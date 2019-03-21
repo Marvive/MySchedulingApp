@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 
 public class LoginController {
 
+//    FXML section
     @FXML
     private Label loginTitle;
 
@@ -33,6 +34,9 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
+
+
+//    Handlers
     @FXML
     void exitButtonHandler(ActionEvent event) {
 
@@ -45,8 +49,10 @@ public class LoginController {
 
 
 
+//    Translation
 
-    //This is a test
+
+
 }
 
 /*
