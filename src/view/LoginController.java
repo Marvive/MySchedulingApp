@@ -34,7 +34,7 @@ public class LoginController {
     private Label errorLabel;
 
     @FXML
-    void exitButtonexitButtonHandler(ActionEvent event) {
+    void exitButtonHandler(ActionEvent event) {
 
     }
 
@@ -42,6 +42,8 @@ public class LoginController {
     void loginSignInButtonHandler(ActionEvent event) {
 
     }
+
+
 
 
     //This is a test

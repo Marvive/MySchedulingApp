@@ -49,7 +49,7 @@
       <ButtonBar layoutX="386.0" layoutY="338.0" prefHeight="40.0" prefWidth="200.0">
         <buttons>
           <Button fx:id="loginSignInButton" defaultButton="true" mnemonicParsing="false" onAction="#loginSignInButtonHandler" text="Sign In" />
-            <Button fx:id="exitButton" layoutX="140.0" layoutY="17.0" mnemonicParsing="false" onAction="#exitButtonexitButtonHandler" text="Exit" />
+            <Button fx:id="exitButton" layoutX="140.0" layoutY="17.0" mnemonicParsing="false" onAction="#exitButtonHandler" text="Exit" />
         </buttons>
       </ButtonBar>
       <Label fx:id="errorLabel" layoutX="52.0" layoutY="275.0" text="Error Label">
