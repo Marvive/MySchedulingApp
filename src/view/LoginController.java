@@ -11,13 +11,13 @@ public class LoginController {
 
 //    FXML section
     @FXML
-    private Label loginTitle;
+    public static Label loginTitle;
 
     @FXML
-    private Label usernameLabel;
+    public Label usernameLabel;
 
     @FXML
-    private Label passwordLabel;
+    public Label passwordLabel;
 
     @FXML
     private TextField usernameField;
