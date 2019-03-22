@@ -2,16 +2,21 @@ package view;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import util.Global;
 
-public class LoginController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class LoginController implements Initializable {
 
 //    FXML section
     @FXML
-    public static Label loginTitle;
+    public Label loginTitle;
 
     @FXML
     public Label usernameLabel;
@@ -39,18 +44,38 @@ public class LoginController {
 //    Handlers
     @FXML
     void exitButtonHandler(ActionEvent event) {
-
+/*
+* Exit Confirmation
+* Quits App
+* */
     }
 
     @FXML
     void loginSignInButtonHandler(ActionEvent event) {
-
+/*
+* Load main menu
+* Add details to log file
+* */
     }
 
 
 
 //    Translation
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+//        Translate words to spanish
+        if (true) {
+            loginTitle.setText("Iniciar Sesión");
+            usernameLabel.setText("Usuario");
+            passwordLabel.setText("Código");
+            loginSignInButton.setText("Entrar");
+            exitButton.setText("Salida");
 
+        }
+        errorLabel.setText("");
+
+
+    }
 
 
 }
@@ -59,8 +84,7 @@ public class LoginController {
 Create a log-in form that can determine the user’s location
  and translate log-in and error control messages
 (e.g., “The username and password did not match.”)
-into two languages. This should be handled automatically based
-on user's location ???and preferred system language????
+into two languages.
 
 F. Write exception controls to prevent each of the following. You may use the same mechanism
  of exception control more than once, but you must incorporate at least two different mechanisms of exception control.
