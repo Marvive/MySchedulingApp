@@ -1,5 +1,7 @@
 package view;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,9 +9,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import model.Appointment;
+import sun.applet.Main;
 import util.Global;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
@@ -59,12 +64,21 @@ public class LoginController implements Initializable {
     }
 
 
+//    References the main application
+    private Main mainApp;
+//
+    ResourceBundle rb = ResourceBundle.getBundle("login", Locale.getDefault());
+    Locale currentLocale = Locale.getDefault();
+    ObservableList<Appointment> reminderList;
 
-//    Translation
+
+
+
+    //    Translation
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 //        Translate words to spanish
-        if (true) {
+        if (currentLocale.getDisplayLanguage().equals("English")) {
             loginTitle.setText("Iniciar Sesión");
             usernameLabel.setText("Usuario");
             passwordLabel.setText("Código");
@@ -77,6 +91,21 @@ public class LoginController implements Initializable {
 
     }
 
+
+    /**
+     * Initializes LoginScreen
+     * @param mainApp
+     */
+    public void setLogin(Main mainApp) {
+        this.mainApp = mainApp;
+        reminderList = FXCollections.observableArrayList();
+
+        loginTitle.setText(rb.getString("title"));
+        usernameLabel.setText(rb.getString("username"));
+        passwordLabel.setText(rb.getString("password"));
+        loginSignInButton.setText(rb.getString("signin"));
+        exitButton.setText(rb.getString("cancel"));
+    }
 
 }
 

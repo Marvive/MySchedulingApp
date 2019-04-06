@@ -14,26 +14,23 @@ public class Main extends Application {
     private Stage primaryStage;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+//    Initial startup of App, calls showLoginScreen Method
+    public void start(Stage primaryStage)  {
 
-
-        primaryStage.setTitle("The Scheduling App");
-
-////        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("view/Login.fxml"));
-//
-//        primaryStage.setScene(new Scene(root));
-//        primaryStage.show();
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("My Scheduling App");
         showLoginScreen();
+
     }
 
     public void showLoginScreen() {
         try {
             // Load Login Screen.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/view/Login.fxml"));
+            loader.setLocation(Main.class.getResource("view/Login.fxml"));
             AnchorPane loginScreen = (AnchorPane) loader.load();
 
-            // Give the controller access to the main app.
+            // Gives the controller access to the main app.
             LoginController controller = loader.getController();
             controller.setLogin(this);
 
@@ -46,7 +43,6 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-
 
     public static void main(String[] args) {
         launch(args);
