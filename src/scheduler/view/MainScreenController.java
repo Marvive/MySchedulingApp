@@ -1,4 +1,4 @@
-package view;
+package scheduler.view;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

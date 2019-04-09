@@ -1,4 +1,4 @@
-package util;
+package scheduler.util;
 
 public class DatabaseConnection {
 }

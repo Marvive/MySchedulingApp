@@ -1,4 +1,4 @@
-package model;
+package scheduler.model;
 
 public class Appointment {
 }

@@ -46,7 +46,7 @@
                   </HBox>
                </children>
             </VBox>
-            <Text fx:id="mainMenuText" layoutX="207.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Main Menu">
+            <Text fx:id="mainMenuText" layoutX="207.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="scheduler.MySchedulingApp Menu">
                <font>
                   <Font size="36.0" />
                </font>

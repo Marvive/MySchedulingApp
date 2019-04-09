@@ -1,4 +1,4 @@
-package view;
+package scheduler.view;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,6 +53,6 @@ public class AppointmentViewScreenController {
 * to the appointment edit screen
 *
 *
-* D. Provide the ability to view the calendar by month and by week.
+* D. Provide the ability to scheduler.view the calendar by month and by week.
 *
 * */

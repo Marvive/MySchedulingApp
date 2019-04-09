@@ -1,6 +1,6 @@
-package util;
+package scheduler.util;
 
-import view.LoginController;
+import scheduler.view.LoginController;
 
 public class Global {
 

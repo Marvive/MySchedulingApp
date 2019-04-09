@@ -1,4 +1,4 @@
-package view;
+package scheduler.view;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,9 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import model.Appointment;
-import sun.applet.Main;
-import util.Global;
+import scheduler.MySchedulingApp;
+import scheduler.model.Appointment;
 
 import java.net.URL;
 import java.util.Locale;
@@ -65,9 +64,8 @@ public class LoginController implements Initializable {
 
 
 //    References the main application
-    private Main mainApp;
-//
-    ResourceBundle rb = ResourceBundle.getBundle("login", Locale.getDefault());
+    private MySchedulingApp mainApp;
+    ResourceBundle rb = ResourceBundle.getBundle("../resources/login", Locale.getDefault());
     Locale currentLocale = Locale.getDefault();
     ObservableList<Appointment> reminderList;
 
@@ -96,7 +94,7 @@ public class LoginController implements Initializable {
      * Initializes LoginScreen
      * @param mainApp
      */
-    public void setLogin(Main mainApp) {
+    public void setLogin(MySchedulingApp mainApp) {
         this.mainApp = mainApp;
         reminderList = FXCollections.observableArrayList();
 
