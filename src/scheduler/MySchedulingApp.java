@@ -4,14 +4,17 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import scheduler.model.*;
-import scheduler.view.*;
+import scheduler.model.User;
+import scheduler.view.LoginController;
+import scheduler.view.MainScreenController;
 
 import java.io.IOException;
 
 public class MySchedulingApp extends Application {
     private Stage primaryStage;
+    private BorderPane menu;
 
     @Override
 //    Initial startup of App, calls showLoginScreen Method
@@ -48,8 +51,21 @@ public class MySchedulingApp extends Application {
     }
 
 
-    public void showMenu(User currentUser) {
+    public void showMain(User currentUser) {
 //        Method to show the Menu that can be called from anywhere.
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MySchedulingApp.class.getResource("scheduler/view/MainScreen.fxml"));
+            menu = loader.load();
+
+            Scene scene = new Scene(menu);
+            primaryStage.getScene();
+
+            MainScreenController controller = loader.getController();
+            controller.setMain(this, currentUser);
+        } catch (IOException e) {
+            e.getCause().printStackTrace();
+        }
     }
 
     public void showCustomerScreen(User currentUser) {

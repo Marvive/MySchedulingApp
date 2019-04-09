@@ -11,12 +11,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import scheduler.MySchedulingApp;
 import scheduler.model.Appointment;
+import scheduler.model.User;
 
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable {
+public class LoginController {
 
 //    FXML section
     @FXML
@@ -43,6 +44,7 @@ public class LoginController implements Initializable {
     @FXML
     private Label errorLabel;
 
+    private MySchedulingApp mainApp;
 
 
 //    Handlers
@@ -60,21 +62,46 @@ public class LoginController implements Initializable {
 * Load main menu
 * Add details to log file
 * */
+
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        if(username.length()==0 || password.length()==0) {
+//            TODO use a key here dependent on the language
+            errorLabel.setText("empty key");
+        } else {
+//            Create a validateLogin function to make sure that user is legit
+            User validUser = validateLogin(username, password);
+//            TODO
+//            populateReminderList(); <<< Create function that populates reminders for appointments
+            mainApp.showMain(validUser);
+        }
+}
+
+    User validateLogin(String username, String password) {
+//        TODO Use this to validate user in the SQL Database
+        try {
+            if (true) {
+                return true;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
-
 //    References the main application
-    private MySchedulingApp mainApp;
-    ResourceBundle rb = ResourceBundle.getBundle("login", Locale.getDefault());
+
     Locale currentLocale = Locale.getDefault();
+//    ResourceBundle rb = ResourceBundle.getBundle("login", currentLocale);
+
     ObservableList<Appointment> reminderList;
 
 
 
 
     //    Translation
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+//    @Override
+//    public void initialize(URL url, ResourceBundle rb) {
 //        Translate words to spanish
 //        if (currentLocale.getDisplayLanguage().equals("English")) {
 //            loginTitle.setText("Iniciar Sesión");
@@ -87,7 +114,7 @@ public class LoginController implements Initializable {
 //        errorLabel.setText("");
 //
 
-    }
+
 
 
     /**
@@ -102,11 +129,19 @@ public class LoginController implements Initializable {
         this.mainApp = mainApp;
         reminderList = FXCollections.observableArrayList();
 
-        loginTitle.setText(rb.getString("title"));
-        usernameLabel.setText(rb.getString("username"));
-        passwordLabel.setText(rb.getString("password"));
-        loginSignInButton.setText(rb.getString("signin"));
-        exitButton.setText(rb.getString("cancel"));
+        if (currentLocale.getDisplayLanguage().equals("English")) {
+            loginTitle.setText("Iniciar Sesión");
+            usernameLabel.setText("Usuario");
+            passwordLabel.setText("Código");
+            loginSignInButton.setText("Entrar");
+            exitButton.setText("Salida");
+
+        }
+//        loginTitle.setText(rb.getString("title"));
+//        usernameLabel.setText(rb.getString("username"));
+//        passwordLabel.setText(rb.getString("password"));
+//        loginSignInButton.setText(rb.getString("signin"));
+//        exitButton.setText(rb.getString("cancel"));
     }
 
 }

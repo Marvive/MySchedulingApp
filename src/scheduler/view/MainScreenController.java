@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.text.Text;
+import scheduler.MySchedulingApp;
+import scheduler.model.User;
 
 public class MainScreenController {
 
@@ -74,6 +76,19 @@ public class MainScreenController {
     @FXML
     void menuReportsButtonHandler(ActionEvent event) {
 
+    }
+
+    private MySchedulingApp mainApp;
+    private User currentUser;
+    /*
+    * Non FXML
+    * */
+    public void setMenu(MySchedulingApp mainApp, User currentUser) {
+        this.mainApp = mainApp;
+        this.currentUser = currentUser;
+
+//        TODO add
+//        logoutUser.setText("Logout: " + currentUser.getUsername());
     }
 
 }
