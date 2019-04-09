@@ -22,6 +22,7 @@ import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.*;
 
@@ -588,7 +589,7 @@ public class DatabaseConnection {
      * Will update the appointmentList with future appointments
      * */
     public static void updateAppointmentList() {
-//        DB Conneciton
+//        DB Connection
         try (Connection conn = DriverManager.getConnection(url, user, pass);
              Statement stmt = conn.createStatement()) {
 //            Calls getAppointmentList() from AppointmentList
@@ -619,10 +620,9 @@ public class DatabaseConnection {
                 utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                 java.util.Date startDate = utcFormat.parse(startTimestamp.toString());
                 java.util.Date endDate = utcFormat.parse(endTimestamp.toString());
-                // Assign appointment info to new Appointment object
-//
+//                Adds information to the Appointment instance
                 Appointment appointment = new Appointment(appointmentId, customerId, title, description, location, contact, url, startTimestamp, endTimestamp, startDate, endDate, createdBy);
-                // Add new Appointment object to appointmentList
+//                Adds instance to appointmentList
                 appointmentList.add(appointment);
             }
         } catch (SQLException e) {
@@ -645,7 +645,33 @@ public class DatabaseConnection {
         }
     }
 
-
+    // Add appointment to database if entry does not already exist
+    /**
+     * Adds appointment to database unless it exists
+     * */
+    public static boolean addNewAppointment(Customer customer, String title, String description, String location, String contact, String url, ZonedDateTime startUTC, ZonedDateTime endUTC) {
+//        Change ZonedDateTimes to Timestamps
+        String startUTCString = startUTC.toString();
+        startUTCString = startUTCString.substring(0,10) + " " + startUTCString.substring(11,16) + ":00";
+        Timestamp startTimestamp = Timestamp.valueOf(startUTCString);
+        String endUTCString = endUTC.toString();
+        endUTCString = endUTCString.substring(0,10) + " " + endUTCString.substring(11,16) + ":00";
+        Timestamp endTimestamp = Timestamp.valueOf(endUTCString);
+//        Checks to make sure that added appointment does not overlap with others, then adds it if it doesn't
+        if (doesAppointmentOverlap(startTimestamp, endTimestamp)) {
+            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorAddingAppointment"));
+            alert.setContentText(rb.getString("errorAppointmentOverlaps"));
+            alert.showAndWait();
+            return false;
+        } else {
+            int customerId = customer.getCustomerId();
+            addAppointment(customerId, title, description, location, contact, url, startTimestamp, endTimestamp);
+            return true;
+        }
+    }
 
 
 
