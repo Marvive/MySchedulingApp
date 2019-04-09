@@ -76,16 +76,16 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 //        Translate words to spanish
-        if (currentLocale.getDisplayLanguage().equals("English")) {
-            loginTitle.setText("Iniciar Sesión");
-            usernameLabel.setText("Usuario");
-            passwordLabel.setText("Código");
-            loginSignInButton.setText("Entrar");
-            exitButton.setText("Salida");
-
-        }
-        errorLabel.setText("");
-
+//        if (currentLocale.getDisplayLanguage().equals("English")) {
+//            loginTitle.setText("Iniciar Sesión");
+//            usernameLabel.setText("Usuario");
+//            passwordLabel.setText("Código");
+//            loginSignInButton.setText("Entrar");
+//            exitButton.setText("Salida");
+//
+//        }
+//        errorLabel.setText("");
+//
 
     }
 
@@ -94,6 +94,10 @@ public class LoginController implements Initializable {
      * Initializes LoginScreen
      * @param mainApp
      */
+
+/*//    Instead of creating a bunch of override functions, setlogin will get information from the properties file
+*       This is more efficient as it will automatically pick up the user's locale
+* */
     public void setLogin(MySchedulingApp mainApp) {
         this.mainApp = mainApp;
         reminderList = FXCollections.observableArrayList();
