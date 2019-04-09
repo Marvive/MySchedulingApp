@@ -4,13 +4,14 @@ package scheduler.util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
 import scheduler.model.Appointment;
 import scheduler.model.AppointmentList;
 import scheduler.model.Customer;
 import scheduler.model.CustomerRoster;
 import scheduler.view.LoginController;
 
-import javax.xml.transform.Result;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -47,6 +48,7 @@ public class DatabaseConnection {
 
     /**
      * Sets the current user for public access
+     * Used by checkLogInCredentials()
      */
     private static void setCurrentUser(String userName) {
         currentUser = userName;
@@ -55,7 +57,7 @@ public class DatabaseConnection {
     /**
      * Method to validate if the user is a valid user
      */
-    public static boolean validateLogin(String userName, String password) {
+    public static boolean checkLogInCredentials(String userName, String password) {
         int userId = getUserId(userName);
         boolean correctPassword = checkPassword(userId, password);
         if (correctPassword) {
@@ -75,6 +77,7 @@ public class DatabaseConnection {
 
     /**
      * Method to reference the Usernames grom the SQL Database
+     * Used by checkLogInCredentials()
      */
     private static int getUserId(String userName) {
         try {
@@ -100,7 +103,8 @@ public class DatabaseConnection {
     }
 
     /**
-     * Method to reference the password from the SQL Database
+     * Method to reference the password from the SQL Database.
+     * Used by checkLogInCredentials()
      */
     private static boolean checkPassword(int userId, String password) {
         try (Connection conn = DriverManager.getConnection(url, user, pass);
@@ -145,9 +149,8 @@ public class DatabaseConnection {
                 calendar.setTime(Date.from(Instant.now()));
                 calendar.add(Calendar.MINUTE, 15);
                 Date notificationCutoff = calendar.getTime();
-//                Generates message for the notification
+//                Generates message for the notification. Calls on methods from appointment class
                 if (appointment.getStartDate().before(notificationCutoff)) {
-
                     ResourceBundle rb = ResourceBundle.getBundle("MainScreen", Locale.getDefault());
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle(rb.getString("notificationUpcomingAppointment"));
@@ -287,8 +290,10 @@ public class DatabaseConnection {
 
 
     }
+
     /**
-    * Returns the ID if it already exists. Will create a new one if it doesn't
+    * Returns the ID if it already exists. Will create a new one if it doesn't.
+     * Used by addNewCustomer()
     * */
     public static int calculateCountryId(String country) {
 //        Try to connect to DB
@@ -325,7 +330,8 @@ public class DatabaseConnection {
     }
 
     /**
-    * Method to check or add the CityId
+    * Method to check or add the CityId.
+     * Used by addNewCustomer()
     * */
     public static int calculateCityId(String city, int countryId) {
 //        Try to connect to DB
@@ -341,17 +347,16 @@ public class DatabaseConnection {
                 cityIdCheck.close();
                 int cityId;
                 ResultSet allCityId = stmt.executeQuery("SELECT cityId FROM city ORDER BY cityId");
-                // Check last cityId value and add one to it for new cityId value
+//                If the city exists, then add +1 to it
                 if (allCityId.last()) {
                     cityId = allCityId.getInt(1) + 1;
                     allCityId.close();
-                }
-                // If no values present, set countryId to beginning value of 1
-                else {
+                } else {
+//                    else set the ID to 1
                     allCityId.close();
                     cityId = 1;
                 }
-                // Create new entry with new cityId value
+//                Create the new item if it doesn't exist
                 stmt.executeUpdate("INSERT INTO city VALUES (" + cityId + ", '" + city + "', " + countryId + ", CURRENT_DATE, " +
                         "'" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
                 return cityId;
@@ -362,8 +367,89 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+    * Method used to check or add AddressID
+     * Used by addNewCustomer()
+    * */
+    public static int calculateAddressId(String address, String address2, String postalCode, String phone, int cityId) {
+//        Try to connect to database
+        try (Connection conn = DriverManager.getConnection(url,user,pass);
+             Statement stmt = conn.createStatement()) {
+            ResultSet addressIdCheck = stmt.executeQuery("SELECT addressId FROM address WHERE address = '" + address + "' AND " +
+                    "address2 = '" + address2 + "' AND postalCode = '" + postalCode + "' AND phone = '" + phone + "' AND cityId = " + cityId);
+//            If address already exists, else add to ID's
+            if (addressIdCheck.next()) {
+                int addressId = addressIdCheck.getInt(1);
+                addressIdCheck.close();
+                return addressId;
+            } else {
+                addressIdCheck.close();
+                int addressId;
+                ResultSet allAddressId = stmt.executeQuery("SELECT addressId FROM address ORDER BY addressId");
+                if (allAddressId.last()) {
+                    addressId = allAddressId.getInt(1) + 1;
+                    allAddressId.close();
+                } else {
+                    allAddressId.close();
+                    addressId = 1;
+                }
+//                Create new Entry
+                stmt.executeUpdate("INSERT INTO address VALUES (" + addressId + ", '" + address + "', '" +address2 + "', " + cityId + ", " +
+                        "'" + postalCode + "', '" + phone + "', CURRENT_DATE, '" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
+                return addressId;
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
 
+    /**
+    * Simple method to see if the customer exists.
+     * Used by addNewCustomer().
+    * */
+    private static boolean checkIfCustomerExists(String customerName, int addressId) throws SQLException {
+//        Connect to DB
+        try (Connection conn = DriverManager.getConnection(url,user,pass);
+             Statement stmt = conn.createStatement()) {
+            ResultSet customerIdCheck = stmt.executeQuery("SELECT customerId FROM customer WHERE customerName = '" + customerName + "' " +
+                    "AND addressId = " + addressId);
+            if (customerIdCheck.next()) {
+                customerIdCheck.close();
+                return true;
+            } else {
+                customerIdCheck.close();
+                return false;
+            }
+        }
+    }
 
+    /**
+    * Method to make a customer active
+     * Used by addNewCustomer()
+    * */
+    public static void setCustomerToActive(String customerName, int addressId) {
+        // Try-with-resources block for database connection
+        try (Connection conn = DriverManager.getConnection(url, user, pass);
+             Statement stmt = conn.createStatement()) {
+            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            // Show confirmation box to confirm setting customer to active
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.initModality(Modality.NONE);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorModifyingCustomer"));
+            alert.setContentText(rb.getString("errorSetToActive"));
+            Optional<ButtonType> result = alert.showAndWait();
+//            If OK button is clicked, then it will update the SQL database
+            if (result.get() == ButtonType.OK) {
+                stmt.executeUpdate("UPDATE customer SET active = 1, lastUpdate = CURRENT_TIMESTAMP, " +
+                        "lastUpdateBy = '" + currentUser + "' WHERE customerName = '" + customerName + "' AND addressId = " + addressId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
