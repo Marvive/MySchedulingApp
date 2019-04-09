@@ -63,6 +63,7 @@ public class MySchedulingApp extends Application {
 
             MainScreenController controller = loader.getController();
             controller.setMain(this, currentUser);
+
         } catch (IOException e) {
             e.getCause().printStackTrace();
         }

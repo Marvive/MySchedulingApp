@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -13,7 +12,6 @@ import scheduler.MySchedulingApp;
 import scheduler.model.Appointment;
 import scheduler.model.User;
 
-import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -47,6 +45,25 @@ public class LoginController {
     private MySchedulingApp mainApp;
 
 
+
+
+//  This gets the Locale of the user setting the default language
+//    rb grabs the information from Resource Bundle
+    Locale currentLocale = Locale.getDefault();
+    ResourceBundle rb = ResourceBundle.getBundle("login", currentLocale);
+
+    public static void incrementDatabaseError() {
+    }
+
+    // This Method will be in every class to set the names if of the labels
+    private void setLanguage() {
+        loginTitle.setText(rb.getString("title"));
+        usernameLabel.setText(rb.getString("username"));
+        passwordLabel.setText(rb.getString("password"));
+        loginSignInButton.setText(rb.getString("signin"));
+        exitButton.setText(rb.getString("cancel"));
+    }
+
 //    Handlers
     @FXML
     void exitButtonHandler(ActionEvent event) {
@@ -58,40 +75,48 @@ public class LoginController {
 
     @FXML
     void loginSignInButtonHandler(ActionEvent event) {
-/*
-* Load main menu
-* Add details to log file
-* */
-
+        /*
+         * Load main menu
+         * Add details to log file
+         * */
         String username = usernameField.getText();
         String password = passwordField.getText();
         if(username.length()==0 || password.length()==0) {
-//            TODO use a key here dependent on the language
-            errorLabel.setText("empty key");
-        } else {
-//            Create a validateLogin function to make sure that user is legit
-            User validUser = validateLogin(username, password);
-//            TODO
-//            populateReminderList(); <<< Create function that populates reminders for appointments
-            mainApp.showMain(validUser);
+            errorLabel.setText(rb.getString("emptylogin"));
         }
-}
-
-    User validateLogin(String username, String password) {
-//        TODO Use this to validate user in the SQL Database
-        try {
-            if (true) {
-                return true;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        boolean validate = validateLogin(username, password);
+        if
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //    References the main application
 
-    Locale currentLocale = Locale.getDefault();
+
 //    ResourceBundle rb = ResourceBundle.getBundle("login", currentLocale);
 
     ObservableList<Appointment> reminderList;
@@ -115,34 +140,6 @@ public class LoginController {
 //
 
 
-
-
-    /**
-     * Initializes LoginScreen
-     * @param mainApp
-     */
-
-/*//    Instead of creating a bunch of override functions, setlogin will get information from the properties file
-*       This is more efficient as it will automatically pick up the user's locale
-* */
-    public void setLogin(MySchedulingApp mainApp) {
-        this.mainApp = mainApp;
-        reminderList = FXCollections.observableArrayList();
-
-        if (currentLocale.getDisplayLanguage().equals("English")) {
-            loginTitle.setText("Iniciar Sesión");
-            usernameLabel.setText("Usuario");
-            passwordLabel.setText("Código");
-            loginSignInButton.setText("Entrar");
-            exitButton.setText("Salida");
-
-        }
-//        loginTitle.setText(rb.getString("title"));
-//        usernameLabel.setText(rb.getString("username"));
-//        passwordLabel.setText(rb.getString("password"));
-//        loginSignInButton.setText(rb.getString("signin"));
-//        exitButton.setText(rb.getString("cancel"));
-    }
 
 }
 

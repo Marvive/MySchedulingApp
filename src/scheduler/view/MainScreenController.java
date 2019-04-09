@@ -27,7 +27,7 @@ public class MainScreenController {
     private Menu menuBarReports;
 
     @FXML
-    private Button menuAppointmentsButtonmenuAppointmentsButton;
+    private Button menuAppointmentsButton;
 
     @FXML
     private Button menuCustomersButton;
@@ -83,11 +83,11 @@ public class MainScreenController {
     /*
     * Non FXML
     * */
-    public void setMenu(MySchedulingApp mainApp, User currentUser) {
+    public void setMain(MySchedulingApp mainApp, User currentUser) {
         this.mainApp = mainApp;
         this.currentUser = currentUser;
 
-//        TODO add
+//        TODO add a logout option the states the name of the user
 //        logoutUser.setText("Logout: " + currentUser.getUsername());
     }
 
