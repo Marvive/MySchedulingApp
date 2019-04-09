@@ -19,6 +19,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.*;
@@ -427,14 +429,14 @@ public class DatabaseConnection {
 
     /**
     * Method to make a customer active
-     * Used by addNewCustomer()
+     * Used by addNewCustomer() and modifyCustomer()
     * */
     public static void setCustomerToActive(String customerName, int addressId) {
         // Try-with-resources block for database connection
         try (Connection conn = DriverManager.getConnection(url, user, pass);
              Statement stmt = conn.createStatement()) {
             ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
-            // Show confirmation box to confirm setting customer to active
+//            Alert and confirmation before setting a customer to active
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.initModality(Modality.NONE);
             alert.setTitle(rb.getString("error"));
@@ -451,7 +453,197 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+    * Method to add customer used by addNewCustomer()
+    * */
+    private static void addCustomer(String customerName, int addressId) throws SQLException {
+//        Connect to DB
+        try (Connection conn = DriverManager.getConnection(url,user,pass);
+             Statement stmt = conn.createStatement()) {
+            ResultSet allCustomerId = stmt.executeQuery("SELECT customerId FROM customer ORDER BY customerId");
+            int customerId;
+//            If ID exists, add +1 to last value, else set to 1
+            if (allCustomerId.last()) {
+                customerId = allCustomerId.getInt(1) + 1;
+                allCustomerId.close();
+            } else {
+                allCustomerId.close();
+                customerId = 1;
+            }
+//            Creates entry to customerId
+            stmt.executeUpdate("INSERT INTO customer VALUES (" + customerId + ", '" + customerName + "', " + addressId + ", 1, " +
+                    "CURRENT_DATE, '" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
+        }
+    }
 
+    /**
+    * Method to modify existing customer. Verifies that it exsists first
+    * */
+    public static int modifyCustomer(int customerId, String customerName, String address, String address2,
+                                     String city, String country, String postalCode, String phone) {
+        try {
+            // Find customer's country, city and addressId's
+            int countryId = calculateCountryId(country);
+            int cityId = calculateCityId(city, countryId);
+            int addressId = calculateAddressId(address, address2, postalCode, phone, cityId);
+            // Check if customer already exists in the database
+            if (checkIfCustomerExists(customerName, addressId)) {
+                int existingCustomerId = getCustomerId(customerName, addressId);
+                int activeStatus = getActiveStatus(existingCustomerId);
+                return activeStatus;
+            } else {
+//                Cleans up database after updating the customer
+                updateCustomer(customerId, customerName, addressId);
+                cleanDatabase();
+                return -1;
+            }
+        } catch (SQLException e) {
+//            Alerts that you need to be connected to the database
+            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorModifyingCustomer"));
+            alert.setContentText(rb.getString("errorRequiresDatabase"));
+            alert.showAndWait();
+            return -1;
+        }
+    }
+
+    /**
+     * Method to grab Customer ID
+     * Used by modifyCustomer()
+     * */
+    private static int getCustomerId(String customerName, int addressId) throws SQLException {
+//        Connect to DB
+        try (Connection conn = DriverManager.getConnection(url,user,pass);
+             Statement stmt = conn.createStatement()) {
+            ResultSet customerIdResultSet = stmt.executeQuery("SELECT customerId FROM customer WHERE customerName = '" + customerName + "' AND addressId = " + addressId);
+            customerIdResultSet.next();
+            int customerId = customerIdResultSet.getInt(1);
+            return customerId;
+        }
+    }
+
+    /**
+     * Method to see whether customer is active or not
+     * Used by modifyCustomer()
+    * */
+    private static int getActiveStatus(int customerId) throws SQLException {
+//        Connect to database
+        try (Connection conn = DriverManager.getConnection(url,user,pass);
+             Statement stmt = conn.createStatement()) {
+            ResultSet activeResultSet = stmt.executeQuery("SELECT active FROM customer WHERE customerId = " + customerId);
+            activeResultSet.next();
+            int active = activeResultSet.getInt(1);
+            return active;
+        }
+    }
+
+    /**
+    * Method that updates customer.
+     * Used by modifyCustomer()
+    * */
+    private static void updateCustomer(int customerId, String customerName, int addressId) throws SQLException {
+        try (Connection conn = DriverManager.getConnection(url,user,pass);
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate("UPDATE customer SET customerName = '" + customerName + "', addressId = " + addressId + ", " +
+                    "lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = '" + currentUser + "' WHERE customerId = " + customerId);
+        }
+    }
+
+    /**
+    * Sets a customer to inactive and makes them hidden in the customer list view
+    * */
+    public static void setCustomerToInactive(Customer customerToRemove) {
+        int customerId = customerToRemove.getCustomerId();
+        ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+//        Set Confirmation to delete customer
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.NONE);
+        alert.setTitle(rb.getString("confirmRemove"));
+        alert.setHeaderText(rb.getString("confirmRemovingCustomer"));
+        alert.setContentText(rb.getString("confirmRemovingCustomerMessage"));
+        Optional<ButtonType> result = alert.showAndWait();
+//        If OK is pressed, then proceed. Catches errors if cannot connect to DB
+        if (result.get() == ButtonType.OK) {
+            try (Connection conn = DriverManager.getConnection(url,user,pass);
+                 Statement stmt = conn.createStatement()) {
+                stmt.executeUpdate("UPDATE customer SET active = 0 WHERE customerId = " + customerId);
+            } catch (SQLException e) {
+//                If it fails it will throw this database error
+                Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                alert2.setTitle(rb.getString("error"));
+                alert2.setHeaderText(rb.getString("errorModifyingCustomer"));
+                alert2.setContentText(rb.getString("errorRequiresDatabase"));
+                alert2.showAndWait();
+            }
+//            Will pass the information into the roster
+            updateCustomerRoster();
+        }
+    }
+
+
+
+    /**
+     * Will update the appointmentList with future appointments
+     * */
+    public static void updateAppointmentList() {
+//        DB Conneciton
+        try (Connection conn = DriverManager.getConnection(url, user, pass);
+             Statement stmt = conn.createStatement()) {
+//            Calls getAppointmentList() from AppointmentList
+            ObservableList<Appointment> appointmentList = AppointmentList.getAppointmentList();
+            appointmentList.clear();
+//            Create list of appointmentId's for all appointments that are in the future
+            ResultSet appointmentResultSet = stmt.executeQuery("SELECT appointmentId FROM appointment WHERE start >= CURRENT_TIMESTAMP");
+            ArrayList<Integer> appointmentIdList = new ArrayList<>();
+            while(appointmentResultSet.next()) {
+                appointmentIdList.add(appointmentResultSet.getInt(1));
+            }
+//            For Loop to create Appoinment for each appointmendId in list and adds the object to appointmentList
+            for (int appointmentId : appointmentIdList) {
+//                Queries database for appointment information
+                appointmentResultSet = stmt.executeQuery("SELECT customerId, title, description, location, contact, url, start, end, createdBy FROM appointment WHERE appointmentId = " + appointmentId);
+                appointmentResultSet.next();
+                int customerId = appointmentResultSet.getInt(1);
+                String title = appointmentResultSet.getString(2);
+                String description = appointmentResultSet.getString(3);
+                String location = appointmentResultSet.getString(4);
+                String contact = appointmentResultSet.getString(5);
+                String url = appointmentResultSet.getString(6);
+                Timestamp startTimestamp = appointmentResultSet.getTimestamp(7);
+                Timestamp endTimestamp = appointmentResultSet.getTimestamp(8);
+                String createdBy = appointmentResultSet.getString(9);
+//                Changes startTimestamp & endTimestamp to ZonedDateTimes
+                DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                java.util.Date startDate = utcFormat.parse(startTimestamp.toString());
+                java.util.Date endDate = utcFormat.parse(endTimestamp.toString());
+                // Assign appointment info to new Appointment object
+//
+                Appointment appointment = new Appointment(appointmentId, customerId, title, description, location, contact, url, startTimestamp, endTimestamp, startDate, endDate, createdBy);
+                // Add new Appointment object to appointmentList
+                appointmentList.add(appointment);
+            }
+        } catch (SQLException e) {
+//            Catches SQL errors
+            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorAddingAppointment"));
+            alert.setContentText(rb.getString("errorRequiresDatabase"));
+            alert.showAndWait();
+        } catch (Exception e) {
+//            If an error occurs that isn't a SQL error, this part catches it
+//            TODO add error2, errorAddingAppointment2, errorRequiresDatabase2 to ResourceBundle
+            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error2"));
+            alert.setHeaderText(rb.getString("errorAddingAppointment2"));
+            alert.setContentText(rb.getString("errorRequiresDatabase2"));
+            alert.showAndWait();
+        }
+    }
 
 
 
@@ -460,3 +652,6 @@ public class DatabaseConnection {
 
 
 }
+
+
+
