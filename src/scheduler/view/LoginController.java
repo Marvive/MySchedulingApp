@@ -65,7 +65,7 @@ public class LoginController implements Initializable {
 
 //    References the main application
     private MySchedulingApp mainApp;
-    ResourceBundle rb = ResourceBundle.getBundle("../resources/login", Locale.getDefault());
+    ResourceBundle rb = ResourceBundle.getBundle("login", Locale.getDefault());
     Locale currentLocale = Locale.getDefault();
     ObservableList<Appointment> reminderList;
 
