@@ -864,14 +864,16 @@ public class DatabaseConnection {
         }
     }
 
-    // Create report for number of appointment types by month
+    /**
+     * Creates a report of appointment types by month
+     * */
     public static void generateAppointmentTypeByMonthReport() {
         updateAppointmentList();
         ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
-        // Initialize report string
+//        Creates report string and grabs label based on language
         String report = rb.getString("lblAppointmentTypeByMonthTitle");
         ArrayList<String> monthsWithAppointments = new ArrayList<>();
-        // Check year and month of each appointment. Add new year-month combos to ArrayList
+//        For each appointment in the list, add a year and month combo to arraylist
         for (Appointment appointment : AppointmentList.getAppointmentList()) {
             Date startDate = appointment.getStartDate();
             Calendar calendar = Calendar.getInstance();
@@ -881,56 +883,55 @@ public class DatabaseConnection {
             String yearMonth = year + "-" + month;
             if (month < 10) {
                 yearMonth = year + "-0" + month;
-            }
-            if (!monthsWithAppointments.contains(yearMonth)) {
+            } else if (!monthsWithAppointments.contains(yearMonth)) {
                 monthsWithAppointments.add(yearMonth);
             }
         }
-        // Sort year-months
+//        Sorting the years and months
         Collections.sort(monthsWithAppointments);
         for (String yearMonth : monthsWithAppointments) {
             // Get year and month values again
+//            Grabs the year and month values again
             int year = Integer.parseInt(yearMonth.substring(0,4));
             int month = Integer.parseInt(yearMonth.substring(5,7));
-            // Initialize typeCount int
+//            Initializing the counter
             int typeCount = 0;
             ArrayList<String> descriptions = new ArrayList<>();
             for (Appointment appointment : AppointmentList.getAppointmentList()) {
-                // Get appointment start date
+//                Grabs the appointment start date
                 Date startDate = appointment.getStartDate();
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(startDate);
-                // Get appointment year and month values
+//                Grabs year and month values from appointment
                 int appointmentYear = calendar.get(Calendar.YEAR);
                 int appointmentMonth = calendar.get(Calendar.MONTH) + 1;
-                // If year and month match, get appointment description
+//                If the years and month match, grab description
                 if (year == appointmentYear && month == appointmentMonth) {
                     String description = appointment.getDescription();
-                    // If appointment description is not in ArrayList, add it and increment typeCount
+//                    If not already in arraylist, add it then up the counter
                     if (!descriptions.contains(description)) {
                         descriptions.add(description);
                         typeCount++;
                     }
                 }
             }
-            // Add year-month to report
+//            Add Year and month to report
             report = report + yearMonth + ": " + typeCount + "\n";
             report = report + rb.getString("lblTypes");
             // Add each type description to report
             for (String description : descriptions) {
                 report = report + " " + description + ",";
             }
-            // Remove trailing comma from type descriptions
+//            TODO removes last character intended for comma. Optimize with regex
             report = report.substring(0, report.length()-1);
-            // Add paragraph break between months
+//            Adds new lines for spacing
             report = report + "\n \n";
         }
-        // Print report to AppointmentTypeByMonth.txt. Overwrite file if exists.
+//        Prints out report to AppointmentTypeByMonth.txt. Will overwrite it if it exists
         try {
             Path path = Paths.get("AppointmentTypeByMonth.txt");
             Files.write(path, Arrays.asList(report), StandardCharsets.UTF_8);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
