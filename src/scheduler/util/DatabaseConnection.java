@@ -10,6 +10,7 @@ import scheduler.model.Appointment;
 import scheduler.model.AppointmentList;
 import scheduler.model.Customer;
 import scheduler.model.CustomerRoster;
+import scheduler.view.AppointmentSummaryController;
 import scheduler.view.LoginController;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.*;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -587,7 +589,7 @@ public class DatabaseConnection {
 
     /**
      * Will update the appointmentList with future appointments
-     * Used by doesAppointmentOverlap()
+     * Used by doesAppointmentOverlap(), deleteAppointment
      * */
     public static void updateAppointmentList() {
 //        DB Connection
@@ -786,8 +788,152 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * Updates appointment after a check
+     * */
+    private static void updateAppointment(int appointmentId, int customerId, String title, String description, String location,
+                                          String contact, String url, Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException {
+//        Connects to DB. Uses full url path since we're using url as a parameter
+        try (Connection conn = DriverManager.getConnection(DBManager.url,user,pass);
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate("UPDATE appointment SET customerId = " + customerId + ", title = '" + title + "', description = '" + description + "', " +
+                    "location = '" + location + "', contact = '" + contact + "', url = '" + url + "', start = '" + startTimestamp + "', end = '" + endTimestamp + "', " +
+                    "lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = '" + currentUser + "' WHERE appointmentId = " + appointmentId);
+        }
+    }
 
+    // Check if new appointment overlaps with any other existing appointments and return true if it does
 
+    /**
+     * A secondary overlap check made for modifying existing appointments
+     * Used by modifyAppointment()
+     * */
+    private static boolean doesAppointmentOverlapOthers(Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException, ParseException {
+        int appointmentIndexToRemove = AppointmentSummaryController.getAppointmentIndexToModify();
+        ObservableList<Appointment> appointmentList = AppointmentList.getAppointmentList();
+//        Calls remove method from appointmentList
+        appointmentList.remove(appointmentIndexToRemove);
+        for (Appointment appointment: appointmentList) {
+            Timestamp existingStartTimestamp = appointment.getStartTimestamp();
+            Timestamp existingEndTimestamp = appointment.getEndTimestamp();
+//            Check to see if appointments overlap. Did not create on one line for readability.
+            if (startTimestamp.after(existingStartTimestamp) && startTimestamp.before(existingEndTimestamp)) {
+                return true;
+            } else if (endTimestamp.after(existingStartTimestamp) && endTimestamp.before(existingEndTimestamp)) {
+                return true;
+            } else if (startTimestamp.after(existingStartTimestamp) && endTimestamp.before(existingEndTimestamp)) {
+                return true;
+            } else if (startTimestamp.before(existingStartTimestamp) && endTimestamp.after(existingEndTimestamp)) {
+                return true;
+            } else if (startTimestamp.equals(existingStartTimestamp) || endTimestamp.equals(existingEndTimestamp))  {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Deletes an appointment base on the appointmentId
+     * */
+    public static void deleteAppointment(Appointment appointmentToDelete) {
+        int appointmentId = appointmentToDelete.getAppointmentId();
+        ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+//        Delete confirmation alert
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.NONE);
+        alert.setTitle(rb.getString("confirmDelete"));
+        alert.setHeaderText(rb.getString("confirmDeleteAppointment"));
+        alert.setContentText(rb.getString("confirmDeleteAppointmentMessage"));
+        Optional<ButtonType> result = alert.showAndWait();
+//        Action if Confirmed with OK button
+        if (result.get() == ButtonType.OK) {
+            try (Connection conn = DriverManager.getConnection(url,user,pass);
+                 Statement stmt = conn.createStatement()) {
+                stmt.executeUpdate("DELETE FROM appointment WHERE appointmentId =" + appointmentId);
+            }
+            catch (SQLException e) {
+//                Alert for SQL failure
+                Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+                alert2.setTitle(rb.getString("error"));
+                alert2.setHeaderText(rb.getString("errorModifyingAppointment"));
+                alert2.setContentText(rb.getString("errorRequiresDatabase"));
+                alert2.showAndWait();
+            }
+//            Calls updateAppointmentlist
+            updateAppointmentList();
+        }
+    }
+
+    // Create report for number of appointment types by month
+    public static void generateAppointmentTypeByMonthReport() {
+        updateAppointmentList();
+        ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+        // Initialize report string
+        String report = rb.getString("lblAppointmentTypeByMonthTitle");
+        ArrayList<String> monthsWithAppointments = new ArrayList<>();
+        // Check year and month of each appointment. Add new year-month combos to ArrayList
+        for (Appointment appointment : AppointmentList.getAppointmentList()) {
+            Date startDate = appointment.getStartDate();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(startDate);
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            String yearMonth = year + "-" + month;
+            if (month < 10) {
+                yearMonth = year + "-0" + month;
+            }
+            if (!monthsWithAppointments.contains(yearMonth)) {
+                monthsWithAppointments.add(yearMonth);
+            }
+        }
+        // Sort year-months
+        Collections.sort(monthsWithAppointments);
+        for (String yearMonth : monthsWithAppointments) {
+            // Get year and month values again
+            int year = Integer.parseInt(yearMonth.substring(0,4));
+            int month = Integer.parseInt(yearMonth.substring(5,7));
+            // Initialize typeCount int
+            int typeCount = 0;
+            ArrayList<String> descriptions = new ArrayList<>();
+            for (Appointment appointment : AppointmentList.getAppointmentList()) {
+                // Get appointment start date
+                Date startDate = appointment.getStartDate();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(startDate);
+                // Get appointment year and month values
+                int appointmentYear = calendar.get(Calendar.YEAR);
+                int appointmentMonth = calendar.get(Calendar.MONTH) + 1;
+                // If year and month match, get appointment description
+                if (year == appointmentYear && month == appointmentMonth) {
+                    String description = appointment.getDescription();
+                    // If appointment description is not in ArrayList, add it and increment typeCount
+                    if (!descriptions.contains(description)) {
+                        descriptions.add(description);
+                        typeCount++;
+                    }
+                }
+            }
+            // Add year-month to report
+            report = report + yearMonth + ": " + typeCount + "\n";
+            report = report + rb.getString("lblTypes");
+            // Add each type description to report
+            for (String description : descriptions) {
+                report = report + " " + description + ",";
+            }
+            // Remove trailing comma from type descriptions
+            report = report.substring(0, report.length()-1);
+            // Add paragraph break between months
+            report = report + "\n \n";
+        }
+        // Print report to AppointmentTypeByMonth.txt. Overwrite file if exists.
+        try {
+            Path path = Paths.get("AppointmentTypeByMonth.txt");
+            Files.write(path, Arrays.asList(report), StandardCharsets.UTF_8);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }
