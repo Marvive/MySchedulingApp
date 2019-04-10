@@ -587,6 +587,7 @@ public class DatabaseConnection {
 
     /**
      * Will update the appointmentList with future appointments
+     * Used by doesAppointmentOverlap()
      * */
     public static void updateAppointmentList() {
 //        DB Connection
@@ -649,7 +650,8 @@ public class DatabaseConnection {
     /**
      * Adds appointment to database unless it exists
      * */
-    public static boolean addNewAppointment(Customer customer, String title, String description, String location, String contact, String url, ZonedDateTime startUTC, ZonedDateTime endUTC) {
+    public static boolean addNewAppointment(Customer customer, String title, String description, String location, String contact,
+                                            String url, ZonedDateTime startUTC, ZonedDateTime endUTC) {
 //        Change ZonedDateTimes to Timestamps
         String startUTCString = startUTC.toString();
         startUTCString = startUTCString.substring(0,10) + " " + startUTCString.substring(11,16) + ":00";
@@ -670,6 +672,117 @@ public class DatabaseConnection {
             int customerId = customer.getCustomerId();
             addAppointment(customerId, title, description, location, contact, url, startTimestamp, endTimestamp);
             return true;
+        }
+    }
+
+    /**
+     * Makes sure that no appointment overlaps as required by the rubric
+     * Used by addNewAppointment()
+     * */
+    private static boolean doesAppointmentOverlap(Timestamp startTimestamp, Timestamp endTimestamp) {
+        updateAppointmentList();
+        ObservableList<Appointment> appointmentList = AppointmentList.getAppointmentList();
+        for (Appointment appointment: appointmentList) {
+//            Calls getStartTimestamp & getEndTimestamp from appointment to get appointment times
+            Timestamp existingStartTimestamp = appointment.getStartTimestamp();
+            Timestamp existingEndTimestamp = appointment.getEndTimestamp();
+//            Checks various conditions for whether it will overlap. Did not put on one line for readability
+            if (startTimestamp.after(existingStartTimestamp) && startTimestamp.before(existingEndTimestamp)) {
+                return true;
+            } else if (endTimestamp.after(existingStartTimestamp) && endTimestamp.before(existingEndTimestamp)) {
+                return true;
+            } else if (startTimestamp.after(existingStartTimestamp) && endTimestamp.before(existingEndTimestamp)) {
+                return true;
+            } else if (startTimestamp.before(existingStartTimestamp) && endTimestamp.after(existingEndTimestamp)) {
+                return true;
+            } else if (startTimestamp.equals(existingStartTimestamp) || endTimestamp.equals(existingEndTimestamp)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Creates new appointment.
+     * Used by addNewAppointment()
+     * */
+    private static void addAppointment(int customerId, String title, String description, String location,
+                                       String contact, String url, Timestamp startTimestamp, Timestamp endTimestamp) {
+//        Connects to DB. Uses a fuller path since I'm creating a url variable as a parameter
+        try (Connection conn = DriverManager.getConnection(DBManager.url,user,pass);
+             Statement stmt = conn.createStatement()) {
+            ResultSet allAppointmentId = stmt.executeQuery("SELECT appointmentId FROM appointment ORDER BY appointmentId");
+            int appointmentId;
+            if (allAppointmentId.last()) {
+                appointmentId = allAppointmentId.getInt(1) + 1;
+                allAppointmentId.close();
+            } else {
+                allAppointmentId.close();
+                appointmentId = 1;
+            }
+//            Creates the new entry
+            stmt.executeUpdate("INSERT INTO appointment VALUES (" + appointmentId +", " + customerId + ", '" + title + "', '" +
+                    description + "', '" + location + "', '" + contact + "', '" + url + "', '" + startTimestamp + "', '" + endTimestamp + "', " +
+                    "CURRENT_DATE, '" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
+        } catch (SQLException e) {
+//            Database failure alert
+            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorAddingAppointment"));
+            alert.setContentText(rb.getString("errorRequiresDatabase"));
+            alert.showAndWait();
+        }
+    }
+
+
+    /**
+     * Modifies an appointment
+     * */
+    public static boolean modifyAppointment(int appointmentId, Customer customer, String title, String description, String location,
+                                            String contact, String url, ZonedDateTime startUTC, ZonedDateTime endUTC) {
+        try {
+//            ZonedDateTimes to Timestamps
+            String startUTCString = startUTC.toString();
+            startUTCString = startUTCString.substring(0, 10) + " " + startUTCString.substring(11, 16) + ":00";
+            Timestamp startTimestamp = Timestamp.valueOf(startUTCString);
+            String endUTCString = endUTC.toString();
+            endUTCString = endUTCString.substring(0, 10) + " " + endUTCString.substring(11, 16) + ":00";
+            Timestamp endTimestamp = Timestamp.valueOf(endUTCString);
+//            Checks to see if appointment overlaps another one
+            if (doesAppointmentOverlapOthers(startTimestamp, endTimestamp)) {
+                ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(rb.getString("error"));
+                alert.setHeaderText(rb.getString("errorModifyingAppointment"));
+                alert.setContentText(rb.getString("errorAppointmentOverlaps"));
+                alert.showAndWait();
+                return false;
+            } else {
+//                Else update the appointment and return true
+                int customerId = customer.getCustomerId();
+                updateAppointment(appointmentId, customerId, title, description, location, contact, url, startTimestamp, endTimestamp);
+                return true;
+            }
+        } catch (SQLException e) {
+//            Database failure alert
+            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorAddingAppointment"));
+            alert.setContentText(rb.getString("errorRequiresDatabase"));
+            alert.showAndWait();
+            return false;
+        } catch (Exception e) {
+//            Catches other failures
+//            TODO create a non SQL failure alert errorAddingAppointment2 & errorRequiresDatabase2
+            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorAddingAppointment2"));
+            alert.setContentText(rb.getString("errorRequiresDatabase2"));
+            alert.showAndWait();
+            return false;
         }
     }
 
