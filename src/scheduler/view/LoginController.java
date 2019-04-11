@@ -68,20 +68,21 @@ public class LoginController {
     }
 
 //    Handlers
+
+    /**
+     * Exit Confirmation
+     * Quits App
+     * */
     @FXML
     void exitButtonHandler(ActionEvent event) {
-/*
-* Exit Confirmation
-* Quits App
-* */
     }
 
+    /**
+     * Load main menu
+     * Add details to log file
+     * */
     @FXML
     void loginSignInButtonHandler(ActionEvent event) {
-        /*
-         * Load main menu
-         * Add details to log file
-         * */
         String username = usernameField.getText();
         String password = passwordField.getText();
 //        Access resourceBundle
@@ -119,7 +120,14 @@ public class LoginController {
 
 
 
-
+    // Initialize screen elements
+    @FXML
+    public void initialize() {
+        // Set local language
+        setLanguage();
+        // Assign action to button
+        btnLogInSubmit.setOnAction(event -> submitLogIn(event));
+    }
 
 
 
