@@ -1,19 +1,23 @@
 package scheduler.view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import scheduler.MySchedulingApp;
-import scheduler.model.Appointment;
-import scheduler.model.User;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static scheduler.util.DatabaseConnection.checkLogInCredentials;
 
 public class LoginController {
 
@@ -45,18 +49,17 @@ public class LoginController {
     private MySchedulingApp mainApp;
 
 
+// variable for whether an error should be thrown
+    public static int databaseError = 0;
 
-
-//  This gets the Locale of the user setting the default language
-//    rb grabs the information from Resource Bundle
-    Locale currentLocale = Locale.getDefault();
-    ResourceBundle rb = ResourceBundle.getBundle("login", currentLocale);
-
+//    method for increasing Database error number
     public static void incrementDatabaseError() {
+        databaseError++;
     }
 
     // This Method will be in every class to set the names if of the labels
     private void setLanguage() {
+        ResourceBundle rb = ResourceBundle.getBundle("LogIn", Locale.getDefault());
         loginTitle.setText(rb.getString("title"));
         usernameLabel.setText(rb.getString("username"));
         passwordLabel.setText(rb.getString("password"));
@@ -81,11 +84,36 @@ public class LoginController {
          * */
         String username = usernameField.getText();
         String password = passwordField.getText();
+//        Access resourceBundle
+        ResourceBundle rb = ResourceBundle.getBundle("LogIn", Locale.getDefault());
         if(username.length()==0 || password.length()==0) {
             errorLabel.setText(rb.getString("emptylogin"));
+//            Returns because rest of code does not need to finish
+            return;
         }
-        boolean validate = validateLogin(username, password);
-        if
+//        Variable to easily query the database
+        boolean correctCredentials = checkLogInCredentials(username, password);
+        if (correctCredentials) {
+            try {
+//                Loads main screen
+                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+                Scene mainScreenScene = new Scene(mainScreenParent);
+                Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                mainScreenStage.setScene(mainScreenScene);
+                mainScreenStage.show();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+//        Check for Database Error
+        else if (databaseError > 0) {
+            // Show connection error message
+            lblLogInErrorMessage.setText(rb.getString("lblConnectionError"));
+        }
+        else {
+            // Show message saying username/password were incorrect
+            lblLogInErrorMessage.setText(rb.getString("lblWrongUserPass"));
         }
     }
 
@@ -95,53 +123,35 @@ public class LoginController {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    References the main application
-
-
-//    ResourceBundle rb = ResourceBundle.getBundle("login", currentLocale);
-
-    ObservableList<Appointment> reminderList;
-
-
-
-
-    //    Translation
-//    @Override
-//    public void initialize(URL url, ResourceBundle rb) {
-//        Translate words to spanish
-//        if (currentLocale.getDisplayLanguage().equals("English")) {
-//            loginTitle.setText("Iniciar Sesión");
-//            usernameLabel.setText("Usuario");
-//            passwordLabel.setText("Código");
-//            loginSignInButton.setText("Entrar");
-//            exitButton.setText("Salida");
-//
-//        }
-//        errorLabel.setText("");
-//
-
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 Create a log-in form that can determine the user’s location

@@ -34,8 +34,8 @@ import java.util.*;
  * Username:  U04zW0
  * Password:  53688393088
  *
- * This will probably be the most complex part of the project since I have to figure out how to properly interact with
- * the SQL database.
+ * This will probably be the most complex part of the project since I have to figure
+ * out how to properly interact with the SQL database.
  */
 
 
@@ -589,7 +589,7 @@ public class DatabaseConnection {
 
     /**
      * Will update the appointmentList with future appointments
-     * Used by doesAppointmentOverlap(), deleteAppointment
+     * Used by doesAppointmentOverlap(), deleteAppointment(), generateUpcomingMeetingsByCustomer()
      * */
     public static void updateAppointmentList() {
 //        DB Connection
@@ -936,7 +936,255 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * Creates a report for each user's schedule
+     * */
+    public static void generateScheduleForConsultants() {
+        updateAppointmentList();
+        ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+//        Create report string
+        String report = rb.getString("lblConsultantScheduleTitle");
+        ArrayList<String> consultantsWithAppointments = new ArrayList<>();
+//        call getCreatedBy() method to see who created, then add to ArrayList
+        for (Appointment appointment : AppointmentList.getAppointmentList()) {
+            String consultant = appointment.getCreatedBy();
+            if (!consultantsWithAppointments.contains(consultant)) {
+                consultantsWithAppointments.add(consultant);
+            }
+        }
+//        Sort by consultant names
+        Collections.sort(consultantsWithAppointments);
+        for (String consultant : consultantsWithAppointments) {
+//            Add Customer name to the report add a new line
+            report = report + consultant + ": \n";
+//            For each appointment in list, grab name
+            for (Appointment appointment : AppointmentList.getAppointmentList()) {
+                String appointmentConsultant = appointment.getCreatedBy();
+//                Check if appointment was was created by the consultant
+                if (consultant.equals(appointmentConsultant)) {
+//                    Grab appointment date and title using appointment methods
+                    String date = appointment.getDateString();
+                    String title = appointment.getTitle();
+                    Date startDate = appointment.getStartDate();
+//                    Change to AM/PM instead of military time. Sees if time is greater than 12, subtracts then appends AM/PM
+                    String startTime = startDate.toString().substring(11,16);
+                    if (Integer.parseInt(startTime.substring(0,2)) > 12) {
+                        startTime = Integer.parseInt(startTime.substring(0,2)) - 12 + startTime.substring(2,5) + "PM";
+                    } else if (Integer.parseInt(startTime.substring(0,2)) == 12) {
+                        startTime += "PM";
+                    } else {
+                        startTime += "AM";
+                    }
+                    Date endDate = appointment.getEndDate();
+                    String endTime = endDate.toString().substring(11,16);
+                    if (Integer.parseInt(endTime.substring(0,2)) > 12) {
+                        endTime = Integer.parseInt(endTime.substring(0,2)) - 12 + endTime.substring(2,5) + "PM";
+                    }
+                    else if (Integer.parseInt(endTime.substring(0,2)) == 12) {
+                        endTime += "PM";
+                    } else {
+                        endTime += "AM";
+                    }
+                    // Get timezone
+                    String timeZone = startDate.toString().substring(20,23);
+                    // Add appointment info to report
+                    report = report + date + ": " + title + rb.getString("lblFrom") + startTime + rb.getString("lblTo") +
+                            endTime + " " + timeZone + ". \n";
+                }
+            }
+//            Add new Lines for spacing
+            report = report + "\n \n";
+        }
+//        Outputs report to ScheduleByConsultant.txt and overwrites if existing
+        try {
+            Path path = Paths.get("ScheduleByConsultant.txt");
+            Files.write(path, Arrays.asList(report), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+
+    /**
+     * Creates report for each othe customer's upcoming meetings
+     * */
+    public static void generateUpcomingMeetingsByCustomer() {
+        updateAppointmentList();
+        ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+//        Create the report string
+        String report = rb.getString("lblCustomerScheduleTitle");
+        ArrayList<Integer> customerIdsWithAppointments = new ArrayList<>();
+        // Check customerId of each appointment. Add new customerId's to ArrayList
+//        For each appointment in list Add new customerId's to ArrayList
+        for (Appointment appointment : AppointmentList.getAppointmentList()) {
+            int customerId = appointment.getCustomerId();
+            if (!customerIdsWithAppointments.contains(customerId)) {
+                customerIdsWithAppointments.add(customerId);
+            }
+        }
+//        Sort by CustomerId
+        Collections.sort(customerIdsWithAppointments);
+        updateCustomerRoster();
+//        Iterates over all customerIdsWithAppointments
+        for (int customerId : customerIdsWithAppointments) {
+            /*
+            * For each of the customers that have appointments, iterate over the
+            * Roster to see how many customers match the customerId
+            * */
+            for (Customer customer : CustomerRoster.getCustomerRoster()) {
+//                checks to see if there's a match between customer and customerId
+                int customerIdToCheck = customer.getCustomerId();
+                if (customerId == customerIdToCheck) {
+//                    Adds name to report
+                    report = report + customer.getCustomerName() + ": \n";
+                }
+            }
+            for (Appointment appointment : AppointmentList.getAppointmentList()) {
+                int appointmentCustomerId = appointment.getCustomerId();
+//                Checks if appointment's customerId matches customer
+                if (customerId == appointmentCustomerId) {
+//                    Grabs date and description from the Appointment Instance
+                    String date = appointment.getDateString();
+                    String description = appointment.getDescription();
+                    Date startDate = appointment.getStartDate();
+//                    Change military time to Standard
+                    String startTime = startDate.toString().substring(11,16);
+                    if (Integer.parseInt(startTime.substring(0,2)) > 12) {
+                        startTime = Integer.parseInt(startTime.substring(0,2)) - 12 + startTime.substring(2,5) + "PM";
+                    } else if (Integer.parseInt(startTime.substring(0,2)) == 12) {
+                        startTime += "PM";
+                    } else {
+                        startTime += "AM";
+                    }
+                    Date endDate = appointment.getEndDate();
+                    String endTime = endDate.toString().substring(11,16);
+                    if (Integer.parseInt(endTime.substring(0,2)) > 12) {
+                        endTime = Integer.parseInt(endTime.substring(0,2)) - 12 + endTime.substring(2,5) + "PM";
+                    } else if (Integer.parseInt(endTime.substring(0,2)) == 12) {
+                        endTime += "PM";
+                    } else {
+                        endTime += "AM";
+                    }
+//                    Grabs timeZone
+//                    TODO timezone detection?
+                    String timeZone = startDate.toString().substring(20,23);
+//                    Finally adds appointment information to the report
+                    report = report + date + ": " + description + rb.getString("lblFrom") + startTime + rb.getString("lblTo") +
+                            endTime + " " + timeZone + ". \n";
+                }
+            }
+//            Adds new lines for spacing
+            report = report + "\n \n";
+        }
+//        Prints to ScheduleByCustomer.txt and overwrites it.
+        try {
+            Path path = Paths.get("ScheduleByCustomer.txt");
+            Files.write(path, Arrays.asList(report), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Cleans up the database entries that no longer are paired with customers
+     * */
+    private static void cleanDatabase() {
+//        Connect to DB
+        try (Connection conn = DriverManager.getConnection(url,user,pass);
+             Statement stmt = conn.createStatement()) {
+//            Creates list of addressId's in Customer Table
+            ResultSet addressIdResultSet = stmt.executeQuery("SELECT DISTINCT addressId FROM customer ORDER BY addressId");
+            ArrayList<Integer> addressIdListFromCustomer = new ArrayList<>();
+            while (addressIdResultSet.next()) {
+                addressIdListFromCustomer.add(addressIdResultSet.getInt(1));
+            }
+//            Creates list of addressId's in Address table
+            addressIdResultSet = stmt.executeQuery("SELECT DISTINCT addressId FROM address ORDER BY addressId");
+            ArrayList<Integer> addressIdListFromAddress = new ArrayList<>();
+            while (addressIdResultSet.next()) {
+                addressIdListFromAddress.add(addressIdResultSet.getInt(1));
+            }
+//            Creates list of addressId's that exist in Address table but are not used in Customer table
+            for (int i = 0; i < addressIdListFromCustomer.size(); i++) {
+                for (int j = 0; j < addressIdListFromAddress.size(); j++) {
+                    if (addressIdListFromCustomer.get(i) == addressIdListFromAddress.get(j)) {
+                        addressIdListFromAddress.remove(j);
+                        j--;
+                    }
+                }
+            }
+//            Deletes Address table entries by remaining addressId's, if any remain
+            if (addressIdListFromAddress.isEmpty()) {}
+            else {
+                for (int addressId : addressIdListFromAddress) {
+                    stmt.executeUpdate("DELETE FROM address WHERE addressId = " + addressId);
+                }
+            }
+
+//            Creates list of cityId's used in Address table
+            ResultSet cityIdResultSet = stmt.executeQuery("SELECT DISTINCT cityId FROM address ORDER BY cityId");
+            ArrayList<Integer> cityIdListFromAddress = new ArrayList<>();
+            while (cityIdResultSet.next()) {
+                cityIdListFromAddress.add(cityIdResultSet.getInt(1));
+            }
+//            Creates list of cityId's used in City table
+            cityIdResultSet = stmt.executeQuery("SELECT DISTINCT cityId FROM city ORDER BY cityId");
+            ArrayList<Integer> cityIdListFromCity = new ArrayList<>();
+            while (cityIdResultSet.next()) {
+                cityIdListFromCity.add(cityIdResultSet.getInt(1));
+            }
+//            Creates list of cityId's that exist in City table but are not used in Address table
+            for (int i = 0; i < cityIdListFromAddress.size(); i++) {
+                for (int j = 0; j < cityIdListFromCity.size(); j++) {
+                    if (cityIdListFromAddress.get(i) == cityIdListFromCity.get(j)) {
+                        cityIdListFromCity.remove(j);
+                        j--;
+                    }
+                }
+            }
+//            Delete City table entries by remaining cityId's, if any remain
+            if (!cityIdListFromCity.isEmpty()) {
+                for (int cityId : cityIdListFromCity) {
+                    stmt.executeUpdate("DELETE FROM city WHERE cityId = " + cityId);
+                }
+            }
+//            Create list of countryId's used in City table
+            ResultSet countryIdResultSet = stmt.executeQuery("SELECT DISTINCT countryId FROM city ORDER BY countryId");
+            ArrayList<Integer> countryIdListFromCity = new ArrayList<>();
+            while (countryIdResultSet.next()) {
+                countryIdListFromCity.add(countryIdResultSet.getInt(1));
+            }
+//            Creates list of countryId's used in Country table
+            countryIdResultSet = stmt.executeQuery("SELECT DISTINCT countryId FROM country ORDER BY countryId");
+            ArrayList<Integer> countryIdListFromCountry = new ArrayList<>();
+            while (countryIdResultSet.next()) {
+                countryIdListFromCountry.add(countryIdResultSet.getInt(1));
+            }
+//            Creates list of countryId's that exist in Country table but are not used in City table
+            for (int i = 0; i < countryIdListFromCity.size(); i++) {
+                for (int j = 0; j < countryIdListFromCountry.size(); j++) {
+                    if (countryIdListFromCity.get(i) == countryIdListFromCountry.get(j)) {
+                        countryIdListFromCountry.remove(j);
+                        j--;
+                    }
+                }
+            }
+//            Deletes Country table entries by remaining countryId's, if any remain
+            if (!countryIdListFromCountry.isEmpty()) {
+                for (int countryId : countryIdListFromCountry) {
+                    stmt.executeUpdate("DELETE FROM country WHERE countryId = " + countryId);
+                }
+            }
+        } catch (SQLException e) {
+//            Throws error if SQL exception
+            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorAddingAppointment"));
+            alert.setContentText(rb.getString("errorRequiresDatabase"));
+            alert.showAndWait();
+        }
+    }
 }
 
 
