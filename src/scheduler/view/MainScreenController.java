@@ -14,7 +14,9 @@ import scheduler.MySchedulingApp;
 import scheduler.model.User;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class MainScreenController {
 
@@ -177,12 +179,25 @@ public class MainScreenController {
     /*
      * Non FXML
      * */
-    public void setMain(MySchedulingApp mainApp, User currentUser) {
-        this.mainApp = mainApp;
-        this.currentUser = currentUser;
-
-//        TODO add a logout option the states the name of the user
-//        logoutUser.setText("Logout: " + currentUser.getUsername());
+//    public void setMain(MySchedulingApp mainApp, User currentUser) {
+//        this.mainApp = mainApp;
+//        this.currentUser = currentUser;
+//
+////        TODO add a logout option the states the name of the user
+////        logoutUser.setText("Logout: " + currentUser.getUsername());
+//    }
+    @FXML
+    private void setLanguage() {
+        ResourceBundle rb = ResourceBundle.getBundle("MainScreen", Locale.getDefault());
+        menuBarLogOut.setText(rb.getString("mainLogout"));
+        menuBarClose.setText(rb.getString("mainClose"));
+        menuBarAppointments.setText(rb.getString("mainAppointments"));
+        menuAppointmentsButton.setText(rb.getString("mainAppointments"));
+        menuBarCustomers.setText(rb.getString("mainCustomers"));
+        menuCustomersButton.setText(rb.getString("mainCustomers"));
+        menuBarReports.setText(rb.getString("mainReports"));
+        menuReportsButton.setText(rb.getString("mainReports"));
+        mainMenuText.setText(rb.getString("mainMenuText"));
     }
 
 }

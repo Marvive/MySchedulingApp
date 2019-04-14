@@ -120,10 +120,10 @@ public class LoginController {
 //        Check for Database Error
         else if (databaseError > 0) {
             // Show connection error message
-            lblLogInErrorMessage.setText(rb.getString("lblConnectionError"));
+            errorLabel.setText(rb.getString("lblConnectionError"));
         } else {
 //            Calls the error message saying username or password incorrect
-            lblLogInErrorMessage.setText(rb.getString("lblWrongUserPass"));
+            errorLabel.setText(rb.getString("lblWrongUserPass"));
         }
     }
 
