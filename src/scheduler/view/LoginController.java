@@ -6,15 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.MySchedulingApp;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static scheduler.util.DatabaseConnection.checkLogInCredentials;
@@ -75,6 +74,17 @@ public class LoginController {
      * */
     @FXML
     void exitButtonHandler(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.NONE);
+        alert.setTitle("Exit");
+        alert.setHeaderText("Exiting Program!");
+        alert.setContentText("Press OK to exit the Program");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            System.exit(0);
+        } else {
+            System.out.println("Cancelled Exit");
+        }
     }
 
     /**
@@ -111,9 +121,8 @@ public class LoginController {
         else if (databaseError > 0) {
             // Show connection error message
             lblLogInErrorMessage.setText(rb.getString("lblConnectionError"));
-        }
-        else {
-            // Show message saying username/password were incorrect
+        } else {
+//            Calls the error message saying username or password incorrect
             lblLogInErrorMessage.setText(rb.getString("lblWrongUserPass"));
         }
     }
@@ -121,12 +130,15 @@ public class LoginController {
 
 
     // Initialize screen elements
+    /**
+     * Inititialize the screen
+     * */
     @FXML
     public void initialize() {
-        // Set local language
+//        Calls setLanguage() to see text in proper language
         setLanguage();
         // Assign action to button
-        btnLogInSubmit.setOnAction(event -> submitLogIn(event));
+        loginSignInButton.setOnAction(event -> loginSignInButtonHandler(event));
     }
 
 

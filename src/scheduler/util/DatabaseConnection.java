@@ -194,7 +194,7 @@ public class DatabaseConnection {
             for (int customerId : customerIdList) {
 //                Creates a customer instance
                 Customer customer = new Customer();
-//                Query databse for instance
+//                Query database for instance
                 ResultSet customerResultSet = stmt.executeQuery("SELECT customerName, active, addressId FROM customer WHERE customerId = " + customerId);
                 customerResultSet.next();
                 String customerName = customerResultSet.getString(1);
