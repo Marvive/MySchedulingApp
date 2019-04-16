@@ -10,7 +10,7 @@ import scheduler.model.Appointment;
 import scheduler.model.AppointmentList;
 import scheduler.model.Customer;
 import scheduler.model.CustomerRoster;
-import scheduler.view.AppointmentSummaryController;
+import scheduler.view.AppointmentViewScreenController;
 import scheduler.view.LoginController;
 
 import java.io.IOException;
@@ -711,7 +711,7 @@ public class DatabaseConnection {
     private static void addAppointment(int customerId, String title, String description, String location,
                                        String contact, String url, Timestamp startTimestamp, Timestamp endTimestamp) {
 //        Connects to DB. Uses a fuller path since I'm creating a url variable as a parameter
-        try (Connection conn = DriverManager.getConnection(DBManager.url,user,pass);
+        try (Connection conn = DriverManager.getConnection(DatabaseConnection.url,user,pass);
              Statement stmt = conn.createStatement()) {
             ResultSet allAppointmentId = stmt.executeQuery("SELECT appointmentId FROM appointment ORDER BY appointmentId");
             int appointmentId;
@@ -794,7 +794,7 @@ public class DatabaseConnection {
     private static void updateAppointment(int appointmentId, int customerId, String title, String description, String location,
                                           String contact, String url, Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException {
 //        Connects to DB. Uses full url path since we're using url as a parameter
-        try (Connection conn = DriverManager.getConnection(DBManager.url,user,pass);
+        try (Connection conn = DriverManager.getConnection(DatabaseConnection.url,user,pass);
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate("UPDATE appointment SET customerId = " + customerId + ", title = '" + title + "', description = '" + description + "', " +
                     "location = '" + location + "', contact = '" + contact + "', url = '" + url + "', start = '" + startTimestamp + "', end = '" + endTimestamp + "', " +
@@ -809,7 +809,7 @@ public class DatabaseConnection {
      * Used by modifyAppointment()
      * */
     private static boolean doesAppointmentOverlapOthers(Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException, ParseException {
-        int appointmentIndexToRemove = AppointmentSummaryController.getAppointmentIndexToModify();
+        int appointmentIndexToRemove = AppointmentViewScreenController.getAppointmentIndexToModify();
         ObservableList<Appointment> appointmentList = AppointmentList.getAppointmentList();
 //        Calls remove method from appointmentList
         appointmentList.remove(appointmentIndexToRemove);
