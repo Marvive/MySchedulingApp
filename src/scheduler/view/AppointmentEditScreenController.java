@@ -16,13 +16,13 @@ import scheduler.model.Appointment;
 import scheduler.model.Customer;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 
+import static scheduler.model.AppointmentList.getAppointmentList;
 import static scheduler.model.CustomerRoster.getCustomerRoster;
 import static scheduler.util.DatabaseConnection.modifyAppointment;
 
@@ -85,32 +85,16 @@ public class AppointmentEditScreenController {
     @FXML
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
-        lblModifyAppointment.setText(rb.getString("lblModifyAppointment"));
-        lblModifyAppointmentTitle.setText(rb.getString("lblTitle"));
-        txtModifyAppointmentTitle.setPromptText(rb.getString("lblTitle"));
-        lblModifyAppointmentDescription.setText(rb.getString("lblDescription"));
-        txtModifyAppointmentDescription.setPromptText(rb.getString("lblDescription"));
-        lblModifyAppointmentLocation.setText(rb.getString("lblLocation"));
-        txtModifyAppointmentLocation.setPromptText(rb.getString("lblLocation"));
-        lblModifyAppointmentContact.setText(rb.getString("lblContact"));
-        txtModifyAppointmentContact.setPromptText(rb.getString("lblContact"));
-        lblModifyAppointmentUrl.setText(rb.getString("lblUrl"));
-        txtModifyAppointmentUrl.setPromptText(rb.getString("lblUrl"));
-        lblModifyAppointmentDate.setText(rb.getString("lblDate"));
-        lblModifyAppointmentStartTime.setText(rb.getString("lblStartTime"));
-        lblModifyAppointmentEndTime.setText(rb.getString("lblEndTime"));
-        tvModifyAppointmentAddNameColumn.setText(rb.getString("lblNameColumn"));
-        tvModifyAppointmentAddCityColumn.setText(rb.getString("lblCityColumn"));
-        tvModifyAppointmentAddCountryColumn.setText(rb.getString("lblCountryColumn"));
-        tvModifyAppointmentAddPhoneColumn.setText(rb.getString("lblPhoneColumn"));
-        tvModifyAppointmentDeleteNameColumn.setText(rb.getString("lblNameColumn"));
-        tvModifyAppointmentDeleteCityColumn.setText(rb.getString("lblCityColumn"));
-        tvModifyAppointmentDeleteCountryColumn.setText(rb.getString("lblCountryColumn"));
-        tvModifyAppointmentDeletePhoneColumn.setText(rb.getString("lblPhoneColumn"));
-        btnModifyAppointmentAdd.setText(rb.getString("btnAdd"));
-        btnModifyAppointmentDelete.setText(rb.getString("btnDelete"));
-        btnModifyAppointmentSave.setText(rb.getString("btnSave"));
-        btnModifyAppointmentCancel.setText(rb.getString("btnCancel"));
+        editAppointmentText.setText(rb.getString("lblAddAppointment"));
+        AppointmentTitleText.setText(rb.getString("lblTitle"));
+        dateText.setText(rb.getString("lblDate"));
+        startTimeText.setText(rb.getString("lblStartTime"));
+        endTimeText.setText(rb.getString("lblEndTime"));
+        customerColumn.setText(rb.getString("lblNameColumn"));
+        appointmentTypeText.setText(rb.getString("aptType"));
+        customerSearchButton.setText(rb.getString("btnSearch"));
+        saveButton.setText(rb.getString("btnSave"));
+        cancelButton.setText(rb.getString("btnCancel"));
     }
 
     @FXML
@@ -165,20 +149,13 @@ public class AppointmentEditScreenController {
         }
 //        Gets changed information
         int appointmentId = appointment.getAppointmentId();
-        String title = txtModifyAppointmentTitle.getText();
-        String description = txtModifyAppointmentDescription.getText();
-        String location = txtModifyAppointmentLocation.getText();
-        String url = txtModifyAppointmentUrl.getText();
-        LocalDate appointmentDate = dateModifyAppointmentDate.getValue();
-        String startHour = txtModifyAppointmentStartHour.getText();
-        String startMinute = txtModifyAppointmentStartMinute.getText();
-        String startAmPm = choiceModifyAppointmentStartAMPM.getSelectionModel().getSelectedItem();
-        String endHour = txtModifyAppointmentEndHour.getText();
-        String endMinute = txtModifyAppointmentEndMinute.getText();
-        String endAmPm = choiceModifyAppointmentEndAMPM.getSelectionModel().getSelectedItem();
+        String title = appointmentTitleField.getText();
+        LocalDate appointmentDate = datePicker.getValue();
+//        TODO Should be solved in AddScreenController
+        String startAmPm = startTimePicker.getSelectionModel().getSelectedItem();
+        String endAmPm = endTimePicker.getSelectionModel().getSelectedItem();
 //        Attempt to submit verifying validity
-        String errorMessage = Appointment.isAppointmentValid(customer, title, description, location,
-                appointmentDate, startHour, startMinute, startAmPm, endHour, endMinute, endAmPm);
+        String errorMessage = Appointment.isAppointmentValid(customer, title, appointmentDate, startAmPm, endAmPm);
 //        Checks and alerts for any relevant errors
         if (errorMessage.length() > 0) {
             ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
@@ -194,17 +171,18 @@ public class AppointmentEditScreenController {
         Date startLocal = null;
         Date endLocal = null;
 //        Formats date and time into Date objects
-        try {
-            startLocal = localDateFormat.parse(appointmentDate.toString() + " " + startHour + ":" + startMinute + " " + startAmPm);
-            endLocal = localDateFormat.parse(appointmentDate.toString() + " " + endHour + ":" + endMinute + " " + endAmPm);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        TODO Combo box selection into UTC, should have been solved in AddScreen
+//        try {
+//            startLocal = localDateFormat.parse(appointmentDate.toString() + " " + startHour + ":" + startMinute + " " + startAmPm);
+//            endLocal = localDateFormat.parse(appointmentDate.toString() + " " + endHour + ":" + endMinute + " " + endAmPm);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 //        Create ZonedDateTime out of Date objects
         ZonedDateTime startUTC = ZonedDateTime.ofInstant(startLocal.toInstant(), ZoneId.of("UTC"));
         ZonedDateTime endUTC = ZonedDateTime.ofInstant(endLocal.toInstant(), ZoneId.of("UTC"));
 //        Return true if successful update to database
-        if (modifyAppointment(appointmentId, customer, title, description, location, url, startUTC, endUTC)) {
+        if (modifyAppointment(appointmentId, customer, title, startUTC, endUTC)) {
             try {
                 // Return to appointment summary window
                 Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentSummary.fxml"));
@@ -226,10 +204,8 @@ public class AppointmentEditScreenController {
 //        Sets the local language
         setLanguage();
 //        Creates actions for buttons
-        btnModifyAppointmentAdd.setOnAction(event -> addCustomerToDeleteTableView(event));
-        btnModifyAppointmentDelete.setOnAction(event -> deleteCustomerFromDeleteTableView(event));
-        btnModifyAppointmentSave.setOnAction(event -> saveModifyAppointment(event));
-        btnModifyAppointmentCancel.setOnAction(event -> cancelModifyAppointment(event));
+        saveButton.setOnAction(event -> saveModifyAppointment(event));
+        cancelButton.setOnAction(event -> cancelButtonHandler(event));
 //        Modifies item based on appointment index
         appointment = getAppointmentList().get(appointmentIndexToModify);
 //        Grabs information from the selected appointment
@@ -270,27 +246,12 @@ public class AppointmentEditScreenController {
             }
         }
 //        Prepopulate information into fields
-        txtModifyAppointmentTitle.setText(title);
-        txtModifyAppointmentDescription.setText(description);
-        txtModifyAppointmentLocation.setText(location);
-        txtModifyAppointmentContact.setText(contact);
-        txtModifyAppointmentUrl.setText(url);
-        dateModifyAppointmentDate.setValue(appointmentLocalDate);
-        txtModifyAppointmentStartHour.setText(startHour);
-        txtModifyAppointmentStartMinute.setText(startMinute);
-        choiceModifyAppointmentStartAMPM.setValue(startAmPm);
-        txtModifyAppointmentEndHour.setText(endHour);
-        txtModifyAppointmentEndMinute.setText(endMinute);
-        choiceModifyAppointmentEndAMPM.setValue(endAmPm);
+        appointmentTitleField.setText(title);
+        datePicker.setValue(appointmentLocalDate);
+        startTimePicker.setValue(startAmPm);
+        endTimePicker.setValue(endAmPm);
 //        Lambdas to assign the populated data to table views
-        tvModifyAppointmentAddNameColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
-        tvModifyAppointmentAddCityColumn.setCellValueFactory(cellData -> cellData.getValue().cityProperty());
-        tvModifyAppointmentAddCountryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
-        tvModifyAppointmentAddPhoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
-        tvModifyAppointmentDeleteNameColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
-        tvModifyAppointmentDeleteCityColumn.setCellValueFactory(cellData -> cellData.getValue().cityProperty());
-        tvModifyAppointmentDeleteCountryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
-        tvModifyAppointmentDeletePhoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
+        customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
 //        Updates table views
         updateModifyAppointmentAddTableView();
         updateModifyAppointmentDeleteTableView();

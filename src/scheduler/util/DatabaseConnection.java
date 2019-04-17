@@ -652,8 +652,7 @@ public class DatabaseConnection {
     /**
      * Adds appointment to database unless it exists
      * */
-    public static boolean addNewAppointment(Customer customer, String title, String description, String location, String contact,
-                                            String url, ZonedDateTime startUTC, ZonedDateTime endUTC) {
+    public static boolean addNewAppointment(Customer customer, String title, ZonedDateTime startUTC, ZonedDateTime endUTC) {
 //        Change ZonedDateTimes to Timestamps
         String startUTCString = startUTC.toString();
         startUTCString = startUTCString.substring(0,10) + " " + startUTCString.substring(11,16) + ":00";
@@ -672,7 +671,7 @@ public class DatabaseConnection {
             return false;
         } else {
             int customerId = customer.getCustomerId();
-            addAppointment(customerId, title, description, location, contact, url, startTimestamp, endTimestamp);
+            addAppointment(customerId, title, startTimestamp, endTimestamp);
             return true;
         }
     }
@@ -708,8 +707,7 @@ public class DatabaseConnection {
      * Creates new appointment.
      * Used by addNewAppointment()
      * */
-    private static void addAppointment(int customerId, String title, String description, String location,
-                                       String contact, String url, Timestamp startTimestamp, Timestamp endTimestamp) {
+    private static void addAppointment(int customerId, String title, Timestamp startTimestamp, Timestamp endTimestamp) {
 //        Connects to DB. Uses a fuller path since I'm creating a url variable as a parameter
         try (Connection conn = DriverManager.getConnection(DatabaseConnection.url,user,pass);
              Statement stmt = conn.createStatement()) {
@@ -724,7 +722,8 @@ public class DatabaseConnection {
             }
 //            Creates the new entry
             stmt.executeUpdate("INSERT INTO appointment VALUES (" + appointmentId +", " + customerId + ", '" + title + "', '" +
-                    description + "', '" + location + "', '" + contact + "', '" + url + "', '" + startTimestamp + "', '" + endTimestamp + "', " +
+//                   TODO URL may need to be removed here
+                     url + "', '" + startTimestamp + "', '" + endTimestamp + "', " +
                     "CURRENT_DATE, '" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
         } catch (SQLException e) {
 //            Database failure alert
@@ -741,8 +740,7 @@ public class DatabaseConnection {
     /**
      * Modifies an appointment
      * */
-    public static boolean modifyAppointment(int appointmentId, Customer customer, String title, String description, String location,
-                                            String url, ZonedDateTime startUTC, ZonedDateTime endUTC) {
+    public static boolean modifyAppointment(int appointmentId, Customer customer, String title, ZonedDateTime startUTC, ZonedDateTime endUTC) {
         try {
 //            ZonedDateTimes to Timestamps
             String startUTCString = startUTC.toString();
@@ -763,7 +761,7 @@ public class DatabaseConnection {
             } else {
 //                Else update the appointment and return true
                 int customerId = customer.getCustomerId();
-                updateAppointment(appointmentId, customerId, title, description, location, url, startTimestamp, endTimestamp);
+                updateAppointment(appointmentId, customerId, title, startTimestamp, endTimestamp);
                 return true;
             }
         } catch (SQLException e) {
@@ -791,13 +789,12 @@ public class DatabaseConnection {
     /**
      * Updates appointment after a check
      * */
-    private static void updateAppointment(int appointmentId, int customerId, String title, String description, String location,
-                                          String url, Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException {
+    private static void updateAppointment(int appointmentId, int customerId, String title, Timestamp startTimestamp,
+                                          Timestamp endTimestamp) throws SQLException {
 //        Connects to DB. Uses full url path since we're using url as a parameter
         try (Connection conn = DriverManager.getConnection(DatabaseConnection.url,user,pass);
              Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate("UPDATE appointment SET customerId = " + customerId + ", title = '" + title + "', description = '" + description + "', " +
-                    "location = '" + location + "', url = '" + url + "', start = '" + startTimestamp + "', end = '" + endTimestamp + "', " +
+            stmt.executeUpdate("UPDATE appointment SET customerId = " + customerId + ", title = '" + title + "', start = '" + startTimestamp + "', end = '" + endTimestamp + "', " +
                     "lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = '" + currentUser + "' WHERE appointmentId = " + appointmentId);
         }
     }

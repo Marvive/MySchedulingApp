@@ -16,7 +16,6 @@ import scheduler.model.Appointment;
 import scheduler.model.Customer;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -152,20 +151,21 @@ public class AppointmentAddScreenController {
         localDateFormat.setTimeZone(TimeZone.getDefault());
         Date startLocal = null;
         Date endLocal = null;
-//        Change date and time strings into date objects
-        try {
-            startLocal = localDateFormat.parse(appointmentDate.toString() + " " + startHour + ":" + startMinute + " " + startAmPm);
-            endLocal = localDateFormat.parse(appointmentDate.toString() + " " + endHour + ":" + endMinute + " " + endAmPm);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+////        Change date and time strings into date objects
+//        try {
+//            startLocal = localDateFormat.parse(appointmentDate.toString() + " " + startHour + ":" + startMinute + " " + startAmPm);
+//            endLocal = localDateFormat.parse(appointmentDate.toString() + " " + endHour + ":" + endMinute + " " + endAmPm);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
         // Create ZonedDateTime out of Date objects
+//        TODO Change combo box selection into UTC
         ZonedDateTime startUTC = ZonedDateTime.ofInstant(startLocal.toInstant(), ZoneId.of("UTC"));
         ZonedDateTime endUTC = ZonedDateTime.ofInstant(endLocal.toInstant(), ZoneId.of("UTC"));
-        // Submit information to be added to database. Check if 'true' is returned
-        if (addNewAppointment(customer, title, description, location, contact, url, startUTC, endUTC)) {
+//        Submit and return to main screen. Checks if it returns true
+        if (addNewAppointment(customer, title, startUTC, endUTC)) {
             try {
-                // Return to main screen
+//                Returns to main screen if accepted
                 Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
                 Scene mainScreenScene = new Scene(mainScreenParent);
                 Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -186,32 +186,16 @@ public class AppointmentAddScreenController {
     @FXML
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
-        lblAddAppointment.setText(rb.getString("lblAddAppointment"));
-        lblAddAppointmentTitle.setText(rb.getString("lblTitle"));
-        txtAddAppointmentTitle.setPromptText(rb.getString("lblTitle"));
-        lblAddAppointmentDescription.setText(rb.getString("lblDescription"));
-        txtAddAppointmentDescription.setPromptText(rb.getString("lblDescription"));
-        lblAddAppointmentLocation.setText(rb.getString("lblLocation"));
-        txtAddAppointmentLocation.setPromptText(rb.getString("lblLocation"));
-        lblAddAppointmentContact.setText(rb.getString("lblContact"));
-        txtAddAppointmentContact.setPromptText(rb.getString("lblContact"));
-        lblAddAppointmentUrl.setText(rb.getString("lblUrl"));
-        txtAddAppointmentUrl.setPromptText(rb.getString("lblUrl"));
-        lblAddAppointmentDate.setText(rb.getString("lblDate"));
-        lblAddAppointmentStartTime.setText(rb.getString("lblStartTime"));
-        lblAddAppointmentEndTime.setText(rb.getString("lblEndTime"));
-        tvAddAppointmentAddNameColumn.setText(rb.getString("lblNameColumn"));
-        tvAddAppointmentAddCityColumn.setText(rb.getString("lblCityColumn"));
-        tvAddAppointmentAddCountryColumn.setText(rb.getString("lblCountryColumn"));
-        tvAddAppointmentAddPhoneColumn.setText(rb.getString("lblPhoneColumn"));
-        tvAddAppointmentDeleteNameColumn.setText(rb.getString("lblNameColumn"));
-        tvAddAppointmentDeleteCityColumn.setText(rb.getString("lblCityColumn"));
-        tvAddAppointmentDeleteCountryColumn.setText(rb.getString("lblCountryColumn"));
-        tvAddAppointmentDeletePhoneColumn.setText(rb.getString("lblPhoneColumn"));
-        btnAddAppointmentAdd.setText(rb.getString("btnAdd"));
-        btnAddAppointmentDelete.setText(rb.getString("btnDelete"));
-        btnAddAppointmentSave.setText(rb.getString("btnSave"));
-        btnAddAppointmentCancel.setText(rb.getString("btnCancel"));
+        editAppointmentText.setText(rb.getString("lblAddAppointment"));
+        AppointmentTitleText.setText(rb.getString("lblTitle"));
+        dateText.setText(rb.getString("lblDate"));
+        startTimeText.setText(rb.getString("lblStartTime"));
+        endTimeText.setText(rb.getString("lblEndTime"));
+        customerColumn.setText(rb.getString("lblNameColumn"));
+        appointmentTypeText.setText(rb.getString("aptType"));
+        customerSearchButton.setText(rb.getString("btnSearch"));
+        saveButton.setText(rb.getString("btnSave"));
+        cancelButton.setText(rb.getString("btnCancel"));
     }
 
 }

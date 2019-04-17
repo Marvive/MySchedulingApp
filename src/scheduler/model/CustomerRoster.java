@@ -8,7 +8,7 @@ public class CustomerRoster {
 
     private static ObservableList<Customer> customerRoster = FXCollections.observableArrayList();
 
-    // Getter for customerRoster
+//    customerRoster getter
     public static ObservableList<Customer> getCustomerRoster() {
         return customerRoster;
     }

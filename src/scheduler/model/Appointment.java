@@ -208,34 +208,20 @@ public class Appointment {
     }
 
 //    Checks to see whether the appointment can be made
-    public static String isAppointmentValid(Customer customer, String title, String description, String location,
-                                            LocalDate appointmentDate, String startHour, String startMinute, String startAmPm,
-                                            String endHour, String endMinute, String endAmPm) throws NumberFormatException {
+    public static String isAppointmentValid(Customer customer, String title, LocalDate appointmentDate, String startAmPm,
+                                            String endAmPm) throws NumberFormatException {
         ResourceBundle rb = ResourceBundle.getBundle("Appointment", Locale.getDefault());
         String errorMessage = "";
+//        TODO create a outside of hours error?
         try {
             if (customer == null) {
                 errorMessage = errorMessage + rb.getString("errorCustomer");
             } else if (title.length() == 0) {
                 errorMessage = errorMessage + rb.getString("errorTitle");
-            } else if (description.length() == 0) {
-                errorMessage = errorMessage + rb.getString("errorDescription");
-            } else if (location.length() == 0) {
-                errorMessage = errorMessage + rb.getString("errorLocation");
-            } else if (appointmentDate == null || startHour.equals("") || startMinute.equals("") || startAmPm.equals("") ||
-                    endHour.equals("") || endMinute.equals("") || endAmPm.equals("")) {
-                errorMessage = errorMessage + rb.getString("errorStartEndIncomplete");
-            } else if (Integer.parseInt(startHour) < 1 || Integer.parseInt(startHour) > 12 || Integer.parseInt(endHour) < 1 || Integer.parseInt(endHour) > 12 ||
-                    Integer.parseInt(startMinute) < 0 || Integer.parseInt(startMinute) > 59 || Integer.parseInt(endMinute) < 0 || Integer.parseInt(endMinute) > 59) {
-                errorMessage = errorMessage + rb.getString("errorStartEndInvalidTime");
-            } else if ((startAmPm.equals("PM") && endAmPm.equals("AM")) || (startAmPm.equals(endAmPm) && Integer.parseInt(startHour) != 12 && Integer.parseInt(startHour) > Integer.parseInt(endHour)) ||
-                    (startAmPm.equals(endAmPm) && startHour.equals(endHour) && Integer.parseInt(startMinute) > Integer.parseInt(endMinute))) {
+            } else if ((startAmPm.equals("PM") && endAmPm.equals("AM")) || (startAmPm.equals(endAmPm))) {
                 errorMessage = errorMessage + rb.getString("errorStartAfterEnd");
-            } else if ((Integer.parseInt(startHour) < 9 && startAmPm.equals("AM")) || (Integer.parseInt(endHour) < 9 && endAmPm.equals("AM")) ||
-                    (Integer.parseInt(startHour) >= 5 && Integer.parseInt(startHour) < 12 && startAmPm.equals("PM")) || (Integer.parseInt(endHour) >= 5 && Integer.parseInt(endHour) < 12 && endAmPm.equals("PM")) ||
-                    (Integer.parseInt(startHour) == 12 && startAmPm.equals("AM")) || (Integer.parseInt(endHour)) == 12 && endAmPm.equals("AM")) {
-                errorMessage = errorMessage + rb.getString("errorStartEndOutsideHours");
-            } else if (appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SATURDAY") || appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SUNDAY")) {
+            } else if (appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SATURDAY")
+                    || appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SUNDAY")) {
                 errorMessage = errorMessage + rb.getString("errorDateIsWeekend");
             }
         } catch (NumberFormatException e) {
