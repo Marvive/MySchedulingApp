@@ -742,7 +742,7 @@ public class DatabaseConnection {
      * Modifies an appointment
      * */
     public static boolean modifyAppointment(int appointmentId, Customer customer, String title, String description, String location,
-                                            String contact, String url, ZonedDateTime startUTC, ZonedDateTime endUTC) {
+                                            String url, ZonedDateTime startUTC, ZonedDateTime endUTC) {
         try {
 //            ZonedDateTimes to Timestamps
             String startUTCString = startUTC.toString();
@@ -763,7 +763,7 @@ public class DatabaseConnection {
             } else {
 //                Else update the appointment and return true
                 int customerId = customer.getCustomerId();
-                updateAppointment(appointmentId, customerId, title, description, location, contact, url, startTimestamp, endTimestamp);
+                updateAppointment(appointmentId, customerId, title, description, location, url, startTimestamp, endTimestamp);
                 return true;
             }
         } catch (SQLException e) {
@@ -792,12 +792,12 @@ public class DatabaseConnection {
      * Updates appointment after a check
      * */
     private static void updateAppointment(int appointmentId, int customerId, String title, String description, String location,
-                                          String contact, String url, Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException {
+                                          String url, Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException {
 //        Connects to DB. Uses full url path since we're using url as a parameter
         try (Connection conn = DriverManager.getConnection(DatabaseConnection.url,user,pass);
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate("UPDATE appointment SET customerId = " + customerId + ", title = '" + title + "', description = '" + description + "', " +
-                    "location = '" + location + "', contact = '" + contact + "', url = '" + url + "', start = '" + startTimestamp + "', end = '" + endTimestamp + "', " +
+                    "location = '" + location + "', url = '" + url + "', start = '" + startTimestamp + "', end = '" + endTimestamp + "', " +
                     "lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = '" + currentUser + "' WHERE appointmentId = " + appointmentId);
         }
     }

@@ -24,7 +24,6 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static scheduler.model.CustomerRoster.getCustomerRoster;
-import static scheduler.util.DatabaseConnection.addNewAppointment;
 import static scheduler.util.DatabaseConnection.modifyAppointment;
 
 
@@ -205,7 +204,7 @@ public class AppointmentEditScreenController {
         ZonedDateTime startUTC = ZonedDateTime.ofInstant(startLocal.toInstant(), ZoneId.of("UTC"));
         ZonedDateTime endUTC = ZonedDateTime.ofInstant(endLocal.toInstant(), ZoneId.of("UTC"));
 //        Return true if successful update to database
-        if (modifyAppointment(appointmentId, customer, title, description, location, contact, url, startUTC, endUTC)) {
+        if (modifyAppointment(appointmentId, customer, title, description, location, url, startUTC, endUTC)) {
             try {
                 // Return to appointment summary window
                 Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentSummary.fxml"));

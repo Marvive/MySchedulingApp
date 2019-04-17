@@ -1,5 +1,7 @@
 package scheduler.view;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -78,6 +80,9 @@ public class AppointmentAddScreenController {
     @FXML
     private Button cancelButton;
 
+    // ObservableList to hold customers currently assigned to appointment
+    private ObservableList<Customer> currentCustomers = FXCollections.observableArrayList();
+
     @FXML
     void cancelButtonHandler(ActionEvent event) {
         ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
@@ -125,29 +130,17 @@ public class AppointmentAddScreenController {
             customer = currentCustomers.get(0);
         }
 //        Grabs appointment information to set TODO
-        String title = txtAddAppointmentTitle.getText();
-        String description = txtAddAppointmentDescription.getText();
-        String location = txtAddAppointmentLocation.getText();
-        String contact = txtAddAppointmentContact.getText();
-        // If contact field has been left empty, fill with customers name and phone
-        if (contact.length() == 0 && customer != null) {
-            contact = customer.getCustomerName() + ", " + customer.getPhone();
-        }
-        String url = txtAddAppointmentUrl.getText();
-        LocalDate appointmentDate = dateAddAppointmentDate.getValue();
-        String startHour = txtAddAppointmentStartHour.getText();
-        String startMinute = txtAddAppointmentStartMinute.getText();
-        String startAmPm = choiceAddAppointmentStartAMPM.getSelectionModel().getSelectedItem();
-        String endHour = txtAddAppointmentEndHour.getText();
-        String endMinute = txtAddAppointmentEndMinute.getText();
-        String endAmPm = choiceAddAppointmentEndAMPM.getSelectionModel().getSelectedItem();
-        // Submit appointment information for validation
-        String errorMessage = Appointment.isAppointmentValid(customer, title, description, location,
-                appointmentDate, startHour, startMinute, startAmPm, endHour, endMinute, endAmPm);
-        // Check if errorMessage contains anything
+        String title = appointmentTitleField.getText();
+        LocalDate appointmentDate = datePicker.getValue();
+//        TODO Figure out how to grab value of combo box
+        String startAmPm = startTimePicker.getSelectionModel().getSelectedItem();
+        String endAmPm = endTimePicker.getSelectionModel().getSelectedItem();
+//        Submit and check for validation
+        String errorMessage = Appointment.isAppointmentValid(customer, title,
+                appointmentDate, startAmPm, endAmPm);
+//        Check and print error message
         if (errorMessage.length() > 0) {
             ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
-//            Alerts with the error message
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
@@ -159,7 +152,7 @@ public class AppointmentAddScreenController {
         localDateFormat.setTimeZone(TimeZone.getDefault());
         Date startLocal = null;
         Date endLocal = null;
-        // Format date and time strings into Date objects
+//        Change date and time strings into date objects
         try {
             startLocal = localDateFormat.parse(appointmentDate.toString() + " " + startHour + ":" + startMinute + " " + startAmPm);
             endLocal = localDateFormat.parse(appointmentDate.toString() + " " + endHour + ":" + endMinute + " " + endAmPm);
