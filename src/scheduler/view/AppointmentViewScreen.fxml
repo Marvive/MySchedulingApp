@@ -43,9 +43,9 @@
             <Pane prefHeight="86.0" prefWidth="103.0" />
             <ButtonBar prefHeight="40.0" prefWidth="261.0">
                <buttons>
-                  <Button mnemonicParsing="false" onAction="#handleNewAppt" text="New" />
-                  <Button mnemonicParsing="false" onAction="#handleEditAppt" text="Edit" />
-                  <Button mnemonicParsing="false" onAction="#handleDeleteAppt" text="Delete" />
+                  <Button fx:id="newAppointmentButton" mnemonicParsing="false" onAction="#handleNewAppt" text="New" />
+                  <Button fx:id="editAppointmentButton" mnemonicParsing="false" onAction="#handleEditAppt" text="Edit" />
+                  <Button fx:id="deleteAppointmentBtton" mnemonicParsing="false" onAction="#handleDeleteAppt" text="Delete" />
                </buttons>
                <padding>
                   <Insets right="6.0" />
