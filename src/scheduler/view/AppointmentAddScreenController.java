@@ -56,13 +56,13 @@ public class AppointmentAddScreenController {
     private DatePicker datePicker;
 
     @FXML
-    private ComboBox<?> startTimePicker;
+    private ComboBox<String> startTimePicker;
 
     @FXML
-    private ComboBox<?> endTimePicker;
+    private ComboBox<String> endTimePicker;
 
     @FXML
-    private ComboBox<?> appointmentTypePicker;
+    private ComboBox<String> appointmentTypePicker;
 
     @FXML
     private Button customerSearchButton;
@@ -132,7 +132,7 @@ public class AppointmentAddScreenController {
         String title = appointmentTitleField.getText();
         LocalDate appointmentDate = datePicker.getValue();
 //        TODO Figure out how to grab value of combo box
-        String startAmPm = startTimePicker.getSelectionModel().getSelectedItem();
+        String startAmPm = startTimePicker.getValue();
         String endAmPm = endTimePicker.getSelectionModel().getSelectedItem();
 //        Submit and check for validation
         String errorMessage = Appointment.isAppointmentValid(customer, title,

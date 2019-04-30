@@ -59,22 +59,22 @@ public class AppointmentEditScreenController {
     private DatePicker datePicker;
 
     @FXML
-    private ComboBox<?> startTimePicker;
+    private ComboBox<String> startTimePicker;
 
     @FXML
-    private ComboBox<?> endTimePicker;
+    private ComboBox<String> endTimePicker;
 
     @FXML
-    private ComboBox<?> appointmentTypePicker;
+    private ComboBox<String> appointmentTypePicker;
 
     @FXML
     private Button customerSearchButton;
 
     @FXML
-    private TableView<?> customerSelectTableView;
+    private TableView<Customer> customerSelectTableView;
 
     @FXML
-    private TableColumn<?, ?> customerColumn;
+    private TableColumn<Customer, String> customerColumn;
 
     @FXML
     private Button saveButton;
@@ -136,6 +136,12 @@ public class AppointmentEditScreenController {
     @FXML
     void customerSearchField(ActionEvent event) {
 
+    }
+
+
+    // Update lower table view
+    public void updateCustomerTableView() {
+        customerSelectTableView.setItems(currentCustomers);
     }
 
 //    Update information to database
@@ -253,8 +259,7 @@ public class AppointmentEditScreenController {
 //        Lambdas to assign the populated data to table views
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
 //        Updates table views
-        updateModifyAppointmentAddTableView();
-        updateModifyAppointmentDeleteTableView();
+        updateCustomerTableView();
     }
 }
 
