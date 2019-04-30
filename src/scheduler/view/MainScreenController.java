@@ -143,7 +143,6 @@ public class MainScreenController {
         }
     }
 
-
     /**
      * Handlers for Reports Buttons
      */
@@ -183,7 +182,7 @@ public class MainScreenController {
 //        this.mainApp = mainApp;
 //        this.currentUser = currentUser;
 //
-////        TODO add a logout option the states the name of the user
+////        TODO add a logout option that states the name of the user
 ////        logoutUser.setText("Logout: " + currentUser.getUsername());
 //    }
     @FXML
@@ -198,6 +197,15 @@ public class MainScreenController {
         menuBarReports.setText(rb.getString("mainReports"));
         menuReportsButton.setText(rb.getString("mainReports"));
         mainMenuText.setText(rb.getString("mainMenuText"));
+    }
+
+    /**
+     * Grabs information to initialize screen and calls set language
+     * */
+    @FXML
+    public void initialize () {
+//        Sets local language
+        setLanguage();
     }
 
 }

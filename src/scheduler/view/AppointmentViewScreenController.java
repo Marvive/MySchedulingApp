@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scheduler.model.Appointment;
 import scheduler.util.DatabaseConnection;
@@ -52,7 +53,10 @@ public class AppointmentViewScreenController {
     private Button editAppointmentButton;
 
     @FXML
-    private Button addAppointmentButton;
+    private Button newAppointmentButton;
+
+    @FXML
+    private Text appoinmentViewTitle;
 
     @FXML
     void handleNewAppt(ActionEvent event) {
@@ -78,21 +82,20 @@ public class AppointmentViewScreenController {
         private void setLanguage () {
             ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
             titleColumn.setText(rb.getString("lblTitle"));
-            tvAppointmentSummaryDateColumn.setText(rb.getString("lblDate"));
-            tvAppointmentSummaryContactColumn.setText(rb.getString("lblContact"));
-            btnAppointmentSummaryGetInfo.setText(rb.getString("btnGetInfo"));
+            typeColumn.setText(rb.getString("lblDate"));
+            startColumn.setText(rb.getString("lblContact"));
+            endColumn.setText(rb.getString("btnGetInfo"));
+            customerColumn.setText(rb.getString("btnGetInfo"));
+            consultantColumn.setText(rb.getString("btnGetInfo"));
             editAppointmentButton.setText(rb.getString("btnModify"));
             deleteAppointmentButton.setText(rb.getString("btnDelete"));
-            addAppointmentButton.setText(rb.getString("btnExit"));
-            lblAppointmentSummaryTitle.setText(rb.getString("lblTitle") + ":");
+            newAppointmentButton.setText(rb.getString("btnExit"));
+            appoinmentViewTitle.setText(rb.getString("lblTitle") + ":");
+//            TODO, These will be the labels for week, month, all appointments
             lblAppointmentSummaryDescription.setText(rb.getString("lblDescription") + ":");
             lblAppointmentSummaryLocation.setText(rb.getString("lblLocation") + ":");
             lblAppointmentSummaryContact.setText(rb.getString("lblContact") + ":");
-            lblAppointmentSummaryURL.setText(rb.getString("lblUrl") + ":");
-            lblAppointmentSummaryDate.setText(rb.getString("lblDate") + ":");
-            lblAppointmentSummaryStartTime.setText(rb.getString("lblStartTime") + ":");
-            lblAppointmentSummaryEndTime.setText(rb.getString("lblEndTime") + ":");
-            lblAppointmentSummaryCreatedBy.setText(rb.getString("lblCreatedBy"));
+
         }
 
         @FXML
@@ -183,8 +186,11 @@ public class AppointmentViewScreenController {
             deleteAppointmentButton.setOnAction(event -> handleDeleteAppt(event));
 //        Puts data to the table view
             titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-            tvAppointmentSummaryDateColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
-            tvAppointmentSummaryContactColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+            typeColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
+            startColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+            endColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+            customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+            consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
             // Update table view
             updateAddAppointmentTableView();
         }

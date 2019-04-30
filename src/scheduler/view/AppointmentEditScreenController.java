@@ -71,6 +71,9 @@ public class AppointmentEditScreenController {
     private Button customerSearchButton;
 
     @FXML
+    private TextField customerSearchField;
+
+    @FXML
     private TableView<Customer> customerSelectTableView;
 
     @FXML
@@ -128,16 +131,30 @@ public class AppointmentEditScreenController {
     int appointmentIndexToModify = AppointmentViewScreenController.getAppointmentIndexToModify();
 //    Initialize observablelist
     private ObservableList<Customer> currentCustomers = FXCollections.observableArrayList();
-    @FXML
-    void customerSearchButtonHandler(ActionEvent event) {
 
-    }
-
-    @FXML
-    void customerSearchField(ActionEvent event) {
-
-    }
-
+    /**
+     * TODO Fix Lookup function
+     * */
+//    @FXML
+//    void customerSearchButtonHandler(ActionEvent event) {
+//        String searchCustomer = customerSearchField.getText();
+//        int partIndex = -1;
+//        if (Customer.lookupPart(searchCustomer) == -1) {
+////            Create condition, if not found, then make sure to input part name
+//            Alert alert = new Alert(Alert.AlertType.WARNING);
+//            alert.setTitle("Error");
+//            alert.setHeaderText("Could Not Find Customer.");
+//            alert.setContentText("Please make sure to input a valid Customer Name");
+//            alert.showAndWait();
+//        } else {
+////            Everything else should fall under found
+//            partIndex = Customer.lookupPart(searchPart);
+//            Part tpart = Inventory.getPartInventory().get(partIndex);
+//            ObservableList<Part> partList = FXCollections.observableArrayList();
+//            partList.add(tpart);
+//            partTableView.setItems(partList);
+//        }
+//    }
 
     // Update lower table view
     public void updateCustomerTableView() {
