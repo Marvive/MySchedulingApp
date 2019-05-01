@@ -48,17 +48,17 @@ public class LoginController {
     private MySchedulingApp mainApp;
 
 
-// variable for whether an error should be thrown
+    // variable for whether an error should be thrown
     public static int databaseError = 0;
 
-//    method for increasing Database error number
+    //    method for increasing Database error number
     public static void incrementDatabaseError() {
         databaseError++;
     }
 
 //    Other Text
 
-    // This Method will be in every class to set the names if of the labels
+    //    This Method will be in every class to set the names if of the labels
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("LogIn", Locale.getDefault());
         loginTitle.setText(rb.getString("title"));
@@ -73,7 +73,7 @@ public class LoginController {
     /**
      * Exit Confirmation
      * Quits App
-     * */
+     */
     @FXML
     void exitButtonHandler(ActionEvent event) {
         ResourceBundle rb = ResourceBundle.getBundle("LogIn", Locale.getDefault());
@@ -91,14 +91,14 @@ public class LoginController {
     /**
      * Load main menu
      * Add details to log file
-     * */
+     */
     @FXML
     void loginSignInButtonHandler(ActionEvent event) {
         String username = usernameField.getText();
         String password = passwordField.getText();
 //        Access resourceBundle
         ResourceBundle rb = ResourceBundle.getBundle("LogIn", Locale.getDefault());
-        if(username.length()==0 || password.length()==0) {
+        if (username.length() == 0 || password.length() == 0) {
             errorLabel.setText(rb.getString("emptyLogin"));
 //            Returns because rest of code does not need to finish
             return;
@@ -113,8 +113,7 @@ public class LoginController {
                 Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 mainScreenStage.setScene(mainScreenScene);
                 mainScreenStage.show();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (databaseError > 0) {
@@ -127,11 +126,11 @@ public class LoginController {
     }
 
 
+//    Initialize screen elements
 
-    // Initialize screen elements
     /**
      * Inititialize the screen
-     * */
+     */
     @FXML
     public void initialize() {
 //        Calls setLanguage() to see text in proper language
@@ -140,20 +139,7 @@ public class LoginController {
         loginSignInButton.setOnAction(event -> loginSignInButtonHandler(event));
     }
 
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
