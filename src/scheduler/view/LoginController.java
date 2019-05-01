@@ -146,18 +146,6 @@ public class LoginController {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 Create a log-in form that can determine the user’s location
  and translate log-in and error control messages

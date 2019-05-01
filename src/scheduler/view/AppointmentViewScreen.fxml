@@ -34,7 +34,7 @@
                         <Font size="24.0" />
                      </font>
                   </Text>
-                  <ComboBox prefHeight="27.0" prefWidth="163.0" />
+                  <ComboBox fx:id="comboBox" prefHeight="27.0" prefWidth="163.0" />
                </children>
                <HBox.margin>
                   <Insets top="15.0" />

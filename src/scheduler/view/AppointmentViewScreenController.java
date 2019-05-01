@@ -1,15 +1,14 @@
 package scheduler.view;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scheduler.model.Appointment;
@@ -56,7 +55,32 @@ public class AppointmentViewScreenController {
     private Button newAppointmentButton;
 
     @FXML
-    private Text appoinmentViewTitle;
+    private Text appointmentViewTitle;
+
+
+    private ResourceBundle rb1 = ResourceBundle.getBundle("appointmentViewScreen", Locale.getDefault());
+//    private ObservableList<String> options = FXCollections.observableArrayList(
+//            rb1.getString("allView"),rb1.getString("weekView"),rb1.getString("monthView")
+//    );
+
+    @FXML
+//    private ComboBox comboBox = new ComboBox(options);
+    private ComboBox comboBox;
+
+    /**
+     * Sets that Data in the combo box
+     * Used in initialize
+     * */
+    private void setData() {
+        comboBox.getItems().clear();
+        comboBox.getItems().addAll(
+                rb1.getString("allView"),
+                rb1.getString("weekView"),
+                rb1.getString("monthView")
+        );
+
+    }
+
 
     @FXML
     void handleNewAppt(ActionEvent event) {
@@ -71,130 +95,127 @@ public class AppointmentViewScreenController {
         }
     }
 
-        // Holds index of the appointment that will be modified
-        private static int appointmentIndexToModify;
+    // Holds index of the appointment that will be modified
+    private static int appointmentIndexToModify;
 
-        /**
-         * Set's language for all the text that can appear on the screen
-         * */
+    /**
+     * Set's language for all the text that can appear on the screen
+     */
 //    TODO
-        @FXML
-        private void setLanguage () {
-            ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
-            titleColumn.setText(rb.getString("lblTitle"));
-            typeColumn.setText(rb.getString("lblDate"));
-            startColumn.setText(rb.getString("lblContact"));
-            endColumn.setText(rb.getString("btnGetInfo"));
-            customerColumn.setText(rb.getString("btnGetInfo"));
-            consultantColumn.setText(rb.getString("btnGetInfo"));
-            editAppointmentButton.setText(rb.getString("btnModify"));
-            deleteAppointmentButton.setText(rb.getString("btnDelete"));
-            newAppointmentButton.setText(rb.getString("btnExit"));
-            appoinmentViewTitle.setText(rb.getString("lblTitle") + ":");
-//            TODO, These will be the labels for week, month, all appointments
-            lblAppointmentSummaryDescription.setText(rb.getString("lblDescription") + ":");
-            lblAppointmentSummaryLocation.setText(rb.getString("lblLocation") + ":");
-            lblAppointmentSummaryContact.setText(rb.getString("lblContact") + ":");
+    @FXML
+    private void setLanguage() {
+        ResourceBundle rb = ResourceBundle.getBundle("appointmentViewScreen", Locale.getDefault());
+        titleColumn.setText(rb.getString("titleColumn"));
+        typeColumn.setText(rb.getString("typeColumn"));
+        startColumn.setText(rb.getString("startColumn"));
+        endColumn.setText(rb.getString("endColumn"));
+        customerColumn.setText(rb.getString("customerColumn"));
+        consultantColumn.setText(rb.getString("consultantColumn"));
+        editAppointmentButton.setText(rb.getString("editAppointmentButton"));
+        deleteAppointmentButton.setText(rb.getString("deleteAppointmentButton"));
+        newAppointmentButton.setText(rb.getString("newAppointmentButton"));
+        appointmentViewTitle.setText(rb.getString("appointmentViewTitle") + ":");
+    }
 
-        }
-
-        @FXML
-        private void handleEditAppt (ActionEvent event){
+    @FXML
+    private void handleEditAppt(ActionEvent event) {
 //        Grab selected appointment to modify
-            Appointment appointmentToModify = apptTableView.getSelectionModel().getSelectedItem();
+        Appointment appointmentToModify = apptTableView.getSelectionModel().getSelectedItem();
 //        Ensures something is selected
-            if (appointmentToModify == null) {
-                ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle(rb.getString("error"));
-                alert.setHeaderText(rb.getString("errorModifyingAppointment"));
-                alert.setContentText(rb.getString("errorModifyingAppointmentPleaseSelect"));
-                alert.showAndWait();
-                return;
-            }
-            // Set the index of the appointment that was selected to be modified
-            appointmentIndexToModify = getAppointmentList().indexOf(appointmentToModify);
-            // Open modify appointment window
-            try {
-                Parent modifyAppointmentParent = FXMLLoader.load(getClass().getResource("ModifyAppointment.fxml"));
-                Scene modifyAppointmentScene = new Scene(modifyAppointmentParent);
-                Stage modifyAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                modifyAppointmentStage.setScene(modifyAppointmentScene);
-                modifyAppointmentStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (appointmentToModify == null) {
+            ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorModifyingAppointment"));
+            alert.setContentText(rb.getString("errorModifyingAppointmentPleaseSelect"));
+            alert.showAndWait();
+            return;
         }
-
-        // Delete the selected appointment
-        @FXML
-        private void handleDeleteAppt (ActionEvent event){
-            // Get the selected appointment from the table view
-            Appointment appointmentToDelete = apptTableView.getSelectionModel().getSelectedItem();
-            // Check if no appointment was selected if
-            if (appointmentToDelete == null) {
-                // Show alert saying an appointment must be selected to delete
-                ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle(rb.getString("error"));
-                alert.setHeaderText(rb.getString("errorDeletingAppointment"));
-                alert.setContentText(rb.getString("errorDeletingAppointmentMessage"));
-                alert.showAndWait();
-                return;
-            }
-            // Submit appointment to be deleted
-            DatabaseConnection.deleteAppointment(appointmentToDelete);
-        }
-
-
-        /**
-         * Go back to main Screen
-         * */
-        @FXML
-        private void exit (ActionEvent event){
-            try {
-                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
-                Scene mainScreenScene = new Scene(mainScreenParent);
-                Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                mainScreenStage.setScene(mainScreenScene);
-                mainScreenStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Return the appointment index to be modified
-        public static int getAppointmentIndexToModify () {
-            return appointmentIndexToModify;
-        }
-
-        // Update the table view
-        @FXML
-        public void updateAddAppointmentTableView () {
-            updateAppointmentList();
-            apptTableView.setItems(getAppointmentList());
-        }
-
-        /**
-         * Grabs information to initialize screen and calls set language
-         * */
-        @FXML
-        public void initialize () {
-            setLanguage();
-//        Lambdas to call methods
-            editAppointmentButton.setOnAction(event -> handleEditAppt(event));
-            deleteAppointmentButton.setOnAction(event -> handleDeleteAppt(event));
-//        Puts data to the table view
-            titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-            typeColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
-            startColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
-            endColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
-            customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
-            consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
-            // Update table view
-            updateAddAppointmentTableView();
+        // Set the index of the appointment that was selected to be modified
+        appointmentIndexToModify = getAppointmentList().indexOf(appointmentToModify);
+        // Open modify appointment window
+        try {
+            Parent modifyAppointmentParent = FXMLLoader.load(getClass().getResource("ModifyAppointment.fxml"));
+            Scene modifyAppointmentScene = new Scene(modifyAppointmentParent);
+            Stage modifyAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            modifyAppointmentStage.setScene(modifyAppointmentScene);
+            modifyAppointmentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
+    // Delete the selected appointment
+    @FXML
+    private void handleDeleteAppt(ActionEvent event) {
+        // Get the selected appointment from the table view
+        Appointment appointmentToDelete = apptTableView.getSelectionModel().getSelectedItem();
+        // Check if no appointment was selected if
+        if (appointmentToDelete == null) {
+            // Show alert saying an appointment must be selected to delete
+            ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorDeletingAppointment"));
+            alert.setContentText(rb.getString("errorDeletingAppointmentMessage"));
+            alert.showAndWait();
+            return;
+        }
+        // Submit appointment to be deleted
+        DatabaseConnection.deleteAppointment(appointmentToDelete);
+    }
+
+
+    /**
+     * Go back to main Screen
+     */
+    @FXML
+    private void exit(ActionEvent event) {
+        try {
+            Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+            Scene mainScreenScene = new Scene(mainScreenParent);
+            Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            mainScreenStage.setScene(mainScreenScene);
+            mainScreenStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Return the appointment index to be modified
+    public static int getAppointmentIndexToModify() {
+        return appointmentIndexToModify;
+    }
+
+    // Update the table view
+    @FXML
+    public void updateAddAppointmentTableView() {
+        updateAppointmentList();
+        apptTableView.setItems(getAppointmentList());
+    }
+
+    /**
+     * Grabs information to initialize screen and calls set language
+     */
+    @FXML
+    public void initialize() {
+        setLanguage();
+//        Lambdas to call methods
+        editAppointmentButton.setOnAction(event -> handleEditAppt(event));
+        deleteAppointmentButton.setOnAction(event -> handleDeleteAppt(event));
+//        Puts data to the table view
+//        TODO These exist somewhere in the models
+        titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        typeColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
+        startColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+        endColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+        customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+        consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+        // Update table view
+        updateAddAppointmentTableView();
+        setData();
+    }
+}
 
 
 
