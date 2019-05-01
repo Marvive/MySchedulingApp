@@ -88,7 +88,7 @@ public class AppointmentEditScreenController {
 
     @FXML
     private void setLanguage() {
-        ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("editAppointmentScreen", Locale.getDefault());
         editAppointmentText.setText(rb.getString("lblAddAppointment"));
         AppointmentTitleText.setText(rb.getString("lblTitle"));
         dateText.setText(rb.getString("lblDate"));
@@ -182,7 +182,7 @@ public class AppointmentEditScreenController {
         String errorMessage = Appointment.isAppointmentValid(customer, title, appointmentDate, startAmPm, endAmPm);
 //        Checks and alerts for any relevant errors
         if (errorMessage.length() > 0) {
-            ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("appointmentEditScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorModifyingAppointment"));
@@ -209,7 +209,7 @@ public class AppointmentEditScreenController {
         if (modifyAppointment(appointmentId, customer, title, startUTC, endUTC)) {
             try {
                 // Return to appointment summary window
-                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentSummary.fxml"));
+                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
                 Scene mainScreenScene = new Scene(mainScreenParent);
                 Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 mainScreenStage.setScene(mainScreenScene);
