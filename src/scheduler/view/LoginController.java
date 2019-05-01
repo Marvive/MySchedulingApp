@@ -56,13 +56,15 @@ public class LoginController {
         databaseError++;
     }
 
+//    Other Text
+
     // This Method will be in every class to set the names if of the labels
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("LogIn", Locale.getDefault());
         loginTitle.setText(rb.getString("title"));
         usernameLabel.setText(rb.getString("username"));
         passwordLabel.setText(rb.getString("password"));
-        loginSignInButton.setText(rb.getString("signin"));
+        loginSignInButton.setText(rb.getString("signIn"));
         exitButton.setText(rb.getString("cancel"));
     }
 
@@ -74,16 +76,15 @@ public class LoginController {
      * */
     @FXML
     void exitButtonHandler(ActionEvent event) {
+        ResourceBundle rb = ResourceBundle.getBundle("LogIn", Locale.getDefault());
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
-        alert.setTitle("Exit");
-        alert.setHeaderText("Exiting Program!");
-        alert.setContentText("Press OK to exit the Program");
+        alert.setTitle(rb.getString("titleExitAlert"));
+        alert.setHeaderText(rb.getString("headerExitAlert"));
+        alert.setContentText(rb.getString("contentExitAlert"));
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             System.exit(0);
-        } else {
-            System.out.println("Cancelled Exit");
         }
     }
 
@@ -98,7 +99,7 @@ public class LoginController {
 //        Access resourceBundle
         ResourceBundle rb = ResourceBundle.getBundle("LogIn", Locale.getDefault());
         if(username.length()==0 || password.length()==0) {
-            errorLabel.setText(rb.getString("emptylogin"));
+            errorLabel.setText(rb.getString("emptyLogin"));
 //            Returns because rest of code does not need to finish
             return;
         }
@@ -116,14 +117,12 @@ public class LoginController {
             catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-//        Check for Database Error
-        else if (databaseError > 0) {
-            // Show connection error message
-            errorLabel.setText(rb.getString("lblConnectionError"));
+        } else if (databaseError > 0) {
+            // Check for database error Show connection error message
+            errorLabel.setText(rb.getString("dbConnectionError"));
         } else {
 //            Calls the error message saying username or password incorrect
-            errorLabel.setText(rb.getString("lblWrongUserPass"));
+            errorLabel.setText(rb.getString("wrongUserPassword"));
         }
     }
 
