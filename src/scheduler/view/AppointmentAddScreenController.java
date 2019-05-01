@@ -24,6 +24,7 @@ import java.util.*;
 
 import static scheduler.util.DatabaseConnection.addNewAppointment;
 
+
 /**
  * Primary difference here from the EditScreen is that this will not be autopopulated
  * based on what was selected. This will be a slightly more simple controller
@@ -64,14 +65,18 @@ public class AppointmentAddScreenController {
     @FXML
     private ComboBox<String> appointmentTypePicker;
 
+//    TODO Search function may by removed as it is unnecessary
     @FXML
     private Button customerSearchButton;
 
     @FXML
+    private TextField customerSearchField;
+//
+    @FXML
     private TableView<?> customerSelectTableView;
 
     @FXML
-    private TableColumn<?, ?> customerColumn;
+    private TableColumn<Customer, String> customerColumn;
 
     @FXML
     private Button saveButton;
@@ -79,12 +84,12 @@ public class AppointmentAddScreenController {
     @FXML
     private Button cancelButton;
 
-    // ObservableList to hold customers currently assigned to appointment
+//    ObservableList to hold the customer assigned to the appointment
     private ObservableList<Customer> currentCustomers = FXCollections.observableArrayList();
 
     @FXML
     void cancelButtonHandler(ActionEvent event) {
-        ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("appointmentAddScreen", Locale.getDefault());
         // Show alert to confirm cancel
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
@@ -186,16 +191,28 @@ public class AppointmentAddScreenController {
     @FXML
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
-        editAppointmentText.setText(rb.getString("lblAddAppointment"));
-        AppointmentTitleText.setText(rb.getString("lblTitle"));
-        dateText.setText(rb.getString("lblDate"));
-        startTimeText.setText(rb.getString("lblStartTime"));
-        endTimeText.setText(rb.getString("lblEndTime"));
-        customerColumn.setText(rb.getString("lblNameColumn"));
-        appointmentTypeText.setText(rb.getString("aptType"));
-        customerSearchButton.setText(rb.getString("btnSearch"));
-        saveButton.setText(rb.getString("btnSave"));
-        cancelButton.setText(rb.getString("btnCancel"));
+        editAppointmentText.setText(rb.getString("editAppointmentText"));
+        AppointmentTitleText.setText(rb.getString("AppointmentTitleText"));
+        dateText.setText(rb.getString("dateText"));
+        startTimeText.setText(rb.getString("startTimeText"));
+        endTimeText.setText(rb.getString("endTimeText"));
+        customerColumn.setText(rb.getString("customerColumn"));
+        appointmentTypeText.setText(rb.getString("appointmentTypeText"));
+        customerSearchButton.setText(rb.getString("customerSearchButton"));
+        saveButton.setText(rb.getString("saveButton"));
+        cancelButton.setText(rb.getString("cancelButton"));
+    }
+
+    @FXML
+    public void initialize() {
+//        Sets the Language
+        setLanguage();
+//        Lambdas to assign actions to buttons
+        cancelButton.setOnAction(event -> cancelButtonHandler(event));
+        saveButton.setOnAction(event -> saveButtonHandler(event));
+        // Assign data to table views
+//        Assigns Data to the Table Column
+        customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
     }
 
 }

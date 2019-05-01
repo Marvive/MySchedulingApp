@@ -67,12 +67,13 @@ public class AppointmentEditScreenController {
     @FXML
     private ComboBox<String> appointmentTypePicker;
 
+//     TODO Search function may by removed as it is unecessary
     @FXML
     private Button customerSearchButton;
 
     @FXML
     private TextField customerSearchField;
-
+//
     @FXML
     private TableView<Customer> customerSelectTableView;
 

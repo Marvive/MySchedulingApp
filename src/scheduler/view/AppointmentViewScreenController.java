@@ -189,7 +189,7 @@ public class AppointmentViewScreenController {
 
     // Update the table view
     @FXML
-    public void updateAddAppointmentTableView() {
+    private void updateAddAppointmentTableView() {
         updateAppointmentList();
         apptTableView.setItems(getAppointmentList());
     }
