@@ -73,7 +73,7 @@ public class AppointmentAddScreenController {
     private TextField customerSearchField;
 //
     @FXML
-    private TableView<?> customerSelectTableView;
+    private TableView<Customer> customerSelectTableView;
 
     @FXML
     private TableColumn<Customer, String> customerColumn;
@@ -112,6 +112,10 @@ public class AppointmentAddScreenController {
         }
     }
 
+
+    /*
+    * Search may be removed due to it not being necessary
+    * */
     @FXML
     void customerSearchButtonHandler(ActionEvent event) {
 
@@ -144,7 +148,7 @@ public class AppointmentAddScreenController {
                 appointmentDate, startAmPm, endAmPm);
 //        Check and print error message
         if (errorMessage.length() > 0) {
-            ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("appointmentAddScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
@@ -190,7 +194,7 @@ public class AppointmentAddScreenController {
      * */
     @FXML
     private void setLanguage() {
-        ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("appointmentAddScreen", Locale.getDefault());
         editAppointmentText.setText(rb.getString("editAppointmentText"));
         AppointmentTitleText.setText(rb.getString("AppointmentTitleText"));
         dateText.setText(rb.getString("dateText"));
@@ -210,7 +214,6 @@ public class AppointmentAddScreenController {
 //        Lambdas to assign actions to buttons
         cancelButton.setOnAction(event -> cancelButtonHandler(event));
         saveButton.setOnAction(event -> saveButtonHandler(event));
-        // Assign data to table views
 //        Assigns Data to the Table Column
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
     }
