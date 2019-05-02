@@ -2,24 +2,23 @@ package scheduler.view;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
+import scheduler.model.Customer;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class CustomerScreenController {
 
     @FXML
-    private TableView<?> customerTableView;
+    private TableView<Class> customerTableView;
 
     @FXML
-    private TableColumn<?, ?> customerNameColumn;
+    private TableColumn<Customer, String> customerNameColumn;
 
     @FXML
-    private TableColumn<?, ?> customerPhoneColumn;
+    private TableColumn<Customer, String> customerPhoneColumn;
 
     @FXML
     private Text customerScreenText;
@@ -80,18 +79,78 @@ public class CustomerScreenController {
 
     @FXML
     void customerDeleteButtonHandler(ActionEvent event) {
-
+        ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
     }
 
     @FXML
     void customerEditButtonHandler(ActionEvent event) {
-
+        ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
     }
 
     @FXML
     void customerNewButtonHandler(ActionEvent event) {
-
+        ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
     }
+
+
+
+
+    // Set labels to local language (default is English)
+    @FXML
+    private void setLanguage() {
+        ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
+        customerNameColumn.setText(rb.getString("customerNameColumn"));
+        customerPhoneColumn.setText(rb.getString("customerPhoneColumn"));
+        customerScreenText.setText(rb.getString("customerScreenText"));
+        customerIDLabel.setText(rb.getString("customerIDLabel"));
+        customerAddressLabel.setText(rb.getString("customerAddressLabel"));
+        customerNameLabel.setText(rb.getString("customerNameLabel"));
+        customerCountryLabel.setText(rb.getString("customerCountryLabel"));
+        customerCityLabel.setText(rb.getString("customerCityLabel"));
+        customerAddressLabel2.setText(rb.getString("customerAddressLabel2"));
+        customerPhoneNumber.setText(rb.getString("customerPhoneNumber"));
+        customerPostalCodeLabel.setText(rb.getString("customerPostalCodeLabel"));
+        customerNewButton.setText(rb.getString("customerNewButton"));
+        customerEditButton.setText(rb.getString("customerEditButton"));
+        customerDeleteButton.setText(rb.getString("customerDeleteButton"));
+//        TODO Add combo box
+    }
+
+
+
+
+
+
+
+    // Initialize screen elements
+    @FXML
+    public void initialize() {
+        // Set local language
+        setLanguage();
+        // Assign actions to buttons
+        btnModifyCustomerSave.setOnAction(event -> saveModifyCustomer(event));
+        btnModifyCustomerCancel.setOnAction(event -> cancelModifyCustomer(event));
+        // Get customer to be modified via index
+        customer = getCustomerRoster().get(customerIndexToModify);
+        // Get customer information
+        String customerName = customer.getCustomerName();
+        String address = customer.getAddress();
+        String address2 = customer.getAddress2();
+        String city = customer.getCity();
+        String country = customer.getCountry();
+        String postalCode = customer.getPostalCode();
+        String phone = customer.getPhone();
+        // Populate information fields with current customer information
+        txtModifyCustomerName.setText(customerName);
+        txtModifyCustomerAddress.setText(address);
+        txtModifyCustomerAddress2.setText(address2);
+        txtModifyCustomerCity.setText(city);
+        txtModifyCustomerCountry.setText(country);
+        txtModifyCustomerPostalCode.setText(postalCode);
+        txtModifyCustomerPhone.setText(phone);
+    }
+
+
 
 }
 

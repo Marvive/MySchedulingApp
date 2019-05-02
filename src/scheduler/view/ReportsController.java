@@ -69,27 +69,30 @@ public class ReportsController {
     public void initialize() {
 //        Sets the local Language
         setLanguage();
+
+//        TODO Add logic to this
+
         // Assign actions to buttons
-        btnModifyCustomerSave.setOnAction(event -> saveModifyCustomer(event));
-        btnModifyCustomerCancel.setOnAction(event -> cancelModifyCustomer(event));
-        // Get customer to be modified via index
-        customer = getCustomerRoster().get(customerIndexToModify);
-        // Get customer information
-        String customerName = customer.getCustomerName();
-        String address = customer.getAddress();
-        String address2 = customer.getAddress2();
-        String city = customer.getCity();
-        String country = customer.getCountry();
-        String postalCode = customer.getPostalCode();
-        String phone = customer.getPhone();
-        // Populate information fields with current customer information
-        txtModifyCustomerName.setText(customerName);
-        txtModifyCustomerAddress.setText(address);
-        txtModifyCustomerAddress2.setText(address2);
-        txtModifyCustomerCity.setText(city);
-        txtModifyCustomerCountry.setText(country);
-        txtModifyCustomerPostalCode.setText(postalCode);
-        txtModifyCustomerPhone.setText(phone);
+//        btnModifyCustomerSave.setOnAction(event -> saveModifyCustomer(event));
+//        btnModifyCustomerCancel.setOnAction(event -> cancelModifyCustomer(event));
+//        // Get customer to be modified via index
+//        customer = getCustomerRoster().get(customerIndexToModify);
+//        // Get customer information
+//        String customerName = customer.getCustomerName();
+//        String address = customer.getAddress();
+//        String address2 = customer.getAddress2();
+//        String city = customer.getCity();
+//        String country = customer.getCountry();
+//        String postalCode = customer.getPostalCode();
+//        String phone = customer.getPhone();
+//        // Populate information fields with current customer information
+//        txtModifyCustomerName.setText(customerName);
+//        txtModifyCustomerAddress.setText(address);
+//        txtModifyCustomerAddress2.setText(address2);
+//        txtModifyCustomerCity.setText(city);
+//        txtModifyCustomerCountry.setText(country);
+//        txtModifyCustomerPostalCode.setText(postalCode);
+//        txtModifyCustomerPhone.setText(phone);
     }
 
 }
