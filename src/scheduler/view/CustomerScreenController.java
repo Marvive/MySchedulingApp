@@ -94,6 +94,24 @@ public class CustomerScreenController {
 
 
 
+    private ResourceBundle rb1 = ResourceBundle.getBundle("customers", Locale.getDefault());
+    @FXML
+    private ComboBox comboBox;
+    /**
+     * Sets that Data in the combo box
+     * Used in initialize
+     * TODO Placeholder for City names
+     * */
+    private void setData() {
+        comboBox.getItems().clear();
+        comboBox.getItems().addAll(
+                rb1.getString("City1"),
+                rb1.getString("City2"),
+                rb1.getString("City3")
+        );
+
+    }
+
 
     // Set labels to local language (default is English)
     @FXML
@@ -127,6 +145,7 @@ public class CustomerScreenController {
     public void initialize() {
         // Set local language
         setLanguage();
+        setData();
         // Assign actions to buttons
         btnModifyCustomerSave.setOnAction(event -> saveModifyCustomer(event));
         btnModifyCustomerCancel.setOnAction(event -> cancelModifyCustomer(event));

@@ -58,13 +58,11 @@ public class AppointmentViewScreenController {
     private Text appointmentViewTitle;
 
 
+
+//    TODO Add this logic to the other Combo boxes
     private ResourceBundle rb1 = ResourceBundle.getBundle("appointmentViewScreen", Locale.getDefault());
-//    private ObservableList<String> options = FXCollections.observableArrayList(
-//            rb1.getString("allView"),rb1.getString("weekView"),rb1.getString("monthView")
-//    );
 
     @FXML
-//    private ComboBox comboBox = new ComboBox(options);
     private ComboBox comboBox;
 
     /**
