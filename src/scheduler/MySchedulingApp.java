@@ -18,7 +18,7 @@ public class MySchedulingApp extends Application {
         primaryStage.setResizable(false);
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("My Scheduling App");
-        Parent root = FXMLLoader.load(getClass().getResource("view/Logn.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/Login.fxml"));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 //        Right now the path returns null

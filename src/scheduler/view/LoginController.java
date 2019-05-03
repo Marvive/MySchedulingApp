@@ -60,7 +60,7 @@ public class LoginController {
 
     //    This Method will be in every class to set the names if of the labels
     private void setLanguage() {
-        ResourceBundle rb = ResourceBundle.getBundle("LogIn", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/login", Locale.getDefault());
         loginTitle.setText(rb.getString("title"));
         usernameLabel.setText(rb.getString("username"));
         passwordLabel.setText(rb.getString("password"));
@@ -76,7 +76,7 @@ public class LoginController {
      */
     @FXML
     void exitButtonHandler(ActionEvent event) {
-        ResourceBundle rb = ResourceBundle.getBundle("LogIn", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/login", Locale.getDefault());
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
         alert.setTitle(rb.getString("titleExitAlert"));
@@ -97,7 +97,7 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 //        Access resourceBundle
-        ResourceBundle rb = ResourceBundle.getBundle("LogIn", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/login", Locale.getDefault());
         if (username.length() == 0 || password.length() == 0) {
             errorLabel.setText(rb.getString("emptyLogin"));
 //            Returns because rest of code does not need to finish
@@ -129,13 +129,13 @@ public class LoginController {
 //    Initialize screen elements
 
     /**
-     * Inititialize the screen
+     * Initialize the screen
      */
     @FXML
     public void initialize() {
 //        Calls setLanguage() to see text in proper language
         setLanguage();
-        // Assign action to button
+//        Lambda to assign action to login button
         loginSignInButton.setOnAction(event -> loginSignInButtonHandler(event));
     }
 
