@@ -1,7 +1,5 @@
 package scheduler.view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -205,8 +203,8 @@ public class AppointmentViewScreenController {
 //        TODO These exist somewhere in the models
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         typeColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
-        startColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
-        endColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+        startColumn.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
+        endColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
         consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
         // Update table view

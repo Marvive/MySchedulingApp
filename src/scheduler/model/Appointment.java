@@ -1,13 +1,11 @@
 package scheduler.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -206,6 +204,28 @@ public class Appointment {
     public StringProperty createdByProperty() {
         return this.createdBy;
     }
+
+    private final ObjectProperty<LocalDateTime> ldt = new SimpleObjectProperty<LocalDateTime>();
+
+    Appointment(LocalDateTime ldt) {
+        this.ldt.set(ldt);
+    }
+
+    public ObjectProperty<LocalDateTime> startTimeProperty() {
+        return ldt;
+    }
+    public ObjectProperty<LocalDateTime> endTimeProperty() {
+        return ldt;
+    }
+//    public LocalDateTime getLdt() {
+//        return ldt.get();
+//    }
+//
+//    public void setLdt(LocalDateTime value) {
+//        ldt.set(value);
+//    }
+
+
 
 //    Checks to see whether the appointment can be made
     public static String isAppointmentValid(Customer customer, String title, LocalDate appointmentDate, String startAmPm,

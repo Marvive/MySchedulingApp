@@ -2,17 +2,25 @@ package scheduler.view;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import scheduler.model.Customer;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static scheduler.model.CustomerRoster.getCustomerRoster;
 
 public class CustomerScreenController {
 
     @FXML
-    private TableView<Class> customerTableView;
+    private TableView<Customer> customerTableView;
 
     @FXML
     private TableColumn<Customer, String> customerNameColumn;
@@ -63,10 +71,13 @@ public class CustomerScreenController {
     private TextField customerAddressTextField;
 
     @FXML
+    private TextField customerPostalCode;
+
+    @FXML
     private TextField customerPhoneTextField;
 
     @FXML
-    private ComboBox<?> customerCityComboBox;
+    private ComboBox<String> customerCityComboBox;
 
     @FXML
     private Button customerNewButton;
@@ -78,21 +89,60 @@ public class CustomerScreenController {
     private Button customerDeleteButton;
 
     @FXML
-    void customerDeleteButtonHandler(ActionEvent event) {
+    private void customerDeleteButtonHandler(ActionEvent event) {
         ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
     }
 
     @FXML
-    void customerEditButtonHandler(ActionEvent event) {
+    private void customerNewButtonHandler(ActionEvent event) {
         ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
     }
 
+//    Initialize customer variable to create a Customer
+
+    /**
+     * IN PROGRESS
+     * */
+    private Customer customer;
+    // Holds index of the customer that will be modified
+    private static int customerIndexToModify;
+    // Return the customer index to be modified
+    public static int getCustomerIndexToModify() {
+        return customerIndexToModify;
+    }
+
+    // Open modify customer window
     @FXML
-    void customerNewButtonHandler(ActionEvent event) {
-        ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
+    private void customerEditButtonHandler(ActionEvent event) {
+        // Get selected customer from table view
+        Customer customerToModify = customerTableView.getSelectionModel().getSelectedItem();
+        // Check if no customer was selected
+        if (customerToModify == null) {
+            // Create alert saying a customer must be selected to be modified
+            ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            TODO Add into RB
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorHeader"));
+            alert.setContentText(rb.getString("errorContent"));
+            alert.showAndWait();
+            return;
+        }
+        // Set the index of the customer to be modified
+        customerIndexToModify = getCustomerRoster().indexOf(customerToModify);
+        // Open modify customer window
+        try {
+            Parent modifyCustomerParent = FXMLLoader.load(getClass().getResource("ModifyCustomer.fxml"));
+            Scene modifyCustomerScene = new Scene(modifyCustomerParent);
+            Stage modifyCustomerStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            modifyCustomerStage.setScene(modifyCustomerScene);
+            modifyCustomerStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-
+//########################################################################
 
     private ResourceBundle rb1 = ResourceBundle.getBundle("customers", Locale.getDefault());
     @FXML
@@ -102,7 +152,7 @@ public class CustomerScreenController {
      * Used in initialize
      * TODO Placeholder for City names
      * */
-    private void setData() {
+    private void setComboData() {
         comboBox.getItems().clear();
         comboBox.getItems().addAll(
                 rb1.getString("City1"),
@@ -131,7 +181,6 @@ public class CustomerScreenController {
         customerNewButton.setText(rb.getString("customerNewButton"));
         customerEditButton.setText(rb.getString("customerEditButton"));
         customerDeleteButton.setText(rb.getString("customerDeleteButton"));
-//        TODO Add combo box
     }
 
 
@@ -143,30 +192,41 @@ public class CustomerScreenController {
     // Initialize screen elements
     @FXML
     public void initialize() {
-        // Set local language
+//        Sets the language
         setLanguage();
-        setData();
-        // Assign actions to buttons
-        btnModifyCustomerSave.setOnAction(event -> saveModifyCustomer(event));
-        btnModifyCustomerCancel.setOnAction(event -> cancelModifyCustomer(event));
-        // Get customer to be modified via index
-        customer = getCustomerRoster().get(customerIndexToModify);
+//        Sets information in the Combo Box
+        setComboData();
+        customerNameColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
+        customerPhoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
+//        Lambdas to assign actions to buttons
+        customerNewButton.setOnAction(event -> customerNewButtonHandler(event));
+        customerEditButton.setOnAction(event -> customerEditButtonHandler(event));
+        customerDeleteButton.setOnAction(event -> customerDeleteButtonHandler(event));
+//        Grab customer by index if the modify button was pressed
+        try {
+            customer = getCustomerRoster().get(customerIndexToModify);
+            String customerName = customer.getCustomerName();
+            String address = customer.getAddress();
+            String address2 = customer.getAddress2();
+            String city = customer.getCity();
+            String country = customer.getCountry();
+            String postalCode = customer.getPostalCode();
+            String phone = customer.getPhone();
+//            Populate the Phone number and name
+            // Populate information fields with current customer information
+            customerNameTextField.setText(customerName);
+            customerAddressTextField.setText(address);
+            customerAddress2TextField.setText(address2);
+//            customerCityComboBox.set(city);
+            customerCountryTextField.setText(country);
+            customerPostalCode.setText(postalCode);
+            customerPhoneTextField.setText(phone);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // Get customer information
-        String customerName = customer.getCustomerName();
-        String address = customer.getAddress();
-        String address2 = customer.getAddress2();
-        String city = customer.getCity();
-        String country = customer.getCountry();
-        String postalCode = customer.getPostalCode();
-        String phone = customer.getPhone();
-        // Populate information fields with current customer information
-        txtModifyCustomerName.setText(customerName);
-        txtModifyCustomerAddress.setText(address);
-        txtModifyCustomerAddress2.setText(address2);
-        txtModifyCustomerCity.setText(city);
-        txtModifyCustomerCountry.setText(country);
-        txtModifyCustomerPostalCode.setText(postalCode);
-        txtModifyCustomerPhone.setText(phone);
+
+
     }
 
 
