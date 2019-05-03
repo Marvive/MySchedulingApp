@@ -58,7 +58,7 @@ public class AppointmentViewScreenController {
 
 
 //    TODO Add this logic to the other Combo boxes
-    private ResourceBundle rb1 = ResourceBundle.getBundle("appointmentViewScreen", Locale.getDefault());
+    private ResourceBundle rb1 = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
 
     @FXML
     private ComboBox comboBox;
@@ -100,7 +100,7 @@ public class AppointmentViewScreenController {
 //    TODO
     @FXML
     private void setLanguage() {
-        ResourceBundle rb = ResourceBundle.getBundle("appointmentViewScreen", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
         titleColumn.setText(rb.getString("titleColumn"));
         typeColumn.setText(rb.getString("typeColumn"));
         startColumn.setText(rb.getString("startColumn"));
@@ -119,7 +119,7 @@ public class AppointmentViewScreenController {
         Appointment appointmentToModify = apptTableView.getSelectionModel().getSelectedItem();
 //        Ensures something is selected
         if (appointmentToModify == null) {
-            ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorModifyingAppointment"));
@@ -149,7 +149,7 @@ public class AppointmentViewScreenController {
         // Check if no appointment was selected if
         if (appointmentToDelete == null) {
             // Show alert saying an appointment must be selected to delete
-            ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorDeletingAppointment"));

@@ -38,6 +38,8 @@ import java.util.*;
  * out how to properly interact with the SQL database.
  */
 
+//    Class.forName(driver);
+
 
 public class DatabaseConnection {
     //    Created finals to frequently reference SQL information provided by Ucertify
@@ -49,6 +51,7 @@ public class DatabaseConnection {
 
     private static String currentUser;
     private static int openCount = 0;
+
 
 
     /**
@@ -112,6 +115,11 @@ public class DatabaseConnection {
      * Used by checkLogInCredentials()
      */
     private static boolean checkPassword(int userId, String password) {
+        try {
+            Class.forName(driver);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         try (Connection conn = DriverManager.getConnection(url, user, pass);
              Statement stmt = conn.createStatement()) {
 

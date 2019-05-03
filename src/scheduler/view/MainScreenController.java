@@ -187,7 +187,7 @@ public class MainScreenController {
 //    }
     @FXML
     private void setLanguage() {
-        ResourceBundle rb = ResourceBundle.getBundle("MainScreen", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/MainScreen", Locale.getDefault());
         menuBarLogOut.setText(rb.getString("mainLogout"));
         menuBarClose.setText(rb.getString("mainClose"));
         menuBarAppointments.setText(rb.getString("mainAppointments"));
