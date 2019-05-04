@@ -186,6 +186,11 @@ public class CustomerScreenController {
     }
 
     @FXML
+    void menuBarMainHandler(ActionEvent event) {
+
+    }
+
+    @FXML
     private void customerDeleteButtonHandler(ActionEvent event) {
         ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
     }

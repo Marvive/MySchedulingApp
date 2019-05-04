@@ -106,6 +106,11 @@ public class AppointmentViewScreenController {
         }
     }
 
+    @FXML
+    void menuBarMainHandler(ActionEvent event) {
+
+    }
+
     /**
      * Handlers for Reports Buttons
      */

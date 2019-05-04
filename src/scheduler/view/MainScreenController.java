@@ -97,6 +97,11 @@ public class MainScreenController {
         }
     }
 
+    @FXML
+    void menuBarMainHandler(ActionEvent event) {
+
+    }
+
 
     /**
      * Handler actions for customer screens

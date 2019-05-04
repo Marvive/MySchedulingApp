@@ -135,6 +135,11 @@ public class ReportsController {
         }
     }
 
+    @FXML
+    void menuBarMainHandler(ActionEvent event) {
+
+    }
+
     /**
      * Closes Program
      */

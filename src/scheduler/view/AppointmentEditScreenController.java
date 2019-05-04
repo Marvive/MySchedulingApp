@@ -178,6 +178,11 @@ public class AppointmentEditScreenController {
         }
     }
 
+    @FXML
+    void menuBarMainHandler(ActionEvent event) {
+
+    }
+
     /**
      * Closes Program
      */

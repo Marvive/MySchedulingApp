@@ -23,7 +23,7 @@
 
 <AnchorPane prefHeight="415.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scheduler.view.AppointmentAddScreenController">
     <children>
-      <MenuBar layoutX="20.0" layoutY="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MenuBar layoutX="20.0" layoutY="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
@@ -31,6 +31,7 @@
                   <MenuItem fx:id="menuBarClose" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Close" />
                </items>
             </Menu>
+            <Menu mnemonicParsing="false" onAction="#menuBarMainHandler" text="Main" />
             <Menu fx:id="menuBarAppointments" mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Appointments" />
             <Menu fx:id="menuBarCustomers" mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Customers" />
             <Menu fx:id="menuBarReports" mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Reports" />

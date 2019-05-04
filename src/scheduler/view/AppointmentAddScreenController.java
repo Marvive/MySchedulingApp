@@ -162,6 +162,11 @@ public class AppointmentAddScreenController {
         }
     }
 
+    @FXML
+    void menuBarMainHandler(ActionEvent event) {
+
+    }
+
     /**
      * Closes Program
      */
