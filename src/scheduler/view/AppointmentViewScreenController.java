@@ -207,8 +207,9 @@ public class AppointmentViewScreenController {
         endColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
         consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
-        // Update table view
+//        Updates the Table View
         updateAddAppointmentTableView();
+//        Sets Data for combobox
         setData();
     }
 }

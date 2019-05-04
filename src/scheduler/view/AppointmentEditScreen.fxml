@@ -6,6 +6,9 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -18,10 +21,22 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scheduler.view.AppointmentEditScreenController">
+<AnchorPane prefHeight="426.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scheduler.view.AppointmentEditScreenController">
    <children>
-      <VBox prefHeight="400.0" prefWidth="220.0" spacing="50.0">
+      <MenuBar layoutX="20.0" layoutY="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem fx:id="menuBarLogOut" mnemonicParsing="false" onAction="#menuBarLogOutHandler" text="Log Out" />
+                  <MenuItem fx:id="menuBarClose" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Close" />
+               </items>
+            </Menu>
+            <Menu fx:id="menuBarAppointments" mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Appointments" />
+            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Customers" />
+            <Menu fx:id="menuBarReports" mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Reports" />
+         </menus>
+      </MenuBar>
+      <VBox prefHeight="400.0" prefWidth="220.0" spacing="50.0" AnchorPane.bottomAnchor="10.0">
          <children>
             <Text fx:id="editAppointmentText" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointment Management">
                <font>
@@ -58,11 +73,11 @@
             <Insets left="20.0" top="20.0" />
          </padding>
       </VBox>
-      <VBox layoutX="343.0" layoutY="-1.0" prefHeight="400.0" prefWidth="234.0" spacing="10.0">
+      <VBox layoutX="343.0" layoutY="-1.0" prefHeight="400.0" prefWidth="234.0" spacing="10.0" AnchorPane.bottomAnchor="10.0">
          <children>
             <HBox prefHeight="15.0" prefWidth="257.0" spacing="5.0">
                <children>
-                  <TextField onAction="#customerSearchField" />
+                  <TextField fx:id="customerSearchField" />
                   <Button fx:id="customerSearchButton" mnemonicParsing="false" onAction="#customerSearchButtonHandler" text="Search" />
                </children>
                <VBox.margin>
