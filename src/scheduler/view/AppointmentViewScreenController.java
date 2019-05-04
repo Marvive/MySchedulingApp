@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.model.Appointment;
 import scheduler.util.DatabaseConnection;
@@ -15,6 +16,7 @@ import scheduler.util.DatabaseConnection;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static scheduler.model.AppointmentList.getAppointmentList;
@@ -54,6 +56,103 @@ public class AppointmentViewScreenController {
 
     @FXML
     private Text appointmentViewTitle;
+
+
+    @FXML
+    private MenuItem menuBarLogOut;
+
+    @FXML
+    private MenuItem menuBarClose;
+
+    @FXML
+    private Menu menuBarAppointments;
+
+    @FXML
+    private Menu menuBarCustomers;
+
+    @FXML
+    private Menu menuBarReports;
+
+    /**
+     * Handler actions for customer screens
+     */
+    @FXML
+    void menuBarCustomersHandler(ActionEvent event) {
+        try {
+            Parent reportsParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
+            Scene reportsScene = new Scene(reportsParent);
+            Stage reportsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            reportsStage.setScene(reportsScene);
+            reportsStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Logs you out
+     */
+    @FXML
+    void menuBarLogOutHandler(ActionEvent event) {
+        try {
+            Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
+            Scene addAppointmentScene = new Scene(addAppointmentParent);
+            Stage addAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            addAppointmentStage.setScene(addAppointmentScene);
+            addAppointmentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Handlers for Reports Buttons
+     */
+    @FXML
+    void menuBarReportsHandler(ActionEvent event) {
+        try {
+            Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
+            Scene reportsScene = new Scene(reportsParent);
+            Stage reportsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            reportsStage.setScene(reportsScene);
+            reportsStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void menuBarAppointmentsHandler(ActionEvent event) {
+        try {
+            Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
+            Scene addAppointmentScene = new Scene(addAppointmentParent);
+            Stage addAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            addAppointmentStage.setScene(addAppointmentScene);
+            addAppointmentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Closes Program
+     */
+    @FXML
+    void menuBarCloseHandler(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.NONE);
+        alert.setTitle("Exit");
+        alert.setHeaderText("Exiting Program!");
+        alert.setContentText("Press OK to exit the Program");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            System.exit(0);
+        } else {
+            System.out.println("Cancelled Exit");
+        }
+    }
 
 
 
