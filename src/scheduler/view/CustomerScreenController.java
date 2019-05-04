@@ -192,12 +192,12 @@ public class CustomerScreenController {
 
     @FXML
     private void customerDeleteButtonHandler(ActionEvent event) {
-        ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/customers", Locale.getDefault());
     }
 
     @FXML
     private void customerNewButtonHandler(ActionEvent event) {
-        ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/customers", Locale.getDefault());
     }
 
 //    Initialize customer variable to create a Customer
@@ -221,7 +221,7 @@ public class CustomerScreenController {
         // Check if no customer was selected
         if (customerToModify == null) {
             // Create alert saying a customer must be selected to be modified
-            ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/customers", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
 //            TODO Add into RB
             alert.setTitle(rb.getString("error"));
@@ -246,17 +246,17 @@ public class CustomerScreenController {
 
 //########################################################################
 
-    private ResourceBundle rb1 = ResourceBundle.getBundle("customers", Locale.getDefault());
+    private ResourceBundle rb1 = ResourceBundle.getBundle("resources/customers", Locale.getDefault());
     @FXML
-    private ComboBox comboBox;
+//    private ComboBox comboBox;
     /**
      * Sets that Data in the combo box
      * Used in initialize
      * TODO Placeholder for City names
      * */
     private void setComboData() {
-        comboBox.getItems().clear();
-        comboBox.getItems().addAll(
+        customerCityComboBox.getItems().clear();
+        customerCityComboBox.getItems().addAll(
                 rb1.getString("City1"),
                 rb1.getString("City2"),
                 rb1.getString("City3")
@@ -268,7 +268,7 @@ public class CustomerScreenController {
     // Set labels to local language (default is English)
     @FXML
     private void setLanguage() {
-        ResourceBundle rb = ResourceBundle.getBundle("customers", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/customers", Locale.getDefault());
         customerNameColumn.setText(rb.getString("customerNameColumn"));
         customerPhoneColumn.setText(rb.getString("customerPhoneColumn"));
         customerScreenText.setText(rb.getString("customerScreenText"));

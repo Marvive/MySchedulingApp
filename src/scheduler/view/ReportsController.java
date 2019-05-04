@@ -160,7 +160,7 @@ public class ReportsController {
     }
 
     private void setLanguage() {
-        ResourceBundle rb = ResourceBundle.getBundle("reports", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/reports", Locale.getDefault());
         appointmentTitleColumn.setText(rb.getString("appointmentTitleColumn"));
         appointmentTypeColumn.setText(rb.getString("appointmentTypeColumn"));
         appointmentStartColumn.setText(rb.getString("appointmentStartColumn"));
