@@ -26,10 +26,21 @@
                   <MenuItem fx:id="menuBarClose" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Close" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" onAction="#menuBarMainHandler" text="Main" />
-            <Menu fx:id="menuBarAppointments" mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Appointments" />
-            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Customers" />
-            <Menu fx:id="menuBarReports" mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Reports" />
+            <Menu mnemonicParsing="false" onAction="#menuBarMainHandler" text="Main">
+               <items>
+                  <MenuItem fx:id="menuBarClose1" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+               </items>
+            </Menu>
+            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Customers">
+               <items>
+                  <MenuItem fx:id="menuBarClose11" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+               </items>
+            </Menu>
+            <Menu fx:id="menuBarReports" mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Reports">
+               <items>
+                  <MenuItem fx:id="menuBarClose12" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+               </items>
+            </Menu>
          </menus>
       </MenuBar>
       <TableView fx:id="apptTableView" layoutX="10.0" layoutY="87.0" prefHeight="296.0" prefWidth="576.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0">

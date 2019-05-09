@@ -19,10 +19,18 @@
                   <MenuItem fx:id="menuBarClose" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Close" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" onAction="#menuBarMainHandler" text="Main" />
-            <Menu fx:id="menuBarAppointments" mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Appointments" />
-            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Customers" />
-            <Menu fx:id="menuBarReports" mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Reports" />
+            <Menu mnemonicParsing="false" onAction="#menuBarMainHandler" text="Main">
+               <items>
+                  <MenuItem fx:id="menuBarClose1" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+               </items></Menu>
+            <Menu fx:id="menuBarAppointments" mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Appointments">
+               <items>
+                  <MenuItem fx:id="menuBarClose11" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+               </items></Menu>
+            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Customers">
+               <items>
+                  <MenuItem fx:id="menuBarClose12" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+               </items></Menu>
          </menus>
       </MenuBar>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">

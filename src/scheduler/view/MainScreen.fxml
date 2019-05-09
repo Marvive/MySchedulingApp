@@ -21,9 +21,18 @@
                   <MenuItem fx:id="menuBarClose" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Close" />
             </items>
           </Menu>
-          <Menu fx:id="menuBarAppointments" mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Appointments" />
-            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Customers" />
-            <Menu fx:id="menuBarReports" mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Reports" />
+          <Menu mnemonicParsing="false" text="Appointments">
+               <items>
+                  <MenuItem fx:id="menuBarAppointments" mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Go" />
+               </items></Menu>
+            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" text="Customers">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Go" />
+               </items></Menu>
+            <Menu fx:id="menuBarReports" mnemonicParsing="false" text="Reports">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Go" />
+               </items></Menu>
         </menus>
       </MenuBar>
    </top>

@@ -28,10 +28,18 @@
                   <MenuItem fx:id="menuBarClose" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Close" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" onAction="#menuBarMainHandler" text="Main" />
-            <Menu fx:id="menuBarAppointments" mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Appointments" />
-            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Customers" />
-            <Menu fx:id="menuBarReports" mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Reports" />
+            <Menu mnemonicParsing="false" onAction="#menuBarMainHandler" text="Main">
+               <items>
+                  <MenuItem fx:id="menuBarClose1" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+               </items></Menu>
+            <Menu fx:id="menuBarAppointments" mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Appointments">
+               <items>
+                  <MenuItem fx:id="menuBarClose11" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+               </items></Menu>
+            <Menu fx:id="menuBarReports" mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Reports">
+               <items>
+                  <MenuItem fx:id="menuBarClose12" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+               </items></Menu>
          </menus>
       </MenuBar>
       <SplitPane dividerPositions="0.3311036789297659" layoutY="24.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0">
