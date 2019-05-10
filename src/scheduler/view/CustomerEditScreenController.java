@@ -11,7 +11,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class CustomerEditScreenController {
 
@@ -32,6 +34,19 @@ public class CustomerEditScreenController {
 
     @FXML
     private Menu menuBarReports;
+
+    @FXML
+    private MenuItem menuBarGoReports;
+
+    @FXML
+    private MenuItem menuBarGoAppointments;
+
+
+    @FXML
+    private Menu menuBarFile;
+
+    @FXML
+    private MenuItem menuBarGoMain;
 
     @FXML
     private Text customerScreenText;
@@ -175,6 +190,25 @@ public class CustomerEditScreenController {
         }
     }
 
+
+
+    /**
+     * Sets the language of the text on the screen Used in the initialize method
+     */
+    @FXML
+    private void setLanguage() {
+        ResourceBundle rb = ResourceBundle.getBundle("resources/customerEditScreen", Locale.getDefault());
+        menuBarLogOut.setText(rb.getString("menuBarLogOut"));
+        menuBarClose.setText(rb.getString("menuBarClose"));
+        menuBarMain.setText(rb.getString("menuBarMain"));
+        menuBarAppointments.setText(rb.getString("menuBarAppointments"));
+        menuBarReports.setText(rb.getString("menuBarReports"));
+        menuBarFile.setText(rb.getString("menuBarFile"));
+        menuBarGoMain.setText(rb.getString("menuBarGoMain"));
+        menuBarGoReports.setText(rb.getString("menuBarGoReports"));
+        menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
+
+    }
 }
 
 

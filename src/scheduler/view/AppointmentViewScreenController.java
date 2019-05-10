@@ -62,6 +62,24 @@ public class AppointmentViewScreenController {
     private MenuBar menuBar;
 
     @FXML
+    private MenuItem menuBarGoReports;
+
+    @FXML
+    private MenuItem menuBarGoAppointments;
+
+    @FXML
+    private MenuItem menuBarGoCustomers;
+
+    @FXML
+    private Menu menuBarFile;
+
+    @FXML
+    private Menu menuBarMain;
+
+    @FXML
+    private MenuItem menuBarGoMain;
+
+    @FXML
     private MenuItem menuBarLogOut;
 
     @FXML
@@ -225,7 +243,20 @@ public class AppointmentViewScreenController {
         editAppointmentButton.setText(rb.getString("editAppointmentButton"));
         deleteAppointmentButton.setText(rb.getString("deleteAppointmentButton"));
         newAppointmentButton.setText(rb.getString("newAppointmentButton"));
-        appointmentViewTitle.setText(rb.getString("appointmentViewTitle") + ":");
+        appointmentViewTitle.setText(rb.getString("appointmentViewTitle"));
+
+        menuBarLogOut.setText(rb.getString("menuBarLogOut"));
+        menuBarClose.setText(rb.getString("menuBarClose"));
+        menuBarMain.setText(rb.getString("menuBarMain"));
+        menuBarAppointments.setText(rb.getString("menuBarAppointments"));
+        menuBarReports.setText(rb.getString("menuBarReports"));
+        menuBarFile.setText(rb.getString("menuBarFile"));
+        menuBarGoMain.setText(rb.getString("menuBarGoMain"));
+        menuBarGoReports.setText(rb.getString("menuBarGoReports"));
+        menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
+
+        menuBarCustomers.setText(rb.getString("menuBarCustomers"));
+        menuBarGoCustomers.setText(rb.getString("menuBarGoCustomers"));
     }
 
     @FXML

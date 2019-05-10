@@ -89,6 +89,25 @@ public class AppointmentAddScreenController {
     private MenuBar menuBar;
 
     @FXML
+    private MenuItem menuBarGoReports;
+
+    @FXML
+    private MenuItem menuBarGoAppointments;
+
+    @FXML
+    private MenuItem menuBarGoCustomers;
+
+    @FXML
+    private Menu menuBarFile;
+
+    @FXML
+    private Menu menuBarMain;
+
+    @FXML
+    private MenuItem menuBarGoMain;
+
+
+    @FXML
     private MenuItem menuBarLogOut;
 
     @FXML
@@ -303,7 +322,6 @@ public class AppointmentAddScreenController {
 
     /**
      * Sets the language of the text on the screen Used in the initialize method
-     * TODO
      * */
     @FXML
     private void setLanguage() {
@@ -318,6 +336,19 @@ public class AppointmentAddScreenController {
         customerSearchButton.setText(rb.getString("customerSearchButton"));
         saveButton.setText(rb.getString("saveButton"));
         cancelButton.setText(rb.getString("cancelButton"));
+
+        menuBarLogOut.setText(rb.getString("menuBarLogOut"));
+        menuBarClose.setText(rb.getString("menuBarClose"));
+        menuBarMain.setText(rb.getString("menuBarMain"));
+        menuBarAppointments.setText(rb.getString("menuBarAppointments"));
+        menuBarReports.setText(rb.getString("menuBarReports"));
+        menuBarFile.setText(rb.getString("menuBarFile"));
+        menuBarGoMain.setText(rb.getString("menuBarGoMain"));
+        menuBarGoReports.setText(rb.getString("menuBarGoReports"));
+        menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
+
+        menuBarCustomers.setText(rb.getString("menuBarCustomers"));
+        menuBarGoCustomers.setText(rb.getString("menuBarGoCustomers"));
     }
 
     @FXML

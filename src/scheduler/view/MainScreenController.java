@@ -27,6 +27,18 @@ public class MainScreenController {
     private MenuItem menuBarClose;
 
     @FXML
+    private MenuItem menuBarGoReports;
+
+    @FXML
+    private MenuItem menuBarGoAppointments;
+
+    @FXML
+    private MenuItem menuBarGoCustomers;
+
+    @FXML
+    private Menu menuBarFile;
+
+    @FXML
     private Menu menuBarAppointments;
 
     @FXML
@@ -49,6 +61,8 @@ public class MainScreenController {
 
     @FXML
     private MenuBar menuBar;
+
+
 
 
     /**
@@ -191,15 +205,21 @@ public class MainScreenController {
     @FXML
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("resources/MainScreen", Locale.getDefault());
-        menuBarLogOut.setText(rb.getString("mainLogout"));
-        menuBarClose.setText(rb.getString("mainClose"));
-        menuBarAppointments.setText(rb.getString("mainAppointments"));
         menuAppointmentsButton.setText(rb.getString("mainAppointments"));
-        menuBarCustomers.setText(rb.getString("mainCustomers"));
         menuCustomersButton.setText(rb.getString("mainCustomers"));
-        menuBarReports.setText(rb.getString("mainReports"));
         menuReportsButton.setText(rb.getString("mainReports"));
         mainMenuText.setText(rb.getString("mainMenuText"));
+
+        menuBarLogOut.setText(rb.getString("menuBarLogOut"));
+        menuBarClose.setText(rb.getString("menuBarClose"));
+        menuBarAppointments.setText(rb.getString("menuBarAppointments"));
+        menuBarReports.setText(rb.getString("menuBarReports"));
+        menuBarFile.setText(rb.getString("menuBarFile"));
+        menuBarGoReports.setText(rb.getString("menuBarGoReports"));
+        menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
+
+        menuBarCustomers.setText(rb.getString("menuBarCustomers"));
+        menuBarGoCustomers.setText(rb.getString("menuBarGoCustomers"));
     }
 
     /**

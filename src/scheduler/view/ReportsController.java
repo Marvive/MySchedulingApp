@@ -72,7 +72,19 @@ public class ReportsController {
     private Menu menuBarCustomers;
 
     @FXML
-    private Menu menuBarReports;
+    private MenuItem menuBarGoAppointments;
+
+    @FXML
+    private MenuItem menuBarGoMain;
+
+    @FXML
+    private Menu menuBarMain;
+
+    @FXML
+    private MenuItem menuBarGoCustomers;
+
+    @FXML
+    private Menu menuBarFile;
 
     /**
      * Handler actions for customer screens
@@ -164,6 +176,17 @@ public class ReportsController {
         appointmentTab.setText(rb.getString("appointmentTab"));
         consultantTab.setText(rb.getString("consultantTab"));
         reportTab.setText(rb.getString("reportTab"));
+
+        menuBarLogOut.setText(rb.getString("menuBarLogOut"));
+        menuBarClose.setText(rb.getString("menuBarClose"));
+        menuBarMain.setText(rb.getString("menuBarMain"));
+        menuBarAppointments.setText(rb.getString("menuBarAppointments"));
+        menuBarFile.setText(rb.getString("menuBarFile"));
+        menuBarGoMain.setText(rb.getString("menuBarGoMain"));
+        menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
+
+        menuBarCustomers.setText(rb.getString("menuBarCustomers"));
+        menuBarGoCustomers.setText(rb.getString("menuBarGoCustomers"));
     }
 
     @FXML

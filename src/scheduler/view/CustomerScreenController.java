@@ -188,6 +188,7 @@ public class CustomerScreenController {
         menuBarGoMain.setText(rb.getString("menuBarGoMain"));
         menuBarGoReports.setText(rb.getString("menuBarGoReports"));
         menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
+
     }
 
     // Initialize screen elements
