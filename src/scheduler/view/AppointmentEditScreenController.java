@@ -168,18 +168,7 @@ public class AppointmentEditScreenController {
         }
     }
 
-    @FXML
-    void menuBarMainHandler(ActionEvent event) {
-        try {
-            Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
-            Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
-            addAppointmentStage.setScene(addAppointmentScene);
-            addAppointmentStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     /**
      * Closes Program

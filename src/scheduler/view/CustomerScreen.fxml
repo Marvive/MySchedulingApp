@@ -34,7 +34,7 @@
                </items></Menu>
             <Menu fx:id="menuBarAppointments" mnemonicParsing="false" text="Appointments">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Go" />
+                  <MenuItem fx:id="menuBarAppointmentsItem" mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Go" />
                </items></Menu>
             <Menu fx:id="menuBarReports" mnemonicParsing="false" text="Reports">
                <items>

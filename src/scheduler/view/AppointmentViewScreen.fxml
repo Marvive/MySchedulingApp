@@ -26,9 +26,9 @@
                   <MenuItem fx:id="menuBarClose" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Close" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" onAction="#menuBarMainHandler" text="Main">
+            <Menu fx:id="menuBarMain" mnemonicParsing="false" text="Main">
                <items>
-                  <MenuItem fx:id="menuBarMain" mnemonicParsing="false" onAction="#menuBarMainHandler" text="Go" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuBarMainHandler" text="Go" />
                </items>
             </Menu>
             <Menu fx:id="menuBarCustomers" mnemonicParsing="false" text="Customers">

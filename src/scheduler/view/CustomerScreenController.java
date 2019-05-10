@@ -90,12 +90,17 @@ public class CustomerScreenController {
     @FXML
     private Button customerDeleteButton;
 
+    @FXML
+    private MenuBar menuBar;
 
     @FXML
     private MenuItem menuBarLogOut;
 
     @FXML
     private MenuItem menuBarClose;
+
+    @FXML
+    private MenuItem menuBarAppointmentsItem;
 
     @FXML
     private Menu menuBarAppointments;
@@ -106,21 +111,6 @@ public class CustomerScreenController {
     @FXML
     private Menu menuBarReports;
 
-    /**
-     * Handler actions for customer screens
-     */
-    @FXML
-    void menuBarCustomersHandler(ActionEvent event) {
-        try {
-            Parent reportsParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
-            Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            reportsStage.setScene(reportsScene);
-            reportsStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Logs you out
@@ -130,7 +120,7 @@ public class CustomerScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -146,13 +136,14 @@ public class CustomerScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Closes Program
@@ -172,12 +163,13 @@ public class CustomerScreenController {
             System.out.println("Cancelled Exit");
         }
     }
+
     @FXML
     void menuBarReportsHandler(ActionEvent event) {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage reportsStage = (Stage) menuBar.getScene().getWindow();
             reportsStage.setScene(reportsScene);
             reportsStage.show();
         } catch (IOException e) {
@@ -187,7 +179,15 @@ public class CustomerScreenController {
 
     @FXML
     void menuBarMainHandler(ActionEvent event) {
-
+        try {
+            Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+            Scene addAppointmentScene = new Scene(addAppointmentParent);
+            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            addAppointmentStage.setScene(addAppointmentScene);
+            addAppointmentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -204,10 +204,11 @@ public class CustomerScreenController {
 
     /**
      * IN PROGRESS
-     * */
+     */
     private Customer customer;
     // Holds index of the customer that will be modified
     private static int customerIndexToModify;
+
     // Return the customer index to be modified
     public static int getCustomerIndexToModify() {
         return customerIndexToModify;
@@ -247,6 +248,7 @@ public class CustomerScreenController {
 //########################################################################
 
     private ResourceBundle rb1 = ResourceBundle.getBundle("resources/customers", Locale.getDefault());
+
     @FXML
 //    private ComboBox comboBox;
     /**
@@ -286,11 +288,6 @@ public class CustomerScreenController {
     }
 
 
-
-
-
-
-
     // Initialize screen elements
     @FXML
     public void initialize() {
@@ -304,6 +301,8 @@ public class CustomerScreenController {
         customerNewButton.setOnAction(event -> customerNewButtonHandler(event));
         customerEditButton.setOnAction(event -> customerEditButtonHandler(event));
         customerDeleteButton.setOnAction(event -> customerDeleteButtonHandler(event));
+
+
 //        Grab customer by index if the modify button was pressed
         try {
             customer = getCustomerRoster().get(customerIndexToModify);
@@ -330,7 +329,6 @@ public class CustomerScreenController {
 
 
     }
-
 
 
 }
