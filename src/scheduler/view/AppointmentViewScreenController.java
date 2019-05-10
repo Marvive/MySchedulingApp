@@ -82,7 +82,7 @@ public class AppointmentViewScreenController {
     @FXML
     void menuBarCustomersHandler(ActionEvent event) {
         try {
-            Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerAddScreen.fxml"));
+            Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
             Scene customerScene = new Scene(customerParent);
             Stage customerStage = (Stage)  menuBar.getScene().getWindow();
             customerStage.setScene(customerScene);
