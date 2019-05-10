@@ -130,7 +130,7 @@ public class AppointmentEditScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
