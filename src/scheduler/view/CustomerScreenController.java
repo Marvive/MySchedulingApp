@@ -12,7 +12,9 @@ import javafx.stage.Stage;
 import scheduler.model.Customer;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class CustomerScreenController {
 
@@ -150,4 +152,19 @@ public class CustomerScreenController {
         }
     }
 
+
+//    Language for resource bundle
+    @FXML
+    private void setLanguage() {
+        ResourceBundle rb = ResourceBundle.getBundle("resources/customerScreen", Locale.getDefault());
+        customerNameColumn.setText(rb.getString("customerNameColumn"));
+        customerPhoneColumn.setText(rb.getString("customerPhoneColumn"));
+        customerViewScreenText.setText(rb.getString("customerScreenText"));
+        customerAddressColumn.setText(rb.getString("customerAddressLabel"));
+        customerCountryColumn.setText(rb.getString("customerCountryLabel"));
+        customerCityColumn.setText(rb.getString("customerCityLabel"));
+        customerAddress2Column.setText(rb.getString("customerAddressLabel2"));
+        customerAddButton.setText(rb.getString("customerAddButton"));
+        customerEditButton.setText(rb.getString("customerEditButton"));
+    }
 }

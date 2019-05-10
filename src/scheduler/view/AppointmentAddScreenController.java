@@ -244,7 +244,7 @@ public class AppointmentAddScreenController {
      * */
     @FXML
     void saveButtonHandler(ActionEvent event) {
-//        Inititializes the Customer
+//        Initializes the Customer
         Customer customer = null;
 //        Grabs the name of currentCustomer
         if (currentCustomers.size() == 1) {
