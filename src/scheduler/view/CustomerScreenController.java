@@ -28,7 +28,13 @@ public class CustomerScreenController {
     private MenuItem menuBarClose;
 
     @FXML
-    private MenuItem menuBarGo;
+    private MenuItem menuBarGoMain;
+
+    @FXML
+    private MenuItem menuBarGoReports;
+
+    @FXML
+    private MenuItem menuBarGoAppointments;
 
     @FXML
     private Menu menuBarMain;
@@ -74,7 +80,7 @@ public class CustomerScreenController {
 
     /**
      * Button Handlers
-     * */
+     */
 
     @FXML
     void addButtonHandler(ActionEvent event) {
@@ -89,13 +95,13 @@ public class CustomerScreenController {
 
     /**
      * Menu Handlers
-     * */
+     */
     @FXML
     void menuBarAppointmentsHandler(ActionEvent event) {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -124,7 +130,7 @@ public class CustomerScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -137,7 +143,7 @@ public class CustomerScreenController {
         try {
             Parent mainParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
             Scene mainScene = new Scene(mainParent);
-            Stage mainStage = (Stage)  menuBar.getScene().getWindow();
+            Stage mainStage = (Stage) menuBar.getScene().getWindow();
             mainStage.setScene(mainScene);
             mainStage.show();
         } catch (IOException e) {
@@ -150,7 +156,7 @@ public class CustomerScreenController {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage)  menuBar.getScene().getWindow();
+            Stage reportsStage = (Stage) menuBar.getScene().getWindow();
             reportsStage.setScene(reportsScene);
             reportsStage.show();
         } catch (IOException e) {
@@ -159,7 +165,7 @@ public class CustomerScreenController {
     }
 
 
-//    Language for resource bundle
+    //    Language for resource bundle
     @FXML
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("resources/customerScreen", Locale.getDefault());
@@ -179,6 +185,15 @@ public class CustomerScreenController {
         menuBarAppointments.setText(rb.getString("menuBarAppointments"));
         menuBarReports.setText(rb.getString("menuBarReports"));
         menuBarFile.setText(rb.getString("menuBarFile"));
-        menuBarGo.setText(rb.getString("menuBarGo"));
+        menuBarGoMain.setText(rb.getString("menuBarGoMain"));
+        menuBarGoReports.setText(rb.getString("menuBarGoReports"));
+        menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
+    }
+
+    // Initialize screen elements
+    @FXML
+    public void initialize() {
+//        Sets the language
+        setLanguage();
     }
 }
