@@ -18,7 +18,7 @@
 
 <AnchorPane prefHeight="419.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scheduler.view.AppointmentViewScreenController">
    <children>
-      <MenuBar layoutX="10.0" layoutY="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MenuBar fx:id="menuBar" layoutX="10.0" layoutY="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
@@ -28,17 +28,17 @@
             </Menu>
             <Menu mnemonicParsing="false" onAction="#menuBarMainHandler" text="Main">
                <items>
-                  <MenuItem fx:id="menuBarClose1" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+                  <MenuItem fx:id="menuBarMain" mnemonicParsing="false" onAction="#menuBarMainHandler" text="Go" />
                </items>
             </Menu>
-            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Customers">
+            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" text="Customers">
                <items>
-                  <MenuItem fx:id="menuBarClose11" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Go" />
                </items>
             </Menu>
-            <Menu fx:id="menuBarReports" mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Reports">
+            <Menu fx:id="menuBarReports" mnemonicParsing="false" text="Reports">
                <items>
-                  <MenuItem fx:id="menuBarClose12" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Go" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Go" />
                </items>
             </Menu>
          </menus>

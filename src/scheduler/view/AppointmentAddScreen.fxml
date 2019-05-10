@@ -23,7 +23,7 @@
 
 <AnchorPane prefHeight="415.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scheduler.view.AppointmentAddScreenController">
     <children>
-      <MenuBar layoutX="20.0" layoutY="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MenuBar fx:id="menuBar" layoutX="20.0" layoutY="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
@@ -31,10 +31,26 @@
                   <MenuItem fx:id="menuBarClose" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Close" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" onAction="#menuBarMainHandler" text="Main" />
-            <Menu fx:id="menuBarAppointments" mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Appointments" />
-            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Customers" />
-            <Menu fx:id="menuBarReports" mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Reports" />
+            <Menu fx:id="menuBarMain" mnemonicParsing="false" text="Main">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#menuBarMainHandler" text="Go" />
+               </items>
+            </Menu>
+            <Menu fx:id="menuBarAppointments" mnemonicParsing="false" text="Appointments">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#menuBarAppointmentsHandler" text="Go" />
+               </items>
+            </Menu>
+            <Menu fx:id="menuBarCustomers" mnemonicParsing="false" text="Customers">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Go" />
+               </items>
+            </Menu>
+            <Menu fx:id="menuBarReports" mnemonicParsing="false" text="Reports">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Go" />
+               </items>
+            </Menu>
          </menus>
       </MenuBar>
         <VBox prefHeight="400.0" prefWidth="220.0" spacing="50.0" AnchorPane.bottomAnchor="0.0">

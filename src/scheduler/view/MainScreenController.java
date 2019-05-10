@@ -47,6 +47,9 @@ public class MainScreenController {
     @FXML
     private Text mainMenuText;
 
+    @FXML
+    private MenuBar menuBar;
+
 
     /**
      * Actions to move to the AppointmentViewScreen
@@ -70,7 +73,7 @@ public class MainScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -97,11 +100,6 @@ public class MainScreenController {
         }
     }
 
-    @FXML
-    void menuBarMainHandler(ActionEvent event) {
-
-    }
-
 
     /**
      * Handler actions for customer screens
@@ -109,11 +107,11 @@ public class MainScreenController {
     @FXML
     void menuBarCustomersHandler(ActionEvent event) {
         try {
-            Parent reportsParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
-            Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            reportsStage.setScene(reportsScene);
-            reportsStage.show();
+            Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
+            Scene customerScene = new Scene(customerParent);
+            Stage customerStage = (Stage)  menuBar.getScene().getWindow();
+            customerStage.setScene(customerScene);
+            customerStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -122,11 +120,11 @@ public class MainScreenController {
     @FXML
     void menuCustomersButtonHandler(ActionEvent event) {
         try {
-            Parent reportsParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
-            Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            reportsStage.setScene(reportsScene);
-            reportsStage.show();
+            Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
+            Scene customerScene = new Scene(customerParent);
+            Stage customerStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            customerStage.setScene(customerScene);
+            customerStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -140,7 +138,7 @@ public class MainScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -169,7 +167,7 @@ public class MainScreenController {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage reportsStage = (Stage)  menuBar.getScene().getWindow();
             reportsStage.setScene(reportsScene);
             reportsStage.show();
         } catch (IOException e) {

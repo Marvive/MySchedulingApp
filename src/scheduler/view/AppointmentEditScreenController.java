@@ -86,6 +86,9 @@ public class AppointmentEditScreenController {
     @FXML
     private Button cancelButton;
 
+    @FXML
+    private MenuBar menuBar;
+
 
 
     @FXML
@@ -109,24 +112,11 @@ public class AppointmentEditScreenController {
     @FXML
     void menuBarCustomersHandler(ActionEvent event) {
         try {
-            Parent reportsParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
-            Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            reportsStage.setScene(reportsScene);
-            reportsStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void menuCustomersButtonHandler(ActionEvent event) {
-        try {
-            Parent reportsParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
-            Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            reportsStage.setScene(reportsScene);
-            reportsStage.show();
+            Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
+            Scene customerScene = new Scene(customerParent);
+            Stage customerStage = (Stage)  menuBar.getScene().getWindow();
+            customerStage.setScene(customerScene);
+            customerStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -157,7 +147,7 @@ public class AppointmentEditScreenController {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage reportsStage = (Stage)  menuBar.getScene().getWindow();
             reportsStage.setScene(reportsScene);
             reportsStage.show();
         } catch (IOException e) {
@@ -170,7 +160,7 @@ public class AppointmentEditScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -180,7 +170,15 @@ public class AppointmentEditScreenController {
 
     @FXML
     void menuBarMainHandler(ActionEvent event) {
-
+        try {
+            Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+            Scene addAppointmentScene = new Scene(addAppointmentParent);
+            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            addAppointmentStage.setScene(addAppointmentScene);
+            addAppointmentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -204,7 +202,7 @@ public class AppointmentEditScreenController {
 
     @FXML
     private void setLanguage() {
-        ResourceBundle rb = ResourceBundle.getBundle("editAppointmentScreen", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentEditScreen", Locale.getDefault());
         editAppointmentText.setText(rb.getString("lblAddAppointment"));
         AppointmentTitleText.setText(rb.getString("lblTitle"));
         dateText.setText(rb.getString("lblDate"));
@@ -219,7 +217,7 @@ public class AppointmentEditScreenController {
 
     @FXML
     void cancelButtonHandler(ActionEvent event) {
-        ResourceBundle rb = ResourceBundle.getBundle("AddModifyAppointment", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentEditScreen", Locale.getDefault());
         // Show alert to confirm cancel
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
@@ -245,8 +243,8 @@ public class AppointmentEditScreenController {
 //    Creating appointment initializer
     private Appointment appointment;
 //    Grabs index of appointment
-    int appointmentIndexToModify = AppointmentViewScreenController.getAppointmentIndexToModify();
-//    Initialize observablelist
+    private int appointmentIndexToModify = AppointmentViewScreenController.getAppointmentIndexToModify();
+//    Initialize observableList
     private ObservableList<Customer> currentCustomers = FXCollections.observableArrayList();
 
     /**
@@ -280,7 +278,7 @@ public class AppointmentEditScreenController {
 
 //    Update information to database
     @FXML
-    private void saveModifyAppointment(ActionEvent event) {
+    private void saveButtonHandler(ActionEvent event) {
 //        Creates customer
         Customer customer = null;
 //        Grabs the currentCustomer state
@@ -298,7 +296,7 @@ public class AppointmentEditScreenController {
         String errorMessage = Appointment.isAppointmentValid(customer, title, appointmentDate, startAmPm, endAmPm);
 //        Checks and alerts for any relevant errors
         if (errorMessage.length() > 0) {
-            ResourceBundle rb = ResourceBundle.getBundle("appointmentEditScreen", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentEditScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorModifyingAppointment"));
@@ -344,7 +342,7 @@ public class AppointmentEditScreenController {
 //        Sets the local language
         setLanguage();
 //        Creates actions for buttons
-        saveButton.setOnAction(event -> saveModifyAppointment(event));
+        saveButton.setOnAction(event -> saveButtonHandler(event));
         cancelButton.setOnAction(event -> cancelButtonHandler(event));
 //        Modifies item based on appointment index
         appointment = getAppointmentList().get(appointmentIndexToModify);
