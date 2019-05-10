@@ -185,7 +185,9 @@ public class Customer {
         return this.country.get();
     }
 
-    // Validation
+    /**
+     * Check if customer is valid
+     * */
     public static String isCustomerValid(String customerName, String address, String city,
                                          String country, String postalCode, String phone) {
         ResourceBundle rb = ResourceBundle.getBundle("Customer", Locale.getDefault());

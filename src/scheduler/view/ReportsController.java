@@ -80,7 +80,7 @@ public class ReportsController {
     @FXML
     void menuBarCustomersHandler(ActionEvent event) {
         try {
-            Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
+            Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerAddScreen.fxml"));
             Scene customerScene = new Scene(customerParent);
             Stage customerStage = (Stage)  menuBar.getScene().getWindow();
             customerStage.setScene(customerScene);
