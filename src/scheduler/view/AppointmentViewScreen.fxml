@@ -20,7 +20,7 @@
    <children>
       <MenuBar fx:id="menuBar" layoutX="10.0" layoutY="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <menus>
-            <Menu mnemonicParsing="false" text="File">
+            <Menu fx:id="menuBarFile" mnemonicParsing="false" text="File">
                <items>
                   <MenuItem fx:id="menuBarLogOut" mnemonicParsing="false" onAction="#menuBarLogOutHandler" text="Log Out" />
                   <MenuItem fx:id="menuBarClose" mnemonicParsing="false" onAction="#menuBarCloseHandler" text="Close" />
@@ -28,17 +28,17 @@
             </Menu>
             <Menu fx:id="menuBarMain" mnemonicParsing="false" text="Main">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#menuBarMainHandler" text="Go" />
+                  <MenuItem fx:id="menuBarGoMain" mnemonicParsing="false" onAction="#menuBarMainHandler" text="Go" />
                </items>
             </Menu>
             <Menu fx:id="menuBarCustomers" mnemonicParsing="false" text="Customers">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Go" />
+                  <MenuItem fx:id="menuBarGoCustomers" mnemonicParsing="false" onAction="#menuBarCustomersHandler" text="Go" />
                </items>
             </Menu>
             <Menu fx:id="menuBarReports" mnemonicParsing="false" text="Reports">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Go" />
+                  <MenuItem fx:id="menuBarGoReports" mnemonicParsing="false" onAction="#menuBarReportsHandler" text="Go" />
                </items>
             </Menu>
          </menus>

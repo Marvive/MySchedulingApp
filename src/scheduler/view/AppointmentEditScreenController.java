@@ -93,9 +93,6 @@ public class AppointmentEditScreenController {
     private MenuItem menuBarGoReports;
 
     @FXML
-    private MenuItem menuBarGoAppointments;
-
-    @FXML
     private MenuItem menuBarGoCustomers;
 
     @FXML
@@ -113,9 +110,6 @@ public class AppointmentEditScreenController {
 
     @FXML
     private MenuItem menuBarClose;
-
-    @FXML
-    private Menu menuBarAppointments;
 
     @FXML
     private Menu menuBarCustomers;
@@ -223,12 +217,10 @@ public class AppointmentEditScreenController {
         menuBarLogOut.setText(rb.getString("menuBarLogOut"));
         menuBarClose.setText(rb.getString("menuBarClose"));
         menuBarMain.setText(rb.getString("menuBarMain"));
-        menuBarAppointments.setText(rb.getString("menuBarAppointments"));
         menuBarReports.setText(rb.getString("menuBarReports"));
         menuBarFile.setText(rb.getString("menuBarFile"));
         menuBarGoMain.setText(rb.getString("menuBarGoMain"));
         menuBarGoReports.setText(rb.getString("menuBarGoReports"));
-        menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
 
         menuBarCustomers.setText(rb.getString("menuBarCustomers"));
         menuBarGoCustomers.setText(rb.getString("menuBarGoCustomers"));
