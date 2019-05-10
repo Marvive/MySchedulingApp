@@ -41,7 +41,6 @@ public class CustomerEditScreenController {
     @FXML
     private MenuItem menuBarGoAppointments;
 
-
     @FXML
     private Menu menuBarFile;
 

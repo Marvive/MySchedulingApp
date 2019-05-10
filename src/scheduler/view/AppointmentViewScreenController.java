@@ -57,15 +57,11 @@ public class AppointmentViewScreenController {
     @FXML
     private Text appointmentViewTitle;
 
-
     @FXML
     private MenuBar menuBar;
 
     @FXML
     private MenuItem menuBarGoReports;
-
-    @FXML
-    private MenuItem menuBarGoAppointments;
 
     @FXML
     private MenuItem menuBarGoCustomers;
