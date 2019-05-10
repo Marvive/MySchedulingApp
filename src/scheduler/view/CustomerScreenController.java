@@ -28,6 +28,9 @@ public class CustomerScreenController {
     private MenuItem menuBarClose;
 
     @FXML
+    private MenuItem menuBarGo;
+
+    @FXML
     private Menu menuBarMain;
 
     @FXML
@@ -35,6 +38,9 @@ public class CustomerScreenController {
 
     @FXML
     private Menu menuBarReports;
+
+    @FXML
+    private Menu menuBarFile;
 
     @FXML
     private TableView<Customer> customerTableView;
@@ -166,5 +172,13 @@ public class CustomerScreenController {
         customerAddress2Column.setText(rb.getString("customerAddressLabel2"));
         customerAddButton.setText(rb.getString("customerAddButton"));
         customerEditButton.setText(rb.getString("customerEditButton"));
+
+        menuBarLogOut.setText(rb.getString("menuBarLogOut"));
+        menuBarClose.setText(rb.getString("menuBarClose"));
+        menuBarMain.setText(rb.getString("menuBarMain"));
+        menuBarAppointments.setText(rb.getString("menuBarAppointments"));
+        menuBarReports.setText(rb.getString("menuBarReports"));
+        menuBarFile.setText(rb.getString("menuBarFile"));
+        menuBarGo.setText(rb.getString("menuBarGo"));
     }
 }
