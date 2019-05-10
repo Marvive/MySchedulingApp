@@ -82,8 +82,8 @@
                 </GridPane>
                 <ButtonBar layoutX="141.0" layoutY="346.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="20.0">
                     <buttons>
-                        <Button fx:id="customerAddSaveButton" layoutX="140.0" layoutY="17.0" mnemonicParsing="false" onAction="#customerAddSaveHandler" text="Save" />
-                        <Button fx:id="customerAddCancelButton" layoutX="140.0" layoutY="17.0" mnemonicParsing="false" onAction="#customerAddCancelHandler" text="Cancel" />
+                        <Button fx:id="customerAddSaveButton" layoutX="140.0" layoutY="17.0" mnemonicParsing="false" onAction="#customerEditSaveHandler" text="Save" />
+                        <Button fx:id="customerAddCancelButton" layoutX="140.0" layoutY="17.0" mnemonicParsing="false" onAction="#customerEditCancelHandler" text="Cancel" />
                     </buttons>
                 </ButtonBar>
             </children>
