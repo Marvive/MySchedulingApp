@@ -196,7 +196,7 @@ public class AppointmentViewScreenController {
     @FXML
     void handleNewAppt(ActionEvent event) {
         try {
-            Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AddAppointment.fxml"));
+            Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentAddScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
             Stage addAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);

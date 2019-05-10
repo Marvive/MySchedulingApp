@@ -110,7 +110,7 @@ public class AppointmentEditScreenController {
      * Handler actions for customer screens
      */
     @FXML
-    void menuBarCustomersHandler(ActionEvent event) {
+    void menuBarCustomersHandler() {
         try {
             Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
             Scene customerScene = new Scene(customerParent);
@@ -126,7 +126,7 @@ public class AppointmentEditScreenController {
      * Logs you out
      */
     @FXML
-    void menuBarLogOutHandler(ActionEvent event) {
+    void menuBarLogOutHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -143,7 +143,7 @@ public class AppointmentEditScreenController {
      */
 
     @FXML
-    void menuBarReportsHandler(ActionEvent event) {
+    void menuBarReportsHandler() {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
@@ -156,7 +156,7 @@ public class AppointmentEditScreenController {
     }
 
     @FXML
-    void menuBarAppointmentsHandler(ActionEvent event) {
+    void menuBarAppointmentsHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -174,7 +174,7 @@ public class AppointmentEditScreenController {
      * Closes Program
      */
     @FXML
-    void menuBarCloseHandler(ActionEvent event) {
+    void menuBarCloseHandler() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
         alert.setTitle("Exit");

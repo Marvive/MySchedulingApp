@@ -107,7 +107,7 @@ public class AppointmentAddScreenController {
      * Handler actions for customer screens
      */
     @FXML
-    void menuBarCustomersHandler(ActionEvent event) {
+    void menuBarCustomersHandler() {
         try {
             Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
             Scene customerScene = new Scene(customerParent);
@@ -202,7 +202,7 @@ public class AppointmentAddScreenController {
 
     @FXML
     void cancelButtonHandler(ActionEvent event) {
-        ResourceBundle rb = ResourceBundle.getBundle("appointmentAddScreen", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
         // Show alert to confirm cancel
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
@@ -261,7 +261,7 @@ public class AppointmentAddScreenController {
                 appointmentDate, startAmPm, endAmPm);
 //        Check and print error message
         if (errorMessage.length() > 0) {
-            ResourceBundle rb = ResourceBundle.getBundle("appointmentAddScreen", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
@@ -307,7 +307,7 @@ public class AppointmentAddScreenController {
      * */
     @FXML
     private void setLanguage() {
-        ResourceBundle rb = ResourceBundle.getBundle("appointmentAddScreen", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
         editAppointmentText.setText(rb.getString("editAppointmentText"));
         AppointmentTitleText.setText(rb.getString("AppointmentTitleText"));
         dateText.setText(rb.getString("dateText"));
