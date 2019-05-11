@@ -232,9 +232,9 @@ public class AppointmentEditScreenController {
         // Show alert to confirm cancel
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
-        alert.setTitle(rb.getString("confirmCancel"));
-        alert.setHeaderText(rb.getString("confirmCancel"));
-        alert.setContentText(rb.getString("confirmCancelAddingMessage"));
+        alert.setTitle(rb.getString("cancelTitle"));
+        alert.setHeaderText(rb.getString("cancelHeader"));
+        alert.setContentText(rb.getString("cancelText"));
         Optional<ButtonType> result = alert.showAndWait();
         // If the 'OK' button is clicked, return to main screen
         if (result.get() == ButtonType.OK) {

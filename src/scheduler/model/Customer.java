@@ -40,6 +40,7 @@ public class Customer {
         country = new SimpleStringProperty();
     }
 
+    //    Setters
     public void setCustomerId(int customerId) {
         this.customerId.set(customerId);
     }
@@ -88,7 +89,7 @@ public class Customer {
         this.country.set(country);
     }
 
-    // Getters
+//    Getters
     public IntegerProperty customerIdProperty() {
         return customerId;
     }
@@ -195,16 +196,16 @@ public class Customer {
         if (address.length() == 0) {
             errorMessage = errorMessage + rb.getString("errorAddress");
         }
-        if (city.length() == 0 || city.matches("a-zA-Z+")) {
+        if (city.length() == 0 || city.matches("0-9+")) {
             errorMessage = errorMessage + rb.getString("errorCity");
         }
-        if (country.length() == 0 || country.matches("a-zA-Z+")) {
+        if (country.length() == 0 || country.matches("0-9+")) {
             errorMessage = errorMessage + rb.getString("errorCountry");
         }
-        if (postalCode.length() < 5 || postalCode.matches("0-9+")) {
+        if (postalCode.length() < 5 || postalCode.matches("a-zA-Z+")) {
             errorMessage = errorMessage + rb.getString("errorPostalCode");
         }
-        if (phone.length() < 10 || phone.matches("0-9+")) {
+        if (phone.length() < 10 || phone.matches("a-zA-Z+")) {
             errorMessage = errorMessage + rb.getString("errorPhone");
         }
         return errorMessage;
