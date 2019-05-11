@@ -413,7 +413,4 @@ public class AppointmentEditScreenController {
 
 • scheduling overlapping appointments
 
-• entering nonexistent or invalid customer data
-
-• entering an incorrect username and password
 * */
