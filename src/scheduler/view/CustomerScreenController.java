@@ -109,16 +109,16 @@ public class CustomerScreenController {
     @FXML
 //    TODO
     void editButtonHandler(ActionEvent event) {
-        // Get selected customer from table view
+//        Grabs customer from Table View
         Customer customerToModify = customerTableView.getSelectionModel().getSelectedItem();
-        // Check if no customer was selected
+//        Checks if no customer was selected
         if (customerToModify == null) {
             // Create alert saying a customer must be selected to be modified
             ResourceBundle rb = ResourceBundle.getBundle("resources/customerScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
-            alert.setHeaderText(rb.getString("errorModifyingCustomer"));
-            alert.setContentText(rb.getString("errorModifyingCustomerMessage"));
+            alert.setHeaderText(rb.getString("errorHeader"));
+            alert.setContentText(rb.getString("errorContent"));
             alert.showAndWait();
             return;
         }
