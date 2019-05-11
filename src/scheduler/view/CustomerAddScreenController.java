@@ -201,6 +201,17 @@ public class CustomerAddScreenController {
         menuBarGoMain.setText(rb.getString("menuBarGoMain"));
         menuBarGoReports.setText(rb.getString("menuBarGoReports"));
         menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
+
+        customerScreenText.setText(rb.getString("customerScreenText"));
+        customerIDLabel.setText(rb.getString("customerIDLabel"));
+        customerAddressLabel.setText(rb.getString("customerAddressLabel"));
+        customerNameLabel.setText(rb.getString("customerNameLabel"));
+        customerCountryLabel.setText(rb.getString("customerCountryLabel"));
+        customerCityLabel.setText(rb.getString("customerCityLabel"));
+        customerAddressLabel2.setText(rb.getString("customerAddressLabel2"));
+        customerPhoneNumber.setText(rb.getString("customerPhoneNumber"));
+        customerAddSaveButton.setText(rb.getString("customerAddSaveButton"));
+        customerAddCancelButton.setText(rb.getString("customerAddCancelButton"));
     }
 }
 
