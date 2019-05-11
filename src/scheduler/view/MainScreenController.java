@@ -85,7 +85,7 @@ public class MainScreenController {
     }
 
     @FXML
-    void menuBarAppointmentsHandler(ActionEvent event) {
+    void menuBarAppointmentsHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);

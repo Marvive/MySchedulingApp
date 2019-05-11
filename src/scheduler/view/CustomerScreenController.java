@@ -3,6 +3,7 @@ package scheduler.view;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -81,18 +82,58 @@ public class CustomerScreenController {
     @FXML
     private Text customerViewScreenText;
 
+    private static int customerIndexToModify;
+
+//    Returns Customer index to modify
+    public static int getCustomerIndexToModify() {
+        return customerIndexToModify;
+    }
+
     /**
      * Button Handlers
      */
 
     @FXML
     void addButtonHandler(ActionEvent event) {
-
+            try {
+                Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("CustomerAddScreen.fxml"));
+                Scene addAppointmentScene = new Scene(addAppointmentParent);
+                Stage addAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                addAppointmentStage.setScene(addAppointmentScene);
+                addAppointmentStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
     @FXML
+//    TODO
     void editButtonHandler(ActionEvent event) {
-
+        // Get selected customer from table view
+        Customer customerToModify = customerTableView.getSelectionModel().getSelectedItem();
+        // Check if no customer was selected
+        if (customerToModify == null) {
+            // Create alert saying a customer must be selected to be modified
+            ResourceBundle rb = ResourceBundle.getBundle("resources/customerScreen", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorModifyingCustomer"));
+            alert.setContentText(rb.getString("errorModifyingCustomerMessage"));
+            alert.showAndWait();
+            return;
+        }
+//        Sets index of the customers to be modified
+        customerIndexToModify = getCustomerRoster().indexOf(customerToModify);
+//        Opens customerEditScreen
+        try {
+            Parent modifyCustomerParent = FXMLLoader.load(getClass().getResource("CustomerEditScreen.fxml"));
+            Scene modifyCustomerScene = new Scene(modifyCustomerParent);
+            Stage modifyCustomerStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            modifyCustomerStage.setScene(modifyCustomerScene);
+            modifyCustomerStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -208,6 +249,7 @@ public class CustomerScreenController {
         customerCountryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
         customerPhoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
     }
+
 
 //    Initialize the Screen
     @FXML
