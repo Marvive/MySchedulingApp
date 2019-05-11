@@ -276,7 +276,6 @@ public class DatabaseConnection {
                     int active = activeResultSet.getInt(1);
 //                    Check to show if a customer is active or not
                     if (active == 1) {
-//
                         ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle(rb.getString("error"));
@@ -285,11 +284,10 @@ public class DatabaseConnection {
                         alert.showAndWait();
                     } else if (active == 0) {
                         setCustomerToActive(customerName, addressId);
-
-                    } else {
-                        addCustomer(customerName, addressId);
                     }
                 }
+            } else {
+                addCustomer(customerName, addressId);
             }
         } catch (SQLException e) {
 //            Catch block to create an alert notifying the user that an error occurred. This is a catch all but will fire if there is no connection
@@ -444,7 +442,6 @@ public class DatabaseConnection {
      * Used by addNewCustomer() and modifyCustomer()
     * */
     public static void setCustomerToActive(String customerName, int addressId) {
-        // Try-with-resources block for database connection
         try (Connection conn = DriverManager.getConnection(url, user, pass);
              Statement stmt = conn.createStatement()) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
@@ -489,16 +486,16 @@ public class DatabaseConnection {
     }
 
     /**
-    * Method to modify existing customer. Verifies that it exsists first
+    * Method to modify existing customer. Verifies that it exists first
     * */
     public static int modifyCustomer(int customerId, String customerName, String address, String address2,
                                      String city, String country, String postalCode, String phone) {
         try {
-            // Find customer's country, city and addressId's
+//            Get Customer's country, city and addressID
             int countryId = calculateCountryId(country);
             int cityId = calculateCityId(city, countryId);
             int addressId = calculateAddressId(address, address2, postalCode, phone, cityId);
-            // Check if customer already exists in the database
+//            Check if customer already exists in DB
             if (checkIfCustomerExists(customerName, addressId)) {
                 int existingCustomerId = getCustomerId(customerName, addressId);
                 int activeStatus = getActiveStatus(existingCustomerId);
@@ -613,7 +610,7 @@ public class DatabaseConnection {
             while(appointmentResultSet.next()) {
                 appointmentIdList.add(appointmentResultSet.getInt(1));
             }
-//            For Loop to create Appoinment for each appointmendId in list and adds the object to appointmentList
+//            For Loop to create Appointment for each appointmentId in list and adds the object to appointmentList
             for (int appointmentId : appointmentIdList) {
 //                Queries database for appointment information
                 appointmentResultSet = stmt.executeQuery("SELECT customerId, title, description, location, contact, url, start, end, createdBy FROM appointment WHERE appointmentId = " + appointmentId);
