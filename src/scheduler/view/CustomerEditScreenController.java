@@ -120,7 +120,7 @@ public class CustomerEditScreenController {
     }
 
     @FXML
-    void customerEditSaveHandler(ActionEvent event) {
+    void customerEditSaveHandler() {
 
     }
 
@@ -128,7 +128,7 @@ public class CustomerEditScreenController {
      * Menu Handlers
      * */
     @FXML
-    void menuBarAppointmentsHandler(ActionEvent event) {
+    void menuBarAppointmentsHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -141,7 +141,7 @@ public class CustomerEditScreenController {
     }
 
     @FXML
-    void menuBarCloseHandler(ActionEvent event) {
+    void menuBarCloseHandler() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
         alert.setTitle("Exit");
@@ -157,7 +157,7 @@ public class CustomerEditScreenController {
     }
 
     @FXML
-    void menuBarLogOutHandler(ActionEvent event) {
+    void menuBarLogOutHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -183,7 +183,7 @@ public class CustomerEditScreenController {
     }
 
     @FXML
-    void menuBarReportsHandler(ActionEvent event) {
+    void menuBarReportsHandler() {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);

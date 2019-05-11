@@ -16,6 +16,9 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static scheduler.model.CustomerRoster.getCustomerRoster;
+import static scheduler.util.DatabaseConnection.updateCustomerRoster;
+
 public class CustomerScreenController {
 
     @FXML
@@ -97,7 +100,7 @@ public class CustomerScreenController {
      * Menu Handlers
      */
     @FXML
-    void menuBarAppointmentsHandler(ActionEvent event) {
+    void menuBarAppointmentsHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -110,7 +113,7 @@ public class CustomerScreenController {
     }
 
     @FXML
-    void menuBarCloseHandler(ActionEvent event) {
+    void menuBarCloseHandler() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
         alert.setTitle("Exit");
@@ -126,7 +129,7 @@ public class CustomerScreenController {
     }
 
     @FXML
-    void menuBarLogOutHandler(ActionEvent event) {
+    void menuBarLogOutHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -152,7 +155,7 @@ public class CustomerScreenController {
     }
 
     @FXML
-    void menuBarReportsHandler(ActionEvent event) {
+    void menuBarReportsHandler() {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
@@ -164,8 +167,13 @@ public class CustomerScreenController {
         }
     }
 
+    public void updateCustomerTableView() {
+        updateCustomerRoster();
+        customerTableView.setItems(getCustomerRoster());
+    }
 
-    //    Language for resource bundle
+
+//    Setting The Language. Used in initialize
     @FXML
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("resources/customerScreen", Locale.getDefault());
@@ -191,10 +199,24 @@ public class CustomerScreenController {
 
     }
 
-    // Initialize screen elements
+    @FXML
+    private void setTableView() {
+        customerNameColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
+        customerAddressColumn.setCellValueFactory(cellData -> cellData.getValue().addressProperty());
+        customerAddress2Column.setCellValueFactory(cellData -> cellData.getValue().address2Property());
+        customerCityColumn.setCellValueFactory(cellData -> cellData.getValue().cityProperty());
+        customerCountryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
+        customerPhoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
+    }
+
+//    Initialize the Screen
     @FXML
     public void initialize() {
 //        Sets the language
         setLanguage();
+//        Sets the TableView Data
+        setTableView();
+//        If there are any customer changes, update the Table View
+        updateCustomerTableView();
     }
 }

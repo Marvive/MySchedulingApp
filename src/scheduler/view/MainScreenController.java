@@ -18,6 +18,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static scheduler.util.DatabaseConnection.loginAppointmentNotification;
+
 public class MainScreenController {
 
     @FXML
@@ -229,6 +231,8 @@ public class MainScreenController {
     public void initialize () {
 //        Sets local language
         setLanguage();
+//        Detects if there is an upcoming notification. Method located in DatabaseConnection
+        loginAppointmentNotification();
     }
 
 }

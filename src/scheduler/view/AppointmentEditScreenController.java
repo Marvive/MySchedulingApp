@@ -359,10 +359,8 @@ public class AppointmentEditScreenController {
         appointment = getAppointmentList().get(appointmentIndexToModify);
 //        Grabs information from the selected appointment
         String title = appointment.getTitle();
-        String description = appointment.getDescription();
         String location = appointment.getLocation();
         String contact = appointment.getContact();
-        String url = appointment.getUrl();
         Date appointmentDate = appointment.getStartDate();
 //        Set LocalDate
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());

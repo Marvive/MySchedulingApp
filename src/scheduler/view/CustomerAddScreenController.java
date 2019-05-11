@@ -180,7 +180,7 @@ public class CustomerAddScreenController {
     }
 
     @FXML
-    void menuBarReportsHandler(ActionEvent event) {
+    void menuBarReportsHandler() {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
