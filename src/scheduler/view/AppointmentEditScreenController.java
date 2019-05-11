@@ -229,14 +229,14 @@ public class AppointmentEditScreenController {
     @FXML
     void cancelButtonHandler(ActionEvent event) {
         ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentEditScreen", Locale.getDefault());
-        // Show alert to confirm cancel
+//        Alerts to Confirm the cancel
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
         alert.setTitle(rb.getString("cancelTitle"));
         alert.setHeaderText(rb.getString("cancelHeader"));
         alert.setContentText(rb.getString("cancelText"));
         Optional<ButtonType> result = alert.showAndWait();
-        // If the 'OK' button is clicked, return to main screen
+//        If confirmed, go back to customer screen
         if (result.get() == ButtonType.OK) {
             try {
                 Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));

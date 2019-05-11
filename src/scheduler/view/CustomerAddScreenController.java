@@ -104,14 +104,26 @@ public class CustomerAddScreenController {
 
     @FXML
     void customerAddCancelHandler(ActionEvent event) {
-        try {
-            Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
-            Scene customerScene = new Scene(customerParent);
-            Stage customerStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            customerStage.setScene(customerScene);
-            customerStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+//        Alert to confirm cancel
+        ResourceBundle rb = ResourceBundle.getBundle("resources/customerEditScreen", Locale.getDefault());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.NONE);
+        alert.setTitle(rb.getString("cancelTitle"));
+        alert.setHeaderText(rb.getString("cancelHeader"));
+        alert.setContentText(rb.getString("cancelText"));
+        Optional<ButtonType> result = alert.showAndWait();
+//        If cancelled, go back to customer screen
+        if (result.get() == ButtonType.OK) {
+            try {
+                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+                Scene mainScreenScene = new Scene(mainScreenParent);
+                Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                mainScreenStage.setScene(mainScreenScene);
+                mainScreenStage.show();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -138,8 +150,9 @@ public class CustomerAddScreenController {
         } else {
 //        If no errors, then it will attempt to add customer to DB
             try {
+//                Method from Database Connection
                 addNewCustomer(customerName, address, address2, city, country, postalCode, phone);
-                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
                 Scene mainScreenScene = new Scene(mainScreenParent);
                 Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 mainScreenStage.setScene(mainScreenScene);
