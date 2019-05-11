@@ -146,6 +146,7 @@ public class DatabaseConnection {
 
     /**
      * Method to create a notification upon logging in
+     * TODO Add to Resource bundle and edit appointment details
      */
     public static void loginAppointmentNotification() {
         if (openCount == 0) {
@@ -164,10 +165,10 @@ public class DatabaseConnection {
                 Date notificationCutoff = calendar.getTime();
 //                Generates message for the notification. Calls on methods from appointment class
                 if (appointment.getStartDate().before(notificationCutoff)) {
-                    ResourceBundle rb = ResourceBundle.getBundle("MainScreen", Locale.getDefault());
+                    ResourceBundle rb = ResourceBundle.getBundle("resources/MainScreen", Locale.getDefault());
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle(rb.getString("notificationUpcomingAppointment"));
-                    alert.setContentText(rb.getString("notificationUpcomingAppointmentmessage") + "\n" + rb.getString("lblTitle")
+                    alert.setTitle(rb.getString("upcomingNotificationTitle"));
+                    alert.setContentText(rb.getString("upcomingNotificationText") + "\n" + rb.getString("lblTitle")
                             + ": " + appointment.getTitle() + "\n" + rb.getString("lblDescription") + ": " + appointment.getDescription() +
                             "\n" + rb.getString("lblLocation") + ": " + appointment.getLocation() + "\n" + rb.getString("lblContact") +
                             ": " + appointment.getContact() + "\n" + rb.getString("lblUrl") + ": " + appointment.getUrl() + "\n" +
@@ -245,11 +246,11 @@ public class DatabaseConnection {
                 customerRoster.add(customer);
             }
         } catch (SQLException e) {
-            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
-            alert.setHeaderText(rb.getString("errorConnectingToDatabase"));
-            alert.setContentText(rb.getString("errorConnectingToDatabaseMessage"));
+            alert.setHeaderText(rb.getString("errorConnectingToDatabaseHeader"));
+            alert.setContentText(rb.getString("errorConnectingToDatabaseText"));
             alert.show();
         }
     }
@@ -276,7 +277,7 @@ public class DatabaseConnection {
 //                    Check to show if a customer is active or not
                     if (active == 1) {
 //
-                        ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+                        ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle(rb.getString("error"));
                         alert.setHeaderText(rb.getString("errorAddingCustomer"));
@@ -292,11 +293,11 @@ public class DatabaseConnection {
             }
         } catch (SQLException e) {
 //            Catch block to create an alert notifying the user that an error occurred. This is a catch all but will fire if there is no connection
-            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
-            alert.setHeaderText(rb.getString("errorAddingCustomer"));
-            alert.setContentText(rb.getString("errorRequiresDatabase"));
+            alert.setTitle(rb.getString("errorTitle"));
+            alert.setHeaderText(rb.getString("errorHeader"));
+            alert.setContentText(rb.getString("errorText"));
             alert.showAndWait();
 
         }
@@ -446,7 +447,7 @@ public class DatabaseConnection {
         // Try-with-resources block for database connection
         try (Connection conn = DriverManager.getConnection(url, user, pass);
              Statement stmt = conn.createStatement()) {
-            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
 //            Alert and confirmation before setting a customer to active
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.initModality(Modality.NONE);
@@ -510,11 +511,11 @@ public class DatabaseConnection {
             }
         } catch (SQLException e) {
 //            Alerts that you need to be connected to the database
-            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorModifyingCustomer"));
-            alert.setContentText(rb.getString("errorRequiresDatabase"));
+            alert.setContentText(rb.getString("errorRequiresDatabaseText"));
             alert.showAndWait();
             return -1;
         }
@@ -567,7 +568,7 @@ public class DatabaseConnection {
     * */
     public static void setCustomerToInactive(Customer customerToRemove) {
         int customerId = customerToRemove.getCustomerId();
-        ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
 //        Set Confirmation to delete customer
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
@@ -585,7 +586,7 @@ public class DatabaseConnection {
                 Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
                 alert2.setTitle(rb.getString("error"));
                 alert2.setHeaderText(rb.getString("errorModifyingCustomer"));
-                alert2.setContentText(rb.getString("errorRequiresDatabase"));
+                alert2.setContentText(rb.getString("errorConnectingToDatabaseText"));
                 alert2.showAndWait();
             }
 //            Will pass the information into the roster
@@ -638,20 +639,19 @@ public class DatabaseConnection {
             }
         } catch (SQLException e) {
 //            Catches SQL errors
-            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
-            alert.setContentText(rb.getString("errorRequiresDatabase"));
+            alert.setContentText(rb.getString("errorConnectingToDatabaseText"));
             alert.showAndWait();
         } catch (Exception e) {
 //            If an error occurs that isn't a SQL error, this part catches it
-//            TODO add error2, errorAddingAppointment2, errorRequiresDatabase2 to ResourceBundle
-            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error2"));
-            alert.setHeaderText(rb.getString("errorAddingAppointment2"));
-            alert.setContentText(rb.getString("errorRequiresDatabase2"));
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorAddingAppointment"));
+            alert.setContentText(rb.getString("nonDatabaseErrorText"));
             alert.showAndWait();
         }
     }
@@ -670,7 +670,7 @@ public class DatabaseConnection {
         Timestamp endTimestamp = Timestamp.valueOf(endUTCString);
 //        Checks to make sure that added appointment does not overlap with others, then adds it if it doesn't
         if (doesAppointmentOverlap(startTimestamp, endTimestamp)) {
-            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
@@ -735,11 +735,11 @@ public class DatabaseConnection {
                     "CURRENT_DATE, '" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
         } catch (SQLException e) {
 //            Database failure alert
-            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
-            alert.setContentText(rb.getString("errorRequiresDatabase"));
+            alert.setContentText(rb.getString("errorConnectingToDatabaseText"));
             alert.showAndWait();
         }
     }
@@ -759,7 +759,7 @@ public class DatabaseConnection {
             Timestamp endTimestamp = Timestamp.valueOf(endUTCString);
 //            Checks to see if appointment overlaps another one
             if (doesAppointmentOverlapOthers(startTimestamp, endTimestamp)) {
-                ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+                ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle(rb.getString("error"));
                 alert.setHeaderText(rb.getString("errorModifyingAppointment"));
@@ -774,21 +774,20 @@ public class DatabaseConnection {
             }
         } catch (SQLException e) {
 //            Database failure alert
-            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
-            alert.setContentText(rb.getString("errorRequiresDatabase"));
+            alert.setContentText(rb.getString("errorConnectingToDatabaseText"));
             alert.showAndWait();
             return false;
         } catch (Exception e) {
 //            Catches other failures
-//            TODO create a non SQL failure alert errorAddingAppointment2 & errorRequiresDatabase2
-            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
-            alert.setHeaderText(rb.getString("errorAddingAppointment2"));
-            alert.setContentText(rb.getString("errorRequiresDatabase2"));
+            alert.setHeaderText(rb.getString("errorAddingAppointment"));
+            alert.setContentText(rb.getString("nonDatabaseErrorText"));
             alert.showAndWait();
             return false;
         }
@@ -842,7 +841,7 @@ public class DatabaseConnection {
      * */
     public static void deleteAppointment(Appointment appointmentToDelete) {
         int appointmentId = appointmentToDelete.getAppointmentId();
-        ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
 //        Delete confirmation alert
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
@@ -861,10 +860,10 @@ public class DatabaseConnection {
                 Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
                 alert2.setTitle(rb.getString("error"));
                 alert2.setHeaderText(rb.getString("errorModifyingAppointment"));
-                alert2.setContentText(rb.getString("errorRequiresDatabase"));
+                alert2.setContentText(rb.getString("errorConnectingToDatabaseText"));
                 alert2.showAndWait();
             }
-//            Calls updateAppointmentlist
+//            Calls updateAppointmentList
             updateAppointmentList();
         }
     }
@@ -874,7 +873,7 @@ public class DatabaseConnection {
      * */
     public static void generateAppointmentTypeByMonthReport() {
         updateAppointmentList();
-        ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
 //        Creates report string and grabs label based on language
         String report = rb.getString("lblAppointmentTypeByMonthTitle");
         ArrayList<String> monthsWithAppointments = new ArrayList<>();
@@ -913,7 +912,7 @@ public class DatabaseConnection {
 //                If the years and month match, grab description
                 if (year == appointmentYear && month == appointmentMonth) {
                     String description = appointment.getDescription();
-//                    If not already in arraylist, add it then up the counter
+//                    If not already in arrayList, add it then up the counter
                     if (!descriptions.contains(description)) {
                         descriptions.add(description);
                         typeCount++;
@@ -946,7 +945,7 @@ public class DatabaseConnection {
      * */
     public static void generateScheduleForConsultants() {
         updateAppointmentList();
-        ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
 //        Create report string
         String report = rb.getString("lblConsultantScheduleTitle");
         ArrayList<String> consultantsWithAppointments = new ArrayList<>();
@@ -1015,11 +1014,10 @@ public class DatabaseConnection {
      * */
     public static void generateUpcomingMeetingsByCustomer() {
         updateAppointmentList();
-        ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
 //        Create the report string
         String report = rb.getString("lblCustomerScheduleTitle");
         ArrayList<Integer> customerIdsWithAppointments = new ArrayList<>();
-        // Check customerId of each appointment. Add new customerId's to ArrayList
 //        For each appointment in list Add new customerId's to ArrayList
         for (Appointment appointment : AppointmentList.getAppointmentList()) {
             int customerId = appointment.getCustomerId();
@@ -1081,7 +1079,7 @@ public class DatabaseConnection {
 //            Adds new lines for spacing
             report = report + "\n \n";
         }
-//        Prints to ScheduleByCustomer.txt and overwrites it.
+//        Prints to ScheduleByCustomer.txt and overwrites it if exists.
         try {
             Path path = Paths.get("ScheduleByCustomer.txt");
             Files.write(path, Arrays.asList(report), StandardCharsets.UTF_8);
@@ -1119,8 +1117,9 @@ public class DatabaseConnection {
                 }
             }
 //            Deletes Address table entries by remaining addressId's, if any remain
-            if (addressIdListFromAddress.isEmpty()) {}
-            else {
+            if (addressIdListFromAddress.isEmpty()) {
+
+            } else {
                 for (int addressId : addressIdListFromAddress) {
                     stmt.executeUpdate("DELETE FROM address WHERE addressId = " + addressId);
                 }
@@ -1182,11 +1181,11 @@ public class DatabaseConnection {
             }
         } catch (SQLException e) {
 //            Throws error if SQL exception
-            ResourceBundle rb = ResourceBundle.getBundle("DBManager", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
-            alert.setContentText(rb.getString("errorRequiresDatabase"));
+            alert.setContentText(rb.getString("errorConnectingToDatabaseText"));
             alert.showAndWait();
         }
     }

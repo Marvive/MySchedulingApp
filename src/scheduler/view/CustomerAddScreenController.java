@@ -105,7 +105,7 @@ public class CustomerAddScreenController {
     @FXML
     void customerAddCancelHandler(ActionEvent event) {
 //        Alert to confirm cancel
-        ResourceBundle rb = ResourceBundle.getBundle("resources/customerEditScreen", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/customerAddScreen", Locale.getDefault());
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
         alert.setTitle(rb.getString("cancelTitle"));
@@ -115,7 +115,7 @@ public class CustomerAddScreenController {
 //        If cancelled, go back to customer screen
         if (result.get() == ButtonType.OK) {
             try {
-                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
                 Scene mainScreenScene = new Scene(mainScreenParent);
                 Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 mainScreenStage.setScene(mainScreenScene);
