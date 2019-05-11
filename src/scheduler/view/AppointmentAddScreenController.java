@@ -117,7 +117,7 @@ public class AppointmentAddScreenController {
     private Menu menuBarReports;
 
     /**
-     * Handler actions for customer screens
+     * menuBar Handlers
      */
     @FXML
     void menuBarCustomersHandler() {
@@ -132,11 +132,8 @@ public class AppointmentAddScreenController {
         }
     }
 
-    /**
-     * Logs you out
-     */
     @FXML
-    void menuBarLogOutHandler(ActionEvent event) {
+    void menuBarLogOutHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -148,12 +145,8 @@ public class AppointmentAddScreenController {
         }
     }
 
-    /**
-     * Handlers for Reports Buttons
-     */
-
     @FXML
-    void menuBarReportsHandler(ActionEvent event) {
+    void menuBarReportsHandler() {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
@@ -166,7 +159,7 @@ public class AppointmentAddScreenController {
     }
 
     @FXML
-    void menuBarAppointmentsHandler(ActionEvent event) {
+    void menuBarAppointmentsHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -179,7 +172,7 @@ public class AppointmentAddScreenController {
     }
 
     @FXML
-    void menuBarMainHandler(ActionEvent event) {
+    void menuBarMainHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -191,11 +184,8 @@ public class AppointmentAddScreenController {
         }
     }
 
-    /**
-     * Closes Program
-     */
     @FXML
-    void menuBarCloseHandler(ActionEvent event) {
+    void menuBarCloseHandler() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
         alert.setTitle("Exit");
@@ -226,7 +216,7 @@ public class AppointmentAddScreenController {
 //        If cancel, go back to Appointment Add
         if(result.get() == ButtonType.OK) {
             try {
-                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
                 Scene mainScreenScene = new Scene(mainScreenParent);
                 Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 mainScreenStage.setScene(mainScreenScene);

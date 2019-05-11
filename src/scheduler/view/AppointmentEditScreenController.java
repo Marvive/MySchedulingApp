@@ -118,7 +118,7 @@ public class AppointmentEditScreenController {
     private Menu menuBarReports;
 
     /**
-     * Handler actions for customer screens
+     * menuBar Handlers
      */
     @FXML
     void menuBarCustomersHandler() {
@@ -133,9 +133,6 @@ public class AppointmentEditScreenController {
         }
     }
 
-    /**
-     * Logs you out
-     */
     @FXML
     void menuBarLogOutHandler() {
         try {
@@ -148,10 +145,6 @@ public class AppointmentEditScreenController {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Handlers for Reports Buttons
-     */
 
     @FXML
     void menuBarReportsHandler() {
@@ -179,11 +172,6 @@ public class AppointmentEditScreenController {
         }
     }
 
-
-
-    /**
-     * Closes Program
-     */
     @FXML
     void menuBarCloseHandler() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -239,7 +227,7 @@ public class AppointmentEditScreenController {
 //        If confirmed, go back to customer screen
         if (result.get() == ButtonType.OK) {
             try {
-                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
                 Scene mainScreenScene = new Scene(mainScreenParent);
                 Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 mainScreenStage.setScene(mainScreenScene);
@@ -282,12 +270,16 @@ public class AppointmentEditScreenController {
 //        }
 //    }
 
-    // Update lower table view
+//    Update Customer Table View
+
     public void updateCustomerTableView() {
         customerSelectTableView.setItems(currentCustomers);
     }
 
-//    Update information to database
+
+    /**
+     * Saves and updates database
+     * */
     @FXML
     private void saveButtonHandler(ActionEvent event) {
 //        Creates customer

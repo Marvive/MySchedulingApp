@@ -105,7 +105,7 @@ public class CustomerEditScreenController {
 
 //    Initialize the customer
     private Customer customer;
-//    Borrow indexToModify from CustomerSCreen Controller
+//    Borrow indexToModify from CustomerScreen Controller
     private int customerIndexToModify = CustomerScreenController.getCustomerIndexToModify();
 
     /**
@@ -333,11 +333,6 @@ Provide the ability to add, update, and delete customer records
   You may use the same mechanism of exception control more than once,
   but you must incorporate at least two different mechanisms of exception control.
 
-• scheduling an appointment outside business hours
-
-• scheduling overlapping appointments
-
 • entering nonexistent or invalid customer data
 
-• entering an incorrect username and password
 * */
