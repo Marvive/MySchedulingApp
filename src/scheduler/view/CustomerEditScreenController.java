@@ -10,11 +10,14 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import scheduler.model.Customer;
 
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import static scheduler.util.DatabaseConnection.*;
 
 public class CustomerEditScreenController {
 
@@ -73,9 +76,6 @@ public class CustomerEditScreenController {
     private Label customerPostalCodeLabel;
 
     @FXML
-    private TextField customerIDTextField;
-
-    @FXML
     private TextField customerNameTextField;
 
     @FXML
@@ -94,7 +94,7 @@ public class CustomerEditScreenController {
     private TextField customerPhoneTextField;
 
     @FXML
-    private ComboBox<String> customerCityComboBox;
+    private TextField customerCityTextField;
 
     @FXML
     private Button customerAddSaveButton;
@@ -102,10 +102,12 @@ public class CustomerEditScreenController {
     @FXML
     private Button customerAddCancelButton;
 
+    //    Initialize customer object
+    private Customer customer;
+
     /**
      * Button Handlers
-     * */
-
+     */
     @FXML
     void customerEditCancelHandler(ActionEvent event) {
 //        Alert to confirm cancel
@@ -124,27 +126,77 @@ public class CustomerEditScreenController {
                 Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 mainScreenStage.setScene(mainScreenScene);
                 mainScreenStage.show();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
     @FXML
-    void customerEditSaveHandler() {
+    void customerEditSaveHandler(ActionEvent event) {
+//        Grab information from TextFields
+        int customerId = customer.getCustomerId();
+        String customerName = customerNameTextField.getText();
+        String address = customerAddressTextField.getText();
+        String address2 = customerAddress2TextField.getText();
+        String city = customerCityTextField.getText();
+        String country = customerCountryTextField.getText();
+        String postalCode = customerPostalCode.getText();
+        String phone = customerPhoneTextField.getText();
+//        Validate customer
+        String errorMessage = Customer.isCustomerValid(customerName, address, city, country, postalCode, phone);
+//        Error message notification
+        if (errorMessage.length() > 0) {
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorModifyingCustomer"));
+            alert.setContentText(errorMessage);
+            alert.showAndWait();
+            return;
+        }
+//        Update Database and save
+        int modifyCustomerCheck = modifyCustomer(customerId, customerName, address, address2, city, country, postalCode, phone);
+//        Check if customer is active
+        if (modifyCustomerCheck == 1) {
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
+            // Create alert saying that customer already exists
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorModifyingCustomer"));
+            alert.setContentText(rb.getString("errorCustomerAlreadyExists"));
+            alert.showAndWait();
 
+        } else if (modifyCustomerCheck == 0) {
+//        Check if customer is inactive
+            // Calculate country, city and addressId's
+            int countryId = calculateCountryId(country);
+            int cityId = calculateCityId(city, countryId);
+            int addressId = calculateAddressId(address, address2, postalCode, phone, cityId);
+//            Change Customer to active
+            setCustomerToActive(customerName, addressId);
+        }
+        try {
+//            Return to Customer Screen
+            Parent mainScreenParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
+            Scene mainScreenScene = new Scene(mainScreenParent);
+            Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            mainScreenStage.setScene(mainScreenScene);
+            mainScreenStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Menu Handlers
-     * */
+     */
     @FXML
     void menuBarAppointmentsHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -173,7 +225,7 @@ public class CustomerEditScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -186,7 +238,7 @@ public class CustomerEditScreenController {
         try {
             Parent mainParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
             Scene mainScene = new Scene(mainParent);
-            Stage mainStage = (Stage)  menuBar.getScene().getWindow();
+            Stage mainStage = (Stage) menuBar.getScene().getWindow();
             mainStage.setScene(mainScene);
             mainStage.show();
         } catch (IOException e) {
@@ -199,14 +251,13 @@ public class CustomerEditScreenController {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage)  menuBar.getScene().getWindow();
+            Stage reportsStage = (Stage) menuBar.getScene().getWindow();
             reportsStage.setScene(reportsScene);
             reportsStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
 
     /**
