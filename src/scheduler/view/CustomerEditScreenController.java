@@ -3,6 +3,7 @@ package scheduler.view;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -110,7 +111,15 @@ public class CustomerEditScreenController {
 
     @FXML
     void customerEditCancelHandler(ActionEvent event) {
-
+        try {
+            Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
+            Scene customerScene = new Scene(customerParent);
+            Stage customerStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            customerStage.setScene(customerScene);
+            customerStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -207,6 +216,23 @@ public class CustomerEditScreenController {
         menuBarGoReports.setText(rb.getString("menuBarGoReports"));
         menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
 
+        customerScreenText.setText(rb.getString("customerScreenText"));
+        customerIDLabel.setText(rb.getString("customerIDLabel"));
+        customerAddressLabel.setText(rb.getString("customerAddressLabel"));
+        customerNameLabel.setText(rb.getString("customerNameLabel"));
+        customerCountryLabel.setText(rb.getString("customerCountryLabel"));
+        customerCityLabel.setText(rb.getString("customerCityLabel"));
+        customerAddressLabel2.setText(rb.getString("customerAddressLabel2"));
+        customerPhoneNumber.setText(rb.getString("customerPhoneNumber"));
+        customerAddSaveButton.setText(rb.getString("customerAddSaveButton"));
+        customerAddCancelButton.setText(rb.getString("customerAddCancelButton"));
+
+    }
+
+    @FXML
+    public void initialize() {
+//        Sets the local language
+        setLanguage();
     }
 }
 

@@ -3,6 +3,7 @@ package scheduler.view;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -106,7 +107,15 @@ public class CustomerAddScreenController {
 
     @FXML
     void customerAddCancelHandler(ActionEvent event) {
-
+        try {
+            Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
+            Scene customerScene = new Scene(customerParent);
+            Stage customerStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            customerStage.setScene(customerScene);
+            customerStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -212,6 +221,12 @@ public class CustomerAddScreenController {
         customerPhoneNumber.setText(rb.getString("customerPhoneNumber"));
         customerAddSaveButton.setText(rb.getString("customerAddSaveButton"));
         customerAddCancelButton.setText(rb.getString("customerAddCancelButton"));
+    }
+
+    @FXML
+    public void initialize() {
+//        Sets the local language
+        setLanguage();
     }
 }
 
