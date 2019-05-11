@@ -17,6 +17,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static scheduler.model.CustomerRoster.getCustomerRoster;
 import static scheduler.util.DatabaseConnection.*;
 
 public class CustomerEditScreenController {
@@ -102,8 +103,10 @@ public class CustomerEditScreenController {
     @FXML
     private Button customerAddCancelButton;
 
-    //    Initialize customer object
+//    Initialize the customer
     private Customer customer;
+//    Borrow indexToModify from CustomerSCreen Controller
+    private int customerIndexToModify = CustomerScreenController.getCustomerIndexToModify();
 
     /**
      * Button Handlers
@@ -121,7 +124,7 @@ public class CustomerEditScreenController {
 //        If cancelled, go back to customer screen
         if (result.get() == ButtonType.OK) {
             try {
-                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
                 Scene mainScreenScene = new Scene(mainScreenParent);
                 Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 mainScreenStage.setScene(mainScreenScene);
@@ -260,6 +263,30 @@ public class CustomerEditScreenController {
     }
 
 
+    private void getCustomerInfo() {
+//        Selects customer to modify by the index number
+        customer = getCustomerRoster().get(customerIndexToModify);
+//        Grabs customer information from the DB
+        String customerName = customer.getCustomerName();
+        String address = customer.getAddress();
+        String address2 = customer.getAddress2();
+        String city = customer.getCity();
+        String country = customer.getCountry();
+        String postalCode = customer.getPostalCode();
+        String phone = customer.getPhone();
+        // Populate information fields with current customer information
+//        Populates the fields of the customer
+        customerNameTextField.setText(customerName);
+        customerAddressTextField.setText(address);
+        customerAddress2TextField.setText(address2);
+        customerCityTextField.setText(city);
+        customerCountryTextField.setText(country);
+        customerPostalCode.setText(postalCode);
+        customerPhoneTextField.setText(phone);
+    }
+
+
+
     /**
      * Sets the language of the text on the screen Used in the initialize method
      */
@@ -292,6 +319,8 @@ public class CustomerEditScreenController {
     public void initialize() {
 //        Sets the local language
         setLanguage();
+//        Populates information
+        getCustomerInfo();
     }
 }
 
