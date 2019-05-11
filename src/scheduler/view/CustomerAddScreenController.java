@@ -76,9 +76,6 @@ public class CustomerAddScreenController {
     private Label customerPostalCodeLabel;
 
     @FXML
-    private TextField customerIDTextField;
-
-    @FXML
     private TextField customerNameTextField;
 
     @FXML
@@ -212,7 +209,6 @@ public class CustomerAddScreenController {
         menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
 
         customerScreenText.setText(rb.getString("customerScreenText"));
-        customerIDLabel.setText(rb.getString("customerIDLabel"));
         customerAddressLabel.setText(rb.getString("customerAddressLabel"));
         customerNameLabel.setText(rb.getString("customerNameLabel"));
         customerCountryLabel.setText(rb.getString("customerCountryLabel"));

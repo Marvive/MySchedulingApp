@@ -52,9 +52,6 @@ public class CustomerEditScreenController {
     private Text customerScreenText;
 
     @FXML
-    private Label customerIDLabel;
-
-    @FXML
     private Label customerAddressLabel;
 
     @FXML
@@ -217,7 +214,6 @@ public class CustomerEditScreenController {
         menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
 
         customerScreenText.setText(rb.getString("customerScreenText"));
-        customerIDLabel.setText(rb.getString("customerIDLabel"));
         customerAddressLabel.setText(rb.getString("customerAddressLabel"));
         customerNameLabel.setText(rb.getString("customerNameLabel"));
         customerCountryLabel.setText(rb.getString("customerCountryLabel"));

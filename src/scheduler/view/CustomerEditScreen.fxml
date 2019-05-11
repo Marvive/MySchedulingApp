@@ -62,7 +62,6 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Label fx:id="customerIDLabel" text="Customer ID" />
                         <Label fx:id="customerAddressLabel" layoutX="10.0" layoutY="17.0" text="Address" GridPane.rowIndex="2" />
                         <Label fx:id="customerNameLabel" layoutX="10.0" layoutY="47.0" text="Name" GridPane.rowIndex="1" />
                         <Label fx:id="customerCountryLabel" layoutX="10.0" layoutY="47.0" text="Country" GridPane.rowIndex="5" />
@@ -70,7 +69,6 @@
                         <Label fx:id="customerAddressLabel2" layoutX="10.0" layoutY="17.0" text="Adress 2" GridPane.rowIndex="3" />
                         <Label fx:id="customerPhoneNumber" layoutX="10.0" layoutY="167.0" text="Phone Number" GridPane.rowIndex="7" />
                         <Label fx:id="customerPostalCodeLabel" layoutX="10.0" layoutY="17.0" text="Postal Code" GridPane.rowIndex="6" />
-                        <TextField fx:id="customerIDTextField" GridPane.columnIndex="1" />
                         <TextField fx:id="customerNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <TextField fx:id="customerPostalCode" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                         <TextField fx:id="customerCountryTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
