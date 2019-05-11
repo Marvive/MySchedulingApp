@@ -177,9 +177,6 @@ public class Customer {
         return this.city.get();
     }
 
-    public int getCountryId() {
-        return this.countryId.get();
-    }
 
     public String getCountry() {
         return this.country.get();
@@ -190,7 +187,7 @@ public class Customer {
      * */
     public static String isCustomerValid(String customerName, String address, String city,
                                          String country, String postalCode, String phone) {
-        ResourceBundle rb = ResourceBundle.getBundle("Customer", Locale.getDefault());
+        ResourceBundle rb = ResourceBundle.getBundle("resources/customer", Locale.getDefault());
         String errorMessage = "";
         if (customerName.length() == 0) {
             errorMessage = errorMessage + rb.getString("errorCustomerName");
@@ -198,16 +195,16 @@ public class Customer {
         if (address.length() == 0) {
             errorMessage = errorMessage + rb.getString("errorAddress");
         }
-        if (city.length() == 0) {
+        if (city.length() == 0 || city.matches("a-zA-Z+")) {
             errorMessage = errorMessage + rb.getString("errorCity");
         }
-        if (country.length() == 0) {
+        if (country.length() == 0 || country.matches("a-zA-Z+")) {
             errorMessage = errorMessage + rb.getString("errorCountry");
         }
-        if (postalCode.length() == 0) {
+        if (postalCode.length() < 5 || postalCode.matches("0-9+")) {
             errorMessage = errorMessage + rb.getString("errorPostalCode");
         }
-        if (phone.length() == 0) {
+        if (phone.length() < 10 || phone.matches("0-9+")) {
             errorMessage = errorMessage + rb.getString("errorPhone");
         }
         return errorMessage;

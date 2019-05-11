@@ -135,19 +135,18 @@ public class CustomerAddScreenController {
             alert.setHeaderText(rb.getString("errorHeader"));
             alert.setContentText(errorMessage);
             alert.showAndWait();
-            return;
-        }
-        // If error message is empty, add customer to database and return to main screen
-        try {
-            addNewCustomer(customerName, address, address2, city, country, postalCode, phone);
-            Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
-            Scene mainScreenScene = new Scene(mainScreenParent);
-            Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            mainScreenStage.setScene(mainScreenScene);
-            mainScreenStage.show();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+        } else {
+//        If no errors, then it will attempt to add customer to DB
+            try {
+                addNewCustomer(customerName, address, address2, city, country, postalCode, phone);
+                Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+                Scene mainScreenScene = new Scene(mainScreenParent);
+                Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                mainScreenStage.setScene(mainScreenScene);
+                mainScreenStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -156,7 +155,7 @@ public class CustomerAddScreenController {
      * Menu Handlers
      */
     @FXML
-    void menuBarAppointmentsHandler(ActionEvent event) {
+    void menuBarAppointmentsHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -169,7 +168,7 @@ public class CustomerAddScreenController {
     }
 
     @FXML
-    void menuBarCloseHandler(ActionEvent event) {
+    void menuBarCloseHandler() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
         alert.setTitle("Exit");
@@ -185,7 +184,7 @@ public class CustomerAddScreenController {
     }
 
     @FXML
-    void menuBarLogOutHandler(ActionEvent event) {
+    void menuBarLogOutHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
