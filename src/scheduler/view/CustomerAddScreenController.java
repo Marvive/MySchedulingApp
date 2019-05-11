@@ -10,11 +10,14 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import scheduler.model.Customer;
 
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import static scheduler.util.DatabaseConnection.addNewCustomer;
 
 public class CustomerAddScreenController {
 
@@ -50,9 +53,6 @@ public class CustomerAddScreenController {
 
     @FXML
     private Text customerScreenText;
-
-    @FXML
-    private Label customerIDLabel;
 
     @FXML
     private Label customerAddressLabel;
@@ -94,7 +94,7 @@ public class CustomerAddScreenController {
     private TextField customerPhoneTextField;
 
     @FXML
-    private ComboBox<?> customerCityComboBox;
+    private TextField customerCityTextField;
 
     @FXML
     private Button customerAddSaveButton;
@@ -117,7 +117,38 @@ public class CustomerAddScreenController {
 
     @FXML
     void customerAddSaveHandler(ActionEvent event) {
-
+//        Grabs inputs
+        String customerName = customerNameTextField.getText();
+        String address = customerAddressTextField.getText();
+        String address2 = customerAddress2TextField.getText();
+        String city = customerCityTextField.getText();
+        String country = customerCountryTextField.getText();
+        String postalCode = customerPostalCode.getText();
+        String phone = customerPhoneTextField.getText();
+//        Validates Customer
+        String errorMessage = Customer.isCustomerValid(customerName, address, city, country, postalCode, phone);
+//        Error Popup Dialog
+        if (errorMessage.length() > 0) {
+            ResourceBundle rb = ResourceBundle.getBundle("resources/customerAddScreen", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorHeader"));
+            alert.setContentText(errorMessage);
+            alert.showAndWait();
+            return;
+        }
+        // If error message is empty, add customer to database and return to main screen
+        try {
+            addNewCustomer(customerName, address, address2, city, country, postalCode, phone);
+            Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+            Scene mainScreenScene = new Scene(mainScreenParent);
+            Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            mainScreenStage.setScene(mainScreenScene);
+            mainScreenStage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -217,6 +248,7 @@ public class CustomerAddScreenController {
         customerPhoneNumber.setText(rb.getString("customerPhoneNumber"));
         customerAddSaveButton.setText(rb.getString("customerAddSaveButton"));
         customerAddCancelButton.setText(rb.getString("customerAddCancelButton"));
+        customerPostalCodeLabel.setText(rb.getString("customerPostalCodeLabel"));
     }
 
     @FXML

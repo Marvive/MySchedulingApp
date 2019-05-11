@@ -222,7 +222,7 @@ public class CustomerEditScreenController {
         customerPhoneNumber.setText(rb.getString("customerPhoneNumber"));
         customerAddSaveButton.setText(rb.getString("customerAddSaveButton"));
         customerAddCancelButton.setText(rb.getString("customerAddCancelButton"));
-
+        customerPostalCodeLabel.setText(rb.getString("customerPostalCodeLabel"));
     }
 
     @FXML
