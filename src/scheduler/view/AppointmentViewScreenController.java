@@ -82,16 +82,13 @@ public class AppointmentViewScreenController {
     private MenuItem menuBarClose;
 
     @FXML
-    private Menu menuBarAppointments;
-
-    @FXML
     private Menu menuBarCustomers;
 
     @FXML
     private Menu menuBarReports;
 
     /**
-     * Handler actions for customer screens
+     * Handler actions for menuBar
      */
     @FXML
     void menuBarCustomersHandler(ActionEvent event) {
@@ -106,12 +103,8 @@ public class AppointmentViewScreenController {
         }
     }
 
-
-    /**
-     * Logs you out
-     */
     @FXML
-    void menuBarLogOutHandler(ActionEvent event) {
+    void menuBarLogOutHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -136,11 +129,8 @@ public class AppointmentViewScreenController {
         }
     }
 
-    /**
-     * Handlers for Reports Buttons
-     */
     @FXML
-    void menuBarReportsHandler(ActionEvent event) {
+    void menuBarReportsHandler() {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
@@ -153,7 +143,7 @@ public class AppointmentViewScreenController {
     }
 
     @FXML
-    void menuBarAppointmentsHandler(ActionEvent event) {
+    void menuBarAppointmentsHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -165,11 +155,8 @@ public class AppointmentViewScreenController {
         }
     }
 
-    /**
-     * Closes Program
-     */
     @FXML
-    void menuBarCloseHandler(ActionEvent event) {
+    void menuBarCloseHandler() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
         alert.setTitle("Exit");

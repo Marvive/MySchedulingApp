@@ -107,7 +107,6 @@ public class CustomerScreenController {
     }
 
     @FXML
-//    TODO
     void editButtonHandler(ActionEvent event) {
 //        Grabs customer from Table View
         Customer customerToModify = customerTableView.getSelectionModel().getSelectedItem();
@@ -208,7 +207,7 @@ public class CustomerScreenController {
         }
     }
 
-    public void updateCustomerTableView() {
+    private void updateCustomerTableView() {
         updateCustomerRoster();
         customerTableView.setItems(getCustomerRoster());
     }

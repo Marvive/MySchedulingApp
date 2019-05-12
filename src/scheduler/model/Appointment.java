@@ -50,7 +50,6 @@ public class Appointment {
         this.createdBy = new SimpleStringProperty(createdBy);
     }
 
-    // Setters
 //    Setters/Mutators
     public void setAppointmentId(int appointmentId) {
         this.appointmentId.set(appointmentId);
