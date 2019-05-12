@@ -330,18 +330,7 @@ public class AppointmentAddScreenController {
         menuBarGoCustomers.setText(rb.getString("menuBarGoCustomers"));
     }
 
-    @FXML
-    public void initialize() {
-//        Sets the Language
-        setLanguage();
-//        Lambdas to assign actions to buttons
-        cancelButton.setOnAction(event -> cancelButtonHandler(event));
-        saveButton.setOnAction(event -> saveButtonHandler(event));
-//        Assigns Data to the Table Column
-        updateCustomerTableView();
-        customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
-
-
+    private void setData(){
 //        Sets times available in 15 minutes increments within business hours 8-5
         LocalTime time = LocalTime.of(8, 0);
         do {
@@ -367,7 +356,20 @@ public class AppointmentAddScreenController {
                 rb1.getString("newAccount"),
                 rb1.getString("closeAccount"));
         appointmentTypePicker.setItems(typeList);
+    }
 
+    @FXML
+    public void initialize() {
+//        Sets the Language
+        setLanguage();
+//        Lambdas to assign actions to buttons
+        cancelButton.setOnAction(event -> cancelButtonHandler(event));
+        saveButton.setOnAction(event -> saveButtonHandler(event));
+//        Assigns Data to the Table Column
+        updateCustomerTableView();
+        customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
+//        Sets all comboBox data
+        setData();
     }
 
 }
