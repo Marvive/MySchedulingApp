@@ -88,10 +88,6 @@
       <VBox layoutX="343.0" layoutY="-1.0" prefHeight="400.0" prefWidth="234.0" spacing="10.0" AnchorPane.bottomAnchor="10.0">
          <children>
             <HBox prefHeight="15.0" prefWidth="257.0" spacing="5.0">
-               <children>
-                  <TextField fx:id="customerSearchField" />
-                  <Button fx:id="customerSearchButton" mnemonicParsing="false" onAction="#customerSearchButtonHandler" text="Search" />
-               </children>
                <VBox.margin>
                   <Insets top="20.0" />
                </VBox.margin>

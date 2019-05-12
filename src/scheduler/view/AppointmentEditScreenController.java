@@ -67,13 +67,6 @@ public class AppointmentEditScreenController {
     @FXML
     private ComboBox<String> appointmentTypePicker;
 
-//     TODO Search function may by removed as it is unnecessary
-    @FXML
-    private Button customerSearchButton;
-
-    @FXML
-    private TextField customerSearchField;
-//
     @FXML
     private TableView<Customer> customerSelectTableView;
 
@@ -198,7 +191,6 @@ public class AppointmentEditScreenController {
         endTimeText.setText(rb.getString("lblEndTime"));
         customerColumn.setText(rb.getString("lblNameColumn"));
         appointmentTypeText.setText(rb.getString("aptType"));
-        customerSearchButton.setText(rb.getString("btnSearch"));
         saveButton.setText(rb.getString("btnSave"));
         cancelButton.setText(rb.getString("btnCancel"));
 

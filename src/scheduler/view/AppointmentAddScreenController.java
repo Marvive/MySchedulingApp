@@ -70,13 +70,6 @@ public class AppointmentAddScreenController {
     @FXML
     private ComboBox<String> appointmentTypePicker;
 
-    //    TODO Search function may by removed as it is unnecessary
-    @FXML
-    private Button customerSearchButton;
-
-    @FXML
-    private TextField customerSearchField;
-    //
     @FXML
     private TableView<Customer> customerSelectTableView;
 
@@ -121,7 +114,7 @@ public class AppointmentAddScreenController {
     @FXML
     private Menu menuBarReports;
 
-    //    Establishes data in the Table View
+//    Adds Data to TableView
     private void updateCustomerTableView() {
         updateCustomerRoster();
         customerSelectTableView.setItems(getCustomerRoster());
@@ -220,7 +213,7 @@ public class AppointmentAddScreenController {
         }
     }
 
-    //    ObservableList to hold the customer assigned to the appointment
+//    ObservableList to hold the customer assigned to the appointment
     private ObservableList<Customer> currentCustomers = FXCollections.observableArrayList();
 
     @FXML
@@ -245,19 +238,6 @@ public class AppointmentAddScreenController {
                 e.printStackTrace();
             }
         }
-    }
-
-    /*
-     * Search may be removed due to it not being necessary
-     * */
-    @FXML
-    void customerSearchButtonHandler(ActionEvent event) {
-
-    }
-
-    @FXML
-    void customerSearchField(ActionEvent event) {
-
     }
 
     /**
@@ -335,7 +315,6 @@ public class AppointmentAddScreenController {
         endTimeText.setText(rb.getString("endTimeText"));
         customerColumn.setText(rb.getString("customerColumn"));
         appointmentTypeText.setText(rb.getString("appointmentTypeText"));
-        customerSearchButton.setText(rb.getString("customerSearchButton"));
         saveButton.setText(rb.getString("saveButton"));
         cancelButton.setText(rb.getString("cancelButton"));
 
