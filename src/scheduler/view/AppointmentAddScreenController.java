@@ -280,11 +280,12 @@ public class AppointmentAddScreenController {
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
-        // Create ZonedDateTime out of Date objects
+//        Creates ZoneDateTime out of date objects
 //        TODO Change combo box selection into UTC
         ZonedDateTime startUTC = ZonedDateTime.ofInstant(startLocal.toInstant(), ZoneId.of("UTC"));
         ZonedDateTime endUTC = ZonedDateTime.ofInstant(endLocal.toInstant(), ZoneId.of("UTC"));
 //        Submit and return to AppointmentViewScreen Checks if it returns true
+//        Method from DBConnection
         if (addNewAppointment(customer, title, startUTC, endUTC)) {
             try {
 //                Returns to AppointmentViewScreen if accepted

@@ -74,10 +74,10 @@
                   <Label fx:id="endTimeText" text="End Time" GridPane.rowIndex="3" />
                   <Label fx:id="dateText" text="Date" GridPane.rowIndex="4" />
                   <TextField fx:id="appointmentTitleField" GridPane.columnIndex="1" />
-                  <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <ComboBox fx:id="appointmentTypePicker" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <ComboBox fx:id="startTimePicker" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <ComboBox fx:id="endTimePicker" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <ComboBox fx:id="appointmentTypePicker" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
          </children>

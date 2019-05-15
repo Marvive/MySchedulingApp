@@ -653,7 +653,6 @@ public class DatabaseConnection {
         }
     }
 
-    // Add appointment to database if entry does not already exist
     /**
      * Adds appointment to database unless it exists
      * */
