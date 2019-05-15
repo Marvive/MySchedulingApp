@@ -95,7 +95,7 @@ public class AppointmentViewScreenController {
         try {
             Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
             Scene customerScene = new Scene(customerParent);
-            Stage customerStage = (Stage)  menuBar.getScene().getWindow();
+            Stage customerStage = (Stage) menuBar.getScene().getWindow();
             customerStage.setScene(customerScene);
             customerStage.show();
         } catch (IOException e) {
@@ -108,7 +108,7 @@ public class AppointmentViewScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -121,7 +121,7 @@ public class AppointmentViewScreenController {
         try {
             Parent mainParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
             Scene mainScene = new Scene(mainParent);
-            Stage mainStage = (Stage)  menuBar.getScene().getWindow();
+            Stage mainStage = (Stage) menuBar.getScene().getWindow();
             mainStage.setScene(mainScene);
             mainStage.show();
         } catch (IOException e) {
@@ -134,7 +134,7 @@ public class AppointmentViewScreenController {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage)  menuBar.getScene().getWindow();
+            Stage reportsStage = (Stage) menuBar.getScene().getWindow();
             reportsStage.setScene(reportsScene);
             reportsStage.show();
         } catch (IOException e) {
@@ -147,7 +147,7 @@ public class AppointmentViewScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -172,7 +172,6 @@ public class AppointmentViewScreenController {
     }
 
 
-
     private ResourceBundle rb1 = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
 
     @FXML
@@ -181,7 +180,7 @@ public class AppointmentViewScreenController {
     /**
      * Sets that Data in the combo box
      * Used in initialize
-     * */
+     */
     private void setData() {
         comboBox.getItems().clear();
         comboBox.getItems().addAll(
@@ -206,7 +205,7 @@ public class AppointmentViewScreenController {
         }
     }
 
-//    Variable to hold index of appointment to modify
+    //    Variable to hold index of appointment to modify
     private static int appointmentIndexToModify;
 
     /**
@@ -250,11 +249,11 @@ public class AppointmentViewScreenController {
             alert.showAndWait();
             return;
         }
-        // Set the index of the appointment that was selected to be modified
+//        Set the index of the appointment to modify
         appointmentIndexToModify = getAppointmentList().indexOf(appointmentToModify);
-        // Open modify appointment window
+//        Try to open the appointment edit window
         try {
-            Parent modifyAppointmentParent = FXMLLoader.load(getClass().getResource("ModifyAppointment.fxml"));
+            Parent modifyAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentEditScreen.fxml"));
             Scene modifyAppointmentScene = new Scene(modifyAppointmentParent);
             Stage modifyAppointmentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             modifyAppointmentStage.setScene(modifyAppointmentScene);
@@ -264,49 +263,36 @@ public class AppointmentViewScreenController {
         }
     }
 
-    // Delete the selected appointment
+//    Deletes Selected Appointment
+
+    /**
+     * Deletes the selected appointment.
+     */
     @FXML
     private void handleDeleteAppt(ActionEvent event) {
-        // Get the selected appointment from the table view
+//        Grabs selected appointment from Table View
         Appointment appointmentToDelete = apptTableView.getSelectionModel().getSelectedItem();
-        // Check if no appointment was selected if
+//        Check if one was selected then alert if not
         if (appointmentToDelete == null) {
-            // Show alert saying an appointment must be selected to delete
             ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
-            alert.setHeaderText(rb.getString("errorDeletingAppointment"));
-            alert.setContentText(rb.getString("errorDeletingAppointmentMessage"));
+            alert.setHeaderText(rb.getString("errorDeleteHeader"));
+            alert.setContentText(rb.getString("errorDeleteContent"));
             alert.showAndWait();
-            return;
-        }
-        // Submit appointment to be deleted
-        DatabaseConnection.deleteAppointment(appointmentToDelete);
-    }
-
-
-    /**
-     * Go back to main Screen
-     */
-    @FXML
-    private void exit(ActionEvent event) {
-        try {
-            Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
-            Scene mainScreenScene = new Scene(mainScreenParent);
-            Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            mainScreenStage.setScene(mainScreenScene);
-            mainScreenStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+//        Submits the appointment to be deleted
+            DatabaseConnection.deleteAppointment(appointmentToDelete);
         }
     }
 
-    // Return the appointment index to be modified
+
+//    Returns appointment index to modify
     public static int getAppointmentIndexToModify() {
         return appointmentIndexToModify;
     }
 
-    // Update the table view
+//    Updates the TableView
     @FXML
     private void updateAddAppointmentTableView() {
         updateAppointmentList();
@@ -319,18 +305,17 @@ public class AppointmentViewScreenController {
     @FXML
     public void initialize() {
         setLanguage();
-//        Lambdas to call methods
+//        Lambdas to call methods on buttons
         editAppointmentButton.setOnAction(event -> handleEditAppt(event));
         deleteAppointmentButton.setOnAction(event -> handleDeleteAppt(event));
 //        Puts data to the table view
-//        TODO These exist somewhere in the models
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         typeColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
         startColumn.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
         endColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
         consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
-//        Updates the Table View
+//        Updates the Table View When initialized
         updateAddAppointmentTableView();
 //        Sets Data for combobox
         setData();
