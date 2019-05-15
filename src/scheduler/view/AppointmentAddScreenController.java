@@ -254,11 +254,11 @@ public class AppointmentAddScreenController {
         String title = appointmentTitleField.getText();
         LocalDate appointmentDate = datePicker.getValue();
         String appointmentType = appointmentTypePicker.getSelectionModel().getSelectedItem();
-        String startAmPm = startTimePicker.getSelectionModel().getSelectedItem();
-        String endAmPm = endTimePicker.getSelectionModel().getSelectedItem();
+        String startTime = startTimePicker.getSelectionModel().getSelectedItem();
+        String endTime = endTimePicker.getSelectionModel().getSelectedItem();
 //        Submit and check for validation
-        String errorMessage = Appointment.isAppointmentValid(customer, title,
-                appointmentDate, startAmPm, endAmPm);
+        String errorMessage = Appointment.isAppointmentValid(customer, title, appointmentType,
+                appointmentDate, startTime, endTime);
 //        Check and print error message
         if (errorMessage.length() > 0) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());

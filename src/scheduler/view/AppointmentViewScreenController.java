@@ -243,7 +243,7 @@ public class AppointmentViewScreenController {
         if (appointmentToModify == null) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
+            alert.setTitle(rb.getString("errorTitle"));
             alert.setHeaderText(rb.getString("errorEditAppointment"));
             alert.setContentText(rb.getString("errorSelectAppointment"));
             alert.showAndWait();
@@ -276,7 +276,7 @@ public class AppointmentViewScreenController {
         if (appointmentToDelete == null) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
+            alert.setTitle(rb.getString("errorTitle"));
             alert.setHeaderText(rb.getString("errorDeleteHeader"));
             alert.setContentText(rb.getString("errorDeleteContent"));
             alert.showAndWait();

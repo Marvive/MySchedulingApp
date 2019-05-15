@@ -15,7 +15,7 @@ public class Appointment {
     private IntegerProperty appointmentId;
     private IntegerProperty customerId;
     private StringProperty title;
-    private StringProperty description;
+    private StringProperty type;
     private StringProperty location;
     private StringProperty contact;
     private StringProperty url;
@@ -28,15 +28,16 @@ public class Appointment {
     private StringProperty endString;
     private StringProperty createdBy;
 
-    // Constructor
-    public Appointment(int appointmentId, int customerId, String title, String description, String location, String contact,
+//    Constructor
+    public Appointment(int appointmentId, int customerId, String title, String type, String location, String contact,
                        String url, Timestamp startTimestamp, Timestamp endTimestamp, Date startDate, Date endDate, String createdBy) {
         this.appointmentId = new SimpleIntegerProperty(appointmentId);
         this.customerId = new SimpleIntegerProperty(customerId);
         this.title = new SimpleStringProperty(title);
-        this.description = new SimpleStringProperty(description);
+        this.type = new SimpleStringProperty(type);
         this.location = new SimpleStringProperty(location);
         this.contact = new SimpleStringProperty(contact);
+//        URL may be removed?
         this.url = new SimpleStringProperty(url);
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
@@ -50,7 +51,7 @@ public class Appointment {
         this.createdBy = new SimpleStringProperty(createdBy);
     }
 
-//    Setters/Mutators
+//    Setters
     public void setAppointmentId(int appointmentId) {
         this.appointmentId.set(appointmentId);
     }
@@ -63,8 +64,8 @@ public class Appointment {
         this.title.set(title);
     }
 
-    public void setDescription(String description) {
-        this.description.set(description);
+    public void setType(String description) {
+        this.type.set(description);
     }
 
     public void setLocation(String location) {
@@ -99,7 +100,7 @@ public class Appointment {
         this.createdBy.set(createdBy);
     }
 
-//    Getters/Accessors
+//    Getters
     public int getAppointmentId() {
         return this.appointmentId.get();
     }
@@ -124,12 +125,12 @@ public class Appointment {
         return this.title;
     }
 
-    public String getDescription() {
-        return this.description.get();
+    public String getType() {
+        return this.type.get();
     }
 
-    public StringProperty descriptionProperty() {
-        return this.description;
+    public StringProperty typeProperty() {
+        return this.type;
     }
 
     public String getLocation() {
@@ -213,6 +214,7 @@ public class Appointment {
     public ObjectProperty<LocalDateTime> startTimeProperty() {
         return ldt;
     }
+
     public ObjectProperty<LocalDateTime> endTimeProperty() {
         return ldt;
     }
@@ -225,30 +227,44 @@ public class Appointment {
 //    }
 
 
-
-//    Checks to see whether the appointment can be made
-    public static String isAppointmentValid(Customer customer, String title, LocalDate appointmentDate, String startAmPm,
-                                            String endAmPm) throws NumberFormatException {
-        ResourceBundle rb = ResourceBundle.getBundle("Appointment", Locale.getDefault());
+//    Appointment Validation
+    public static String isAppointmentValid(Customer customer, String title, String appointmentType,
+                                            LocalDate appointmentDate, String startTime, String endTime) throws NumberFormatException {
+        ResourceBundle rb = ResourceBundle.getBundle("resources/appointment", Locale.getDefault());
         String errorMessage = "";
-//        TODO create a outside of hours error?
         try {
+//            These will not be else if's because it will not continue checking conditions
+//            TODO some of these may be removed because I removed the ability to choose outside business hours
             if (customer == null) {
-                errorMessage = errorMessage + rb.getString("errorCustomer");
-            } else if (title.length() == 0) {
-                errorMessage = errorMessage + rb.getString("errorTitle");
-            } else if ((startAmPm.equals("PM") && endAmPm.equals("AM")) || (startAmPm.equals(endAmPm))) {
-                errorMessage = errorMessage + rb.getString("errorStartAfterEnd");
-            } else if (appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SATURDAY")
-                    || appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SUNDAY")) {
-                errorMessage = errorMessage + rb.getString("errorDateIsWeekend");
+                errorMessage += rb.getString("errorCustomer");
+            }
+            if (title.length() == 0) {
+                errorMessage += rb.getString("errorTitle");
+            }
+            if (appointmentType.length() == 0) {
+                errorMessage += rb.getString("errorType");
+            }
+            if (appointmentDate == null || startTime.equals("") || endTime.equals("")) {
+                errorMessage += rb.getString("errorStartEndEmpty");
+            }
+//            TODO These may be useful if I need conditionals for choosing an illogical time
+//            if (Integer.parseInt(startHour) < 1 || Integer.parseInt(startHour) > 12 || Integer.parseInt(endHour) < 1 || Integer.parseInt(endHour) > 12
+//                     ) {
+//                errorMessage += rb.getString("errorStartEndInvalidTime");
+//            }
+//            if ((Integer.parseInt(startHour) > Integer.parseInt(endHour)) || (startHour.equals(endHour))) {
+//                errorMessage += rb.getString("errorStartAfterEnd");
+//            }
+            if (appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SATURDAY") || appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SUNDAY")) {
+                errorMessage += rb.getString("errrorNoWeekends");
             }
         } catch (NumberFormatException e) {
             errorMessage = errorMessage + rb.getString("errorStartEndInteger");
+//            TODO learn about finally
         } finally {
             return errorMessage;
         }
+
+
     }
-
-
 }
