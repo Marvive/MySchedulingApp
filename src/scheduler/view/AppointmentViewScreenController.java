@@ -173,7 +173,6 @@ public class AppointmentViewScreenController {
 
 
 
-//    TODO Add this logic to the other Combo boxes
     private ResourceBundle rb1 = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
 
     @FXML
@@ -207,13 +206,12 @@ public class AppointmentViewScreenController {
         }
     }
 
-    // Holds index of the appointment that will be modified
+//    Variable to hold index of appointment to modify
     private static int appointmentIndexToModify;
 
     /**
      * Set's language for all the text that can appear on the screen
      */
-//    TODO
     @FXML
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
@@ -227,7 +225,6 @@ public class AppointmentViewScreenController {
         deleteAppointmentButton.setText(rb.getString("deleteAppointmentButton"));
         newAppointmentButton.setText(rb.getString("newAppointmentButton"));
         appointmentViewTitle.setText(rb.getString("appointmentViewTitle"));
-
         menuBarLogOut.setText(rb.getString("menuBarLogOut"));
         menuBarClose.setText(rb.getString("menuBarClose"));
         menuBarMain.setText(rb.getString("menuBarMain"));
@@ -235,7 +232,6 @@ public class AppointmentViewScreenController {
         menuBarFile.setText(rb.getString("menuBarFile"));
         menuBarGoMain.setText(rb.getString("menuBarGoMain"));
         menuBarGoReports.setText(rb.getString("menuBarGoReports"));
-
         menuBarCustomers.setText(rb.getString("menuBarCustomers"));
         menuBarGoCustomers.setText(rb.getString("menuBarGoCustomers"));
     }
@@ -244,13 +240,13 @@ public class AppointmentViewScreenController {
     private void handleEditAppt(ActionEvent event) {
 //        Grab selected appointment to modify
         Appointment appointmentToModify = apptTableView.getSelectionModel().getSelectedItem();
-//        Ensures something is selected
+//        Ensures something is selected before editing
         if (appointmentToModify == null) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
-            alert.setHeaderText(rb.getString("errorModifyingAppointment"));
-            alert.setContentText(rb.getString("errorModifyingAppointmentPleaseSelect"));
+            alert.setHeaderText(rb.getString("errorEditAppointment"));
+            alert.setContentText(rb.getString("errorSelectAppointment"));
             alert.showAndWait();
             return;
         }
