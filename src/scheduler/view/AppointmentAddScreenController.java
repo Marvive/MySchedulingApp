@@ -82,7 +82,6 @@ public class AppointmentAddScreenController {
     @FXML
     private Button cancelButton;
 
-
     @FXML
     private MenuBar menuBar;
 
@@ -114,7 +113,9 @@ public class AppointmentAddScreenController {
     @FXML
     private Menu menuBarReports;
 
-//    Adds Data to TableView
+    /**
+     * Adds data to TableView
+     * */
     private void updateCustomerTableView() {
         updateCustomerRoster();
         customerSelectTableView.setItems(getCustomerRoster());
@@ -124,7 +125,6 @@ public class AppointmentAddScreenController {
     private final ObservableList<String> endTimes = FXCollections.observableArrayList();
     private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
     private final DateTimeFormatter dateDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
-
 
     private ResourceBundle rb1 = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
 
@@ -251,10 +251,8 @@ public class AppointmentAddScreenController {
         if (currentCustomers.size() == 1) {
             customer = currentCustomers.get(0);
         }
-//        Grabs appointment information to set TODO
         String title = appointmentTitleField.getText();
         LocalDate appointmentDate = datePicker.getValue();
-//        TODO Figure out how to grab value of combo box && Set Combo Values and RB if needed
         String appointmentType = appointmentTypePicker.getSelectionModel().getSelectedItem();
         String startAmPm = startTimePicker.getSelectionModel().getSelectedItem();
         String endAmPm = endTimePicker.getSelectionModel().getSelectedItem();
@@ -300,7 +298,6 @@ public class AppointmentAddScreenController {
             }
         }
     }
-
 
     /**
      * Sets the language of the text on the screen Used in the initialize method
