@@ -16,6 +16,7 @@ import scheduler.model.Appointment;
 import scheduler.model.Customer;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -273,19 +274,21 @@ public class AppointmentAddScreenController {
         localDateFormat.setTimeZone(TimeZone.getDefault());
         Date startLocal = null;
         Date endLocal = null;
-////        Change date and time strings into date objects
-//        try {
-//            startLocal = localDateFormat.parse(appointmentDate.toString() + " " + startHour + ":" + startMinute + " " + startAmPm);
-//            endLocal = localDateFormat.parse(appointmentDate.toString() + " " + endHour + ":" + endMinute + " " + endAmPm);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+//        Change date and time strings into date objects
+        try {
+            startLocal = localDateFormat.parse(appointmentDate.toString() + " " + startTime);
+            endLocal = localDateFormat.parse(appointmentDate.toString() + " " + endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 //        Creates ZoneDateTime out of date objects
-//        TODO Change combo box selection into UTC
         ZonedDateTime startUTC = ZonedDateTime.ofInstant(startLocal.toInstant(), ZoneId.of("UTC"));
         ZonedDateTime endUTC = ZonedDateTime.ofInstant(endLocal.toInstant(), ZoneId.of("UTC"));
+
 //        Submit and return to AppointmentViewScreen Checks if it returns true
-//        Method from DBConnection
+//        Method from DBConnection returns null. Cannot get customerID in else block
+//        Customer is null because none is selected!!! Must select customer
         if (addNewAppointment(customer, title, startUTC, endUTC)) {
             try {
 //                Returns to AppointmentViewScreen if accepted
@@ -328,6 +331,10 @@ public class AppointmentAddScreenController {
         menuBarGoCustomers.setText(rb.getString("menuBarGoCustomers"));
     }
 
+
+    /**
+     * Sets comboBox Data
+     * */
     private void setData(){
 //        Sets times available in 15 minutes increments within business hours 8-5
         LocalTime time = LocalTime.of(8, 0);
