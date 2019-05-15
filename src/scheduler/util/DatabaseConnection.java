@@ -169,7 +169,7 @@ public class DatabaseConnection {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle(rb.getString("upcomingNotificationTitle"));
                     alert.setContentText(rb.getString("upcomingNotificationText") + "\n" + rb.getString("lblTitle")
-                            + ": " + appointment.getTitle() + "\n" + rb.getString("lblDescription") + ": " + appointment.getDescription() +
+                            + ": " + appointment.getTitle() + "\n" + rb.getString("lblDescription") + ": " + appointment.getTitle() +
                             "\n" + rb.getString("lblLocation") + ": " + appointment.getLocation() + "\n" + rb.getString("lblContact") +
                             ": " + appointment.getContact() + "\n" + rb.getString("lblUrl") + ": " + appointment.getUrl() + "\n" +
                             rb.getString("lblDate") + ": " + appointment.getDateString() + "\n" + rb.getString("lblStartTime") + ": " +
@@ -897,7 +897,7 @@ public class DatabaseConnection {
             int month = Integer.parseInt(yearMonth.substring(5,7));
 //            Initializing the counter
             int typeCount = 0;
-            ArrayList<String> descriptions = new ArrayList<>();
+            ArrayList<String> titles = new ArrayList<>();
             for (Appointment appointment : AppointmentList.getAppointmentList()) {
 //                Grabs the appointment start date
                 Date startDate = appointment.getStartDate();
@@ -908,10 +908,10 @@ public class DatabaseConnection {
                 int appointmentMonth = calendar.get(Calendar.MONTH) + 1;
 //                If the years and month match, grab description
                 if (year == appointmentYear && month == appointmentMonth) {
-                    String description = appointment.getDescription();
+                    String title = appointment.getTitle();
 //                    If not already in arrayList, add it then up the counter
-                    if (!descriptions.contains(description)) {
-                        descriptions.add(description);
+                    if (!titles.contains(title)) {
+                        titles.add(title);
                         typeCount++;
                     }
                 }
@@ -920,7 +920,7 @@ public class DatabaseConnection {
             report = report + yearMonth + ": " + typeCount + "\n";
             report = report + rb.getString("lblTypes");
             // Add each type description to report
-            for (String description : descriptions) {
+            for (String description : titles) {
                 report = report + " " + description + ",";
             }
 //            TODO removes last character intended for comma. Optimize with regex
@@ -1045,7 +1045,7 @@ public class DatabaseConnection {
                 if (customerId == appointmentCustomerId) {
 //                    Grabs date and description from the Appointment Instance
                     String date = appointment.getDateString();
-                    String description = appointment.getDescription();
+                    String description = appointment.getTitle();
                     Date startDate = appointment.getStartDate();
 //                    Change military time to Standard
                     String startTime = startDate.toString().substring(11,16);

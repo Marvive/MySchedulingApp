@@ -283,12 +283,13 @@ public class AppointmentEditScreenController {
 //        Gets changed information
         int appointmentId = appointment.getAppointmentId();
         String title = appointmentTitleField.getText();
+        String appointmentType = appointmentTypePicker.getSelectionModel().getSelectedItem();
         LocalDate appointmentDate = datePicker.getValue();
 //        TODO Should be solved in AddScreenController
-        String startAmPm = startTimePicker.getSelectionModel().getSelectedItem();
-        String endAmPm = endTimePicker.getSelectionModel().getSelectedItem();
+        String startTime = startTimePicker.getSelectionModel().getSelectedItem();
+        String endTime = endTimePicker.getSelectionModel().getSelectedItem();
 //        Attempt to submit verifying validity
-        String errorMessage = Appointment.isAppointmentValid(customer, title, appointmentDate, startAmPm, endAmPm);
+        String errorMessage = Appointment.isAppointmentValid(customer, title, appointmentType, appointmentDate, startTime, endTime);
 //        Checks and alerts for any relevant errors
         if (errorMessage.length() > 0) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentEditScreen", Locale.getDefault());
