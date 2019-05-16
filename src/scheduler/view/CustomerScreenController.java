@@ -135,7 +135,6 @@ public class CustomerScreenController {
         }
     }
 
-
     /**
      * Menu Handlers
      */
@@ -241,6 +240,7 @@ public class CustomerScreenController {
 
     @FXML
     private void setTableView() {
+//        Lambdas to set the values of the tableView cells
         customerNameColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
         customerAddressColumn.setCellValueFactory(cellData -> cellData.getValue().addressProperty());
         customerAddress2Column.setCellValueFactory(cellData -> cellData.getValue().address2Property());

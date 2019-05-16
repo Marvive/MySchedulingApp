@@ -674,6 +674,7 @@ public class DatabaseConnection {
             alert.showAndWait();
             return false;
         } else {
+//            CustomerID must be null...
             int customerId = customer.getCustomerId();
             addAppointment(customerId, title, startTimestamp, endTimestamp);
             return true;

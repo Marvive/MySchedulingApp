@@ -129,7 +129,6 @@ public class AppointmentAddScreenController {
 
     private ResourceBundle rb1 = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
 
-
     /**
      * menuBar Handlers
      */
@@ -248,19 +247,25 @@ public class AppointmentAddScreenController {
     void saveButtonHandler(ActionEvent event) {
 //        Initializes the Customer
         Customer customer = null;
-//        Grabs the name of currentCustomer
+//        Grabs the name of currentCustomer TODO select customer?
         if (currentCustomers.size() == 1) {
             customer = currentCustomers.get(0);
         }
+        Customer customer1 = customerSelectTableView.getSelectionModel().getSelectedItem();
         String title = appointmentTitleField.getText();
         LocalDate appointmentDate = datePicker.getValue();
         String appointmentType = appointmentTypePicker.getSelectionModel().getSelectedItem();
         String startTime = startTimePicker.getSelectionModel().getSelectedItem();
         String endTime = endTimePicker.getSelectionModel().getSelectedItem();
 //        Submit and check for validation
-        String errorMessage = Appointment.isAppointmentValid(customer, title, appointmentType,
+        String errorMessage = Appointment.isAppointmentValid(customer1, title, appointmentType,
                 appointmentDate, startTime, endTime);
 //        Check and print error message
+
+        if (errorMessage == null) {
+            errorMessage = "Please select a customer";
+        }
+
         if (errorMessage.length() > 0) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -289,7 +294,7 @@ public class AppointmentAddScreenController {
 //        Submit and return to AppointmentViewScreen Checks if it returns true
 //        Method from DBConnection returns null. Cannot get customerID in else block
 //        Customer is null because none is selected!!! Must select customer
-        if (addNewAppointment(customer, title, startUTC, endUTC)) {
+        if (addNewAppointment(customer1, title, startUTC, endUTC)) {
             try {
 //                Returns to AppointmentViewScreen if accepted
                 Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
@@ -299,6 +304,7 @@ public class AppointmentAddScreenController {
                 mainScreenStage.show();
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println(customer1.getCustomerId());
             }
         }
     }
