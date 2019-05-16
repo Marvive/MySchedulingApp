@@ -712,6 +712,10 @@ public class DatabaseConnection {
      * Used by addNewAppointment()
      * */
     private static void addAppointment(int customerId, String title, Timestamp startTimestamp, Timestamp endTimestamp) {
+//        Created Null values as they are not required for the project, but is useful for updating the DB
+        String description = null;
+        String location = null;
+        String contact = null;
 //        Connects to DB. Uses a fuller path since I'm creating a url variable as a parameter
         try (Connection conn = DriverManager.getConnection(DatabaseConnection.url,user,pass);
              Statement stmt = conn.createStatement()) {
@@ -726,8 +730,7 @@ public class DatabaseConnection {
             }
 //            Creates the new entry
             stmt.executeUpdate("INSERT INTO appointment VALUES (" + appointmentId +", " + customerId + ", '" + title + "', '" +
-//                   TODO URL may need to be removed here
-                     url + "', '" + startTimestamp + "', '" + endTimestamp + "', " +
+                    description + "', '" + location + "', '" + contact + "', '" + url + "', '" + startTimestamp + "', '" + endTimestamp + "', " +
                     "CURRENT_DATE, '" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
         } catch (SQLException e) {
 //            Database failure alert
@@ -802,8 +805,6 @@ public class DatabaseConnection {
         }
     }
 
-    // Check if new appointment overlaps with any other existing appointments and return true if it does
-
     /**
      * A secondary overlap check made for modifying existing appointments
      * Used by modifyAppointment()
@@ -873,7 +874,7 @@ public class DatabaseConnection {
 //        Creates report string and grabs label based on language
         String report = rb.getString("lblAppointmentTypeByMonthTitle");
         ArrayList<String> monthsWithAppointments = new ArrayList<>();
-//        For each appointment in the list, add a year and month combo to arraylist
+//        For each appointment in the list, add a year and month combo to arrayList
         for (Appointment appointment : AppointmentList.getAppointmentList()) {
             Date startDate = appointment.getStartDate();
             Calendar calendar = Calendar.getInstance();

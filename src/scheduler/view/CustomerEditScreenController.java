@@ -22,6 +22,9 @@ import static scheduler.util.DatabaseConnection.*;
 
 public class CustomerEditScreenController {
 
+    /**
+     * FXML Menu items
+     * */
     @FXML
     private MenuBar menuBar;
 
@@ -274,7 +277,6 @@ public class CustomerEditScreenController {
         String country = customer.getCountry();
         String postalCode = customer.getPostalCode();
         String phone = customer.getPhone();
-        // Populate information fields with current customer information
 //        Populates the fields of the customer
         customerNameTextField.setText(customerName);
         customerAddressTextField.setText(address);

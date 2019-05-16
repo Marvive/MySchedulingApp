@@ -25,7 +25,7 @@ import static scheduler.util.DatabaseConnection.updateAppointmentList;
 public class AppointmentViewScreenController {
 
     @FXML
-    private TableView<Appointment> apptTableView;
+    private TableView<Appointment> appointmentTableView;
 
     @FXML
     private TableColumn<Appointment, String> titleColumn;
@@ -56,6 +56,11 @@ public class AppointmentViewScreenController {
 
     @FXML
     private Text appointmentViewTitle;
+
+    /**
+     * MenuBar fxml
+     * */
+
 
     @FXML
     private MenuBar menuBar;
@@ -193,7 +198,7 @@ public class AppointmentViewScreenController {
 
 
     @FXML
-    void handleNewAppt(ActionEvent event) {
+    void newAppointmentHandler(ActionEvent event) {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentAddScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -206,7 +211,8 @@ public class AppointmentViewScreenController {
     }
 
     //    Variable to hold index of appointment to modify
-    private static int appointmentIndexToModify;
+//    Variable to hold appointment index to edit
+    private static int appointmentIndexToEdit;
 
     /**
      * Set's language for all the text that can appear on the screen
@@ -236,9 +242,9 @@ public class AppointmentViewScreenController {
     }
 
     @FXML
-    private void handleEditAppt(ActionEvent event) {
+    private void editAppointmentHandler(ActionEvent event) {
 //        Grab selected appointment to modify
-        Appointment appointmentToModify = apptTableView.getSelectionModel().getSelectedItem();
+        Appointment appointmentToModify = appointmentTableView.getSelectionModel().getSelectedItem();
 //        Ensures something is selected before editing
         if (appointmentToModify == null) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
@@ -250,7 +256,7 @@ public class AppointmentViewScreenController {
             return;
         }
 //        Set the index of the appointment to modify
-        appointmentIndexToModify = getAppointmentList().indexOf(appointmentToModify);
+        appointmentIndexToEdit = getAppointmentList().indexOf(appointmentToModify);
 //        Try to open the appointment edit window
         try {
             Parent modifyAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentEditScreen.fxml"));
@@ -263,15 +269,13 @@ public class AppointmentViewScreenController {
         }
     }
 
-//    Deletes Selected Appointment
-
     /**
      * Deletes the selected appointment.
      */
     @FXML
-    private void handleDeleteAppt(ActionEvent event) {
+    private void deleteAppointmentHandler(ActionEvent event) {
 //        Grabs selected appointment from Table View
-        Appointment appointmentToDelete = apptTableView.getSelectionModel().getSelectedItem();
+        Appointment appointmentToDelete = appointmentTableView.getSelectionModel().getSelectedItem();
 //        Check if one was selected then alert if not
         if (appointmentToDelete == null) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
@@ -288,15 +292,15 @@ public class AppointmentViewScreenController {
 
 
 //    Returns appointment index to modify
-    public static int getAppointmentIndexToModify() {
-        return appointmentIndexToModify;
+    public static int getAppointmentIndexToEdit() {
+        return appointmentIndexToEdit;
     }
 
 //    Updates the TableView
     @FXML
     private void updateAddAppointmentTableView() {
         updateAppointmentList();
-        apptTableView.setItems(getAppointmentList());
+        appointmentTableView.setItems(getAppointmentList());
     }
 
     /**
@@ -306,8 +310,11 @@ public class AppointmentViewScreenController {
     public void initialize() {
         setLanguage();
 //        Lambdas to call methods on buttons
-        editAppointmentButton.setOnAction(event -> handleEditAppt(event));
-        deleteAppointmentButton.setOnAction(event -> handleDeleteAppt(event));
+        newAppointmentButton.setOnAction(event -> newAppointmentHandler(event));
+        editAppointmentButton.setOnAction(event -> editAppointmentHandler(event));
+        deleteAppointmentButton.setOnAction(event -> deleteAppointmentHandler(event));
+//        Updates the Table View When initialized
+        updateAddAppointmentTableView();
 //        Puts data to the table view
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         typeColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
@@ -315,8 +322,6 @@ public class AppointmentViewScreenController {
         endColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
         consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
-//        Updates the Table View When initialized
-        updateAddAppointmentTableView();
 //        Sets Data for combobox
         setData();
     }

@@ -79,6 +79,9 @@ public class AppointmentEditScreenController {
     @FXML
     private Button cancelButton;
 
+    /**
+     * MenuBar FXML
+     * */
     @FXML
     private MenuBar menuBar;
 
@@ -96,7 +99,6 @@ public class AppointmentEditScreenController {
 
     @FXML
     private MenuItem menuBarGoMain;
-
 
     @FXML
     private MenuItem menuBarLogOut;
@@ -182,6 +184,19 @@ public class AppointmentEditScreenController {
     }
 
     @FXML
+    void menuBarMainHandler() {
+        try {
+            Parent mainParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
+            Scene mainScene = new Scene(mainParent);
+            Stage mainStage = (Stage) menuBar.getScene().getWindow();
+            mainStage.setScene(mainScene);
+            mainStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentEditScreen", Locale.getDefault());
         editAppointmentText.setText(rb.getString("lblAddAppointment"));
@@ -234,7 +249,7 @@ public class AppointmentEditScreenController {
 //    Creating appointment initializer
     private Appointment appointment;
 //    Grabs index of appointment
-    private int appointmentIndexToModify = AppointmentViewScreenController.getAppointmentIndexToModify();
+    private int appointmentIndexToModify = AppointmentViewScreenController.getAppointmentIndexToEdit();
 //    Initialize observableList
     private ObservableList<Customer> currentCustomers = FXCollections.observableArrayList();
 

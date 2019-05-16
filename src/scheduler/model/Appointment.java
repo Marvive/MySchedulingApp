@@ -256,7 +256,7 @@ public class Appointment {
 //                errorMessage += rb.getString("errorStartAfterEnd");
 //            }
             if (appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SATURDAY") || appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SUNDAY")) {
-                errorMessage += rb.getString("errrorNoWeekends");
+                errorMessage += rb.getString("errorNoWeekends");
             }
         } catch (NumberFormatException e) {
             errorMessage = errorMessage + rb.getString("errorStartEndInteger");
