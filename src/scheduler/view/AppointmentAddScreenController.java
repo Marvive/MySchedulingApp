@@ -17,13 +17,12 @@ import scheduler.model.Customer;
 import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.*;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 import static scheduler.model.CustomerRoster.getCustomerRoster;
 import static scheduler.util.DatabaseConnection.updateCustomerRoster;
@@ -246,14 +245,6 @@ public class AppointmentAddScreenController {
      */
     @FXML
     private void saveButtonHandler(ActionEvent event) {
-//        Initializes the Customer
-        Customer customer = null;
-
-//        Grabs the name of currentCustomer TODO select customer?
-        if (currentCustomers.size() == 1) {
-            customer = currentCustomers.get(0);
-        }
-
         Customer customer1 = customerSelectTableView.getSelectionModel().getSelectedItem();
         String title = appointmentTitleField.getText();
         LocalDate appointmentDate = datePicker.getValue();
@@ -269,9 +260,6 @@ public class AppointmentAddScreenController {
 //        Turns LocalDateTime into ZonedDateTime
         ZonedDateTime startUTC = startDateTime.atZone(zoneID).withZoneSameInstant(ZoneId.of("UTC"));
         ZonedDateTime endUTC = endDateTime.atZone(zoneID).withZoneSameInstant(ZoneId.of("UTC"));
-//        Turns ZonedDateTimes into Timestamps to be used with DB
-        Timestamp startTimeStamp = Timestamp.valueOf(startUTC.toLocalDateTime());
-        Timestamp endTimeStamp = Timestamp.valueOf(endUTC.toLocalDateTime());
 
 //        Submit and check for validation
         String errorMessage = Appointment.isAppointmentValid(customer1, title, appointmentType,
@@ -297,22 +285,7 @@ public class AppointmentAddScreenController {
             alert.showAndWait();
             return;
         }
-        SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy-MM-dd h:mm a");
-        localDateFormat.setTimeZone(TimeZone.getDefault());
-        Date startLocal =null;
-        Date endLocal=null;
-//        Change date and time strings into date objects
-        try {
-            startLocal = localDateFormat.parse(appointmentDate.toString() + " " + startTime);
-            endLocal = localDateFormat.parse(appointmentDate.toString() + " " + endTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
-//        Creates ZoneDateTime out of date objects TODO May be redundant with new code above
-//        ZonedDateTime startUTC = ZonedDateTime.ofInstant(startLocal.toInstant(), ZoneId.of("UTC"));
-//        ZonedDateTime endUTC = ZonedDateTime.ofInstant(endLocal.toInstant(), ZoneId.of("UTC"));
-//        Submit and return to AppointmentViewScreen Checks if it returns true
         if (DatabaseConnection.addNewAppointment(customer1, title, appointmentType, startUTC, endUTC)) {
             try {
 //                Returns to AppointmentViewScreen if accepted
