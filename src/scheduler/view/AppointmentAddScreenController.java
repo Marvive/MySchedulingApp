@@ -358,6 +358,7 @@ public class AppointmentAddScreenController {
                 rb1.getString("newAccount"),
                 rb1.getString("closeAccount"));
         appointmentTypePicker.setItems(typeList);
+        appointmentTypePicker.getSelectionModel().selectFirst();
     }
 
     @FXML

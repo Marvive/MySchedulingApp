@@ -193,7 +193,7 @@ public class AppointmentViewScreenController {
                 rb1.getString("weekView"),
                 rb1.getString("monthView")
         );
-
+        comboBox.getSelectionModel().selectFirst();
     }
 
 
@@ -318,10 +318,10 @@ public class AppointmentViewScreenController {
 //        Puts data to the table view
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
-        startColumn.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
-        endColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
-        customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
-        consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+//        startColumn.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
+//        endColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
+//        customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+//        consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
 //        Sets Data for combobox
         setData();
     }
