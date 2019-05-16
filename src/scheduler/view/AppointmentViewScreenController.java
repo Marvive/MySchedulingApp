@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.model.Appointment;
+import scheduler.model.AppointmentList;
 import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
@@ -20,7 +21,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static scheduler.model.AppointmentList.getAppointmentList;
-import static scheduler.util.DatabaseConnection.updateAppointmentList;
 
 public class AppointmentViewScreenController {
 
@@ -210,12 +210,12 @@ public class AppointmentViewScreenController {
         }
     }
 
-    //    Variable to hold index of appointment to modify
 //    Variable to hold appointment index to edit
     private static int appointmentIndexToEdit;
 
     /**
      * Set's language for all the text that can appear on the screen
+     * Used in initialize
      */
     @FXML
     private void setLanguage() {
@@ -243,10 +243,10 @@ public class AppointmentViewScreenController {
 
     @FXML
     private void editAppointmentHandler(ActionEvent event) {
-//        Grab selected appointment to modify
-        Appointment appointmentToModify = appointmentTableView.getSelectionModel().getSelectedItem();
+//        Grab selected appointment to edit
+        Appointment appointmentToEdit = appointmentTableView.getSelectionModel().getSelectedItem();
 //        Ensures something is selected before editing
-        if (appointmentToModify == null) {
+        if (appointmentToEdit == null) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("errorTitle"));
@@ -255,9 +255,9 @@ public class AppointmentViewScreenController {
             alert.showAndWait();
             return;
         }
-//        Set the index of the appointment to modify
-        appointmentIndexToEdit = getAppointmentList().indexOf(appointmentToModify);
-//        Try to open the appointment edit window
+//        Set the index of the appointment to edit
+        appointmentIndexToEdit = AppointmentList.getAppointmentList().indexOf(appointmentToEdit);
+//        Try to open the appointmentEditScreen
         try {
             Parent modifyAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentEditScreen.fxml"));
             Scene modifyAppointmentScene = new Scene(modifyAppointmentParent);
@@ -291,7 +291,7 @@ public class AppointmentViewScreenController {
     }
 
 
-//    Returns appointment index to modify
+//    Returns appointment index to Edit
     public static int getAppointmentIndexToEdit() {
         return appointmentIndexToEdit;
     }
@@ -299,7 +299,7 @@ public class AppointmentViewScreenController {
 //    Updates the TableView
     @FXML
     private void updateAddAppointmentTableView() {
-        updateAppointmentList();
+        DatabaseConnection.updateAppointmentList();
         appointmentTableView.setItems(getAppointmentList());
     }
 
@@ -317,7 +317,7 @@ public class AppointmentViewScreenController {
         updateAddAppointmentTableView();
 //        Puts data to the table view
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
+//        typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
 //        startColumn.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
 //        endColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
 //        customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());

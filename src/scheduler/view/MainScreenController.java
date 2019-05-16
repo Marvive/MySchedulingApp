@@ -12,16 +12,18 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.MySchedulingApp;
 import scheduler.model.User;
+import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static scheduler.util.DatabaseConnection.loginAppointmentNotification;
-
 public class MainScreenController {
 
+    /**
+     * MenuBar FXML
+     * */
     @FXML
     private MenuItem menuBarLogOut;
 
@@ -65,11 +67,9 @@ public class MainScreenController {
     private MenuBar menuBar;
 
 
-
-
     /**
-     * Actions to move to the AppointmentViewScreen
-     */
+     * Handlers for buttons and MenuBar
+     * */
 
     @FXML
     void menuAppointmentsButtonHandler(ActionEvent event) {
@@ -204,6 +204,10 @@ public class MainScreenController {
 ////        TODO add a logout option that states the name of the user
 ////        logoutUser.setText("Logout: " + currentUser.getUsername());
 //    }
+
+    /**
+     * Sets language for the screen
+     * */
     @FXML
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("resources/MainScreen", Locale.getDefault());
@@ -232,7 +236,7 @@ public class MainScreenController {
 //        Sets local language
         setLanguage();
 //        Detects if there is an upcoming notification. Method located in DatabaseConnection
-        loginAppointmentNotification();
+        DatabaseConnection.loginAppointmentNotification();
     }
 
 }

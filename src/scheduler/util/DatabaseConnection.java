@@ -562,6 +562,7 @@ public class DatabaseConnection {
 
     /**
     * Sets a customer to inactive and makes them hidden in the customer list view
+     * TODO Used Where?
     * */
     public static void setCustomerToInactive(Customer customerToRemove) {
         int customerId = customerToRemove.getCustomerId();
@@ -590,8 +591,6 @@ public class DatabaseConnection {
             updateCustomerRoster();
         }
     }
-
-
 
     /**
      * Will update the appointmentList with future appointments

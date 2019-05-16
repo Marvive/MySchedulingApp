@@ -247,9 +247,9 @@ public class Appointment {
                 errorMessage += rb.getString("errorType");
             }
 //            This is no longer necessary as we switched to combo boxes
-//            if (appointmentDate == null || startTime == null || endTime == null) {
-//                errorMessage += rb.getString("errorStartEndEmpty");
-//            }
+            if (appointmentDate == null || startTime == null || endTime == null) {
+                errorMessage += rb.getString("errorStartEndEmpty");
+            }
 
 
 //        Grabs the strings from the box and converts to localTime
