@@ -4,8 +4,9 @@ import javafx.beans.property.*;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -231,6 +232,7 @@ public class Appointment {
     public static String isAppointmentValid(Customer customer, String title, String appointmentType,
                                             LocalDate appointmentDate, String startTime, String endTime) throws NumberFormatException {
         ResourceBundle rb = ResourceBundle.getBundle("resources/appointment", Locale.getDefault());
+        ZoneId zoneID = ZoneId.systemDefault();
         String errorMessage = "";
         try {
 //            These will not be else if's because it will not continue checking conditions
@@ -241,12 +243,34 @@ public class Appointment {
             if (title.length() == 0) {
                 errorMessage += rb.getString("errorTitle");
             }
-            if (appointmentType.length() == 0) {
+            if (appointmentType == null) {
                 errorMessage += rb.getString("errorType");
             }
-            if (appointmentDate == null || startTime.equals("") || endTime.equals("")) {
-                errorMessage += rb.getString("errorStartEndEmpty");
+//            This is no longer necessary as we switched to combo boxes
+//            if (appointmentDate == null || startTime == null || endTime == null) {
+//                errorMessage += rb.getString("errorStartEndEmpty");
+//            }
+
+
+//        Grabs the strings from the box and converts to localTime
+            LocalTime startLocalTime = LocalTime.parse(startTime, DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+            LocalTime endLocalTime = LocalTime.parse(endTime, DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+//        Combines Date and local Time
+            LocalDateTime startDateTime = LocalDateTime.of(appointmentDate, startLocalTime);
+            LocalDateTime endDateTime = LocalDateTime.of(appointmentDate, endLocalTime);
+//        Turns LocalDateTime into ZonedDateTime
+            ZonedDateTime startUTC = startDateTime.atZone(zoneID).withZoneSameInstant(ZoneId.of("UTC"));
+            ZonedDateTime endUTC = endDateTime.atZone(zoneID).withZoneSameInstant(ZoneId.of("UTC"));
+//        Turns ZonedDateTimes into Timestamps to be used with DB
+            Timestamp startTimeStamp = Timestamp.valueOf(startUTC.toLocalDateTime());
+            Timestamp endTimeStamp = Timestamp.valueOf(endUTC.toLocalDateTime());
+
+
+//            This does not work because it must be in full Timestamp format 'yyyy-mm-dd hh:mm:ss'
+            if (startTimeStamp.after(endTimeStamp)) {
+                errorMessage += rb.getString("startBeforeEnd");
             }
+
 //            TODO These may be useful if I need conditionals for choosing an illogical time
 //            if (Integer.parseInt(startHour) < 1 || Integer.parseInt(startHour) > 12 || Integer.parseInt(endHour) < 1 || Integer.parseInt(endHour) > 12
 //                     ) {
@@ -258,8 +282,8 @@ public class Appointment {
             if (appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SATURDAY") || appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SUNDAY")) {
                 errorMessage += rb.getString("errorNoWeekends");
             }
-        } catch (NumberFormatException e) {
-            errorMessage = errorMessage + rb.getString("errorStartEndInteger");
+        } catch (Exception e) {
+            System.out.println(e);
 //            TODO learn about finally
         } finally {
             return errorMessage;

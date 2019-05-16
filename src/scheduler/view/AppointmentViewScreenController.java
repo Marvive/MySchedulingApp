@@ -317,7 +317,7 @@ public class AppointmentViewScreenController {
         updateAddAppointmentTableView();
 //        Puts data to the table view
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
+        typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
         startColumn.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
         endColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());

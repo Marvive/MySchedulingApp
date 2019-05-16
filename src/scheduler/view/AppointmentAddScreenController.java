@@ -14,20 +14,18 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.model.Appointment;
 import scheduler.model.Customer;
+import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
 
 import static scheduler.model.CustomerRoster.getCustomerRoster;
-import static scheduler.util.DatabaseConnection.addNewAppointment;
 import static scheduler.util.DatabaseConnection.updateCustomerRoster;
 
 
@@ -131,7 +129,7 @@ public class AppointmentAddScreenController {
     private final DateTimeFormatter dateDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
 
     private ResourceBundle rb1 = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
-
+    private final ZoneId zoneID = ZoneId.systemDefault();
     /**
      * menuBar Handlers
      */
@@ -250,6 +248,7 @@ public class AppointmentAddScreenController {
     private void saveButtonHandler(ActionEvent event) {
 //        Initializes the Customer
         Customer customer = null;
+
 //        Grabs the name of currentCustomer TODO select customer?
         if (currentCustomers.size() == 1) {
             customer = currentCustomers.get(0);
@@ -261,6 +260,19 @@ public class AppointmentAddScreenController {
         String appointmentType = appointmentTypePicker.getSelectionModel().getSelectedItem();
         String startTime = startTimePicker.getSelectionModel().getSelectedItem();
         String endTime = endTimePicker.getSelectionModel().getSelectedItem();
+//        Grabs the strings from the box and converts to localTime
+        LocalTime startLocalTime = LocalTime.parse(startTime, timeDTF);
+        LocalTime endLocalTime = LocalTime.parse(endTime, timeDTF);
+//        Combines Date and local Time
+        LocalDateTime startDateTime = LocalDateTime.of(appointmentDate, startLocalTime);
+        LocalDateTime endDateTime = LocalDateTime.of(appointmentDate, endLocalTime);
+//        Turns LocalDateTime into ZonedDateTime
+        ZonedDateTime startUTC = startDateTime.atZone(zoneID).withZoneSameInstant(ZoneId.of("UTC"));
+        ZonedDateTime endUTC = endDateTime.atZone(zoneID).withZoneSameInstant(ZoneId.of("UTC"));
+//        Turns ZonedDateTimes into Timestamps to be used with DB
+        Timestamp startTimeStamp = Timestamp.valueOf(startUTC.toLocalDateTime());
+        Timestamp endTimeStamp = Timestamp.valueOf(endUTC.toLocalDateTime());
+
 //        Submit and check for validation
         String errorMessage = Appointment.isAppointmentValid(customer1, title, appointmentType,
                 appointmentDate, startTime, endTime);
@@ -297,11 +309,11 @@ public class AppointmentAddScreenController {
             e.printStackTrace();
         }
 
-//        Creates ZoneDateTime out of date objects
-        ZonedDateTime startUTC = ZonedDateTime.ofInstant(startLocal.toInstant(), ZoneId.of("UTC"));
-        ZonedDateTime endUTC = ZonedDateTime.ofInstant(endLocal.toInstant(), ZoneId.of("UTC"));
+//        Creates ZoneDateTime out of date objects TODO May be redundant with new code above
+//        ZonedDateTime startUTC = ZonedDateTime.ofInstant(startLocal.toInstant(), ZoneId.of("UTC"));
+//        ZonedDateTime endUTC = ZonedDateTime.ofInstant(endLocal.toInstant(), ZoneId.of("UTC"));
 //        Submit and return to AppointmentViewScreen Checks if it returns true
-        if (addNewAppointment(customer1, title, appointmentType, startUTC, endUTC)) {
+        if (DatabaseConnection.addNewAppointment(customer1, title, appointmentType, startUTC, endUTC)) {
             try {
 //                Returns to AppointmentViewScreen if accepted
                 Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
