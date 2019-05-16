@@ -21,6 +21,9 @@ import static scheduler.util.DatabaseConnection.addNewCustomer;
 
 public class CustomerAddScreenController {
 
+    /**
+     * MenuBar FXML
+     * */
     @FXML
     private MenuBar menuBar;
 

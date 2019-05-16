@@ -656,7 +656,7 @@ public class DatabaseConnection {
     /**
      * Adds appointment to database unless it exists
      * */
-    public static boolean addNewAppointment(Customer customer, String title, ZonedDateTime startUTC, ZonedDateTime endUTC) {
+    public static boolean addNewAppointment(Customer customer, String title, String type, ZonedDateTime startUTC, ZonedDateTime endUTC) {
 //        Change ZonedDateTimes to Timestamps
         String startUTCString = startUTC.toString();
         startUTCString = startUTCString.substring(0,10) + " " + startUTCString.substring(11,16) + ":00";
@@ -675,7 +675,7 @@ public class DatabaseConnection {
             return false;
         } else {
             int customerId = customer.getCustomerId();
-            addAppointment(customerId, title, startTimestamp, endTimestamp);
+            addAppointment(customerId, title, type, startTimestamp, endTimestamp);
             return true;
         }
     }
@@ -711,9 +711,8 @@ public class DatabaseConnection {
      * Creates new appointment.
      * Used by addNewAppointment()
      * */
-    private static void addAppointment(int customerId, String title, Timestamp startTimestamp, Timestamp endTimestamp) {
+    private static void addAppointment(int customerId, String title, String type, Timestamp startTimestamp, Timestamp endTimestamp) {
 //        Created Null values as they are not required for the project, but is useful for updating the DB
-        String description = null;
         String location = null;
         String contact = null;
 //        Connects to DB. Uses a fuller path since I'm creating a url variable as a parameter
@@ -730,7 +729,7 @@ public class DatabaseConnection {
             }
 //            Creates the new entry
             stmt.executeUpdate("INSERT INTO appointment VALUES (" + appointmentId +", " + customerId + ", '" + title + "', '" +
-                    description + "', '" + location + "', '" + contact + "', '" + url + "', '" + startTimestamp + "', '" + endTimestamp + "', " +
+                    type + "', '" + location + "', '" + contact + "', '" + url + "', '" + startTimestamp + "', '" + endTimestamp + "', " +
                     "CURRENT_DATE, '" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
         } catch (SQLException e) {
 //            Database failure alert
@@ -810,7 +809,7 @@ public class DatabaseConnection {
      * Used by modifyAppointment()
      * */
     private static boolean doesAppointmentOverlapOthers(Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException, ParseException {
-        int appointmentIndexToRemove = AppointmentViewScreenController.getAppointmentIndexToModify();
+        int appointmentIndexToRemove = AppointmentViewScreenController.getAppointmentIndexToEdit();
         ObservableList<Appointment> appointmentList = AppointmentList.getAppointmentList();
 //        Calls remove method from appointmentList
         appointmentList.remove(appointmentIndexToRemove);

@@ -83,6 +83,10 @@ public class AppointmentAddScreenController {
     @FXML
     private Button cancelButton;
 
+    /**
+     * MenuBar FXML
+     * */
+
     @FXML
     private MenuBar menuBar;
 
@@ -100,7 +104,6 @@ public class AppointmentAddScreenController {
 
     @FXML
     private MenuItem menuBarGoMain;
-
 
     @FXML
     private MenuItem menuBarLogOut;
@@ -263,8 +266,14 @@ public class AppointmentAddScreenController {
                 appointmentDate, startTime, endTime);
 //        Check and print error message
 
-        if (errorMessage == null) {
-            errorMessage = "Please select a customer";
+        if (customer1 == null) {
+            ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("selectCustomerHeader"));
+            alert.setContentText(rb.getString("selectCustomerContent"));
+            alert.showAndWait();
+            return;
         }
 
         if (errorMessage.length() > 0) {
@@ -292,7 +301,7 @@ public class AppointmentAddScreenController {
         ZonedDateTime startUTC = ZonedDateTime.ofInstant(startLocal.toInstant(), ZoneId.of("UTC"));
         ZonedDateTime endUTC = ZonedDateTime.ofInstant(endLocal.toInstant(), ZoneId.of("UTC"));
 //        Submit and return to AppointmentViewScreen Checks if it returns true
-        if (addNewAppointment(customer1, title, startUTC, endUTC)) {
+        if (addNewAppointment(customer1, title, appointmentType, startUTC, endUTC)) {
             try {
 //                Returns to AppointmentViewScreen if accepted
                 Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
