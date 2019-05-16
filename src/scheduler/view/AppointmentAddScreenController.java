@@ -244,13 +244,14 @@ public class AppointmentAddScreenController {
      * Saves the information to the tableView and into the database
      */
     @FXML
-    void saveButtonHandler(ActionEvent event) {
+    private void saveButtonHandler(ActionEvent event) {
 //        Initializes the Customer
         Customer customer = null;
 //        Grabs the name of currentCustomer TODO select customer?
         if (currentCustomers.size() == 1) {
             customer = currentCustomers.get(0);
         }
+
         Customer customer1 = customerSelectTableView.getSelectionModel().getSelectedItem();
         String title = appointmentTitleField.getText();
         LocalDate appointmentDate = datePicker.getValue();
@@ -277,8 +278,8 @@ public class AppointmentAddScreenController {
         }
         SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy-MM-dd h:mm a");
         localDateFormat.setTimeZone(TimeZone.getDefault());
-        Date startLocal = null;
-        Date endLocal = null;
+        Date startLocal =null;
+        Date endLocal=null;
 //        Change date and time strings into date objects
         try {
             startLocal = localDateFormat.parse(appointmentDate.toString() + " " + startTime);
@@ -290,10 +291,7 @@ public class AppointmentAddScreenController {
 //        Creates ZoneDateTime out of date objects
         ZonedDateTime startUTC = ZonedDateTime.ofInstant(startLocal.toInstant(), ZoneId.of("UTC"));
         ZonedDateTime endUTC = ZonedDateTime.ofInstant(endLocal.toInstant(), ZoneId.of("UTC"));
-
 //        Submit and return to AppointmentViewScreen Checks if it returns true
-//        Method from DBConnection returns null. Cannot get customerID in else block
-//        Customer is null because none is selected!!! Must select customer
         if (addNewAppointment(customer1, title, startUTC, endUTC)) {
             try {
 //                Returns to AppointmentViewScreen if accepted
@@ -304,7 +302,6 @@ public class AppointmentAddScreenController {
                 mainScreenStage.show();
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println(customer1.getCustomerId());
             }
         }
     }
