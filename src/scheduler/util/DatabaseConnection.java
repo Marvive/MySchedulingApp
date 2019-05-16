@@ -657,15 +657,11 @@ public class DatabaseConnection {
      * Adds appointment to database unless it exists
      * */
     public static boolean addNewAppointment(Customer customer, String title, String type, ZonedDateTime startUTC, ZonedDateTime endUTC) {
-//        Change ZonedDateTimes to Timestamps
-        String startUTCString = startUTC.toString();
-        startUTCString = startUTCString.substring(0,10) + " " + startUTCString.substring(11,16) + ":00";
-        Timestamp startTimestamp = Timestamp.valueOf(startUTCString);
-        String endUTCString = endUTC.toString();
-        endUTCString = endUTCString.substring(0,10) + " " + endUTCString.substring(11,16) + ":00";
-        Timestamp endTimestamp = Timestamp.valueOf(endUTCString);
+//        Change ZonedDateTimes to Timestamps.
+        Timestamp startTimeStamp = Timestamp.valueOf(startUTC.toLocalDateTime());
+        Timestamp endTimeStamp = Timestamp.valueOf(endUTC.toLocalDateTime());
 //        Checks to make sure that added appointment does not overlap with others, then adds it if it doesn't
-        if (doesAppointmentOverlap(startTimestamp, endTimestamp)) {
+        if (doesAppointmentOverlap(startTimeStamp, endTimeStamp)) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
@@ -675,7 +671,7 @@ public class DatabaseConnection {
             return false;
         } else {
             int customerId = customer.getCustomerId();
-            addAppointment(customerId, title, type, startTimestamp, endTimestamp);
+            addAppointment(customerId, title, type, startTimeStamp, endTimeStamp);
             return true;
         }
     }
