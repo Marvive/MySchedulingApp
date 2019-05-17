@@ -22,6 +22,9 @@ import static scheduler.util.DatabaseConnection.updateCustomerRoster;
 
 public class CustomerScreenController {
 
+    /**
+     * MenuBar FXML
+     * */
     @FXML
     private MenuBar menuBar;
 
@@ -112,7 +115,6 @@ public class CustomerScreenController {
         Customer customerToModify = customerTableView.getSelectionModel().getSelectedItem();
 //        Checks if no customer was selected
         if (customerToModify == null) {
-            // Create alert saying a customer must be selected to be modified
             ResourceBundle rb = ResourceBundle.getBundle("resources/customerScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
@@ -250,7 +252,6 @@ public class CustomerScreenController {
     }
 
 
-//    Initialize the Screen
     @FXML
     public void initialize() {
 //        Sets the language

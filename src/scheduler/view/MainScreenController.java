@@ -10,8 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import scheduler.MySchedulingApp;
-import scheduler.model.User;
 import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
@@ -101,7 +99,7 @@ public class MainScreenController {
      * Closes Program
      */
     @FXML
-    void menuBarCloseHandler(ActionEvent event) {
+    void menuBarCloseHandler() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
         alert.setTitle("Exit");
@@ -121,7 +119,7 @@ public class MainScreenController {
      * Handler actions for customer screens
      */
     @FXML
-    void menuBarCustomersHandler(ActionEvent event) {
+    void menuBarCustomersHandler() {
         try {
             Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
             Scene customerScene = new Scene(customerParent);
@@ -150,7 +148,7 @@ public class MainScreenController {
      * Logs you out
      */
     @FXML
-    void menuBarLogOutHandler(ActionEvent event) {
+    void menuBarLogOutHandler() {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -179,7 +177,7 @@ public class MainScreenController {
     }
 
     @FXML
-    void menuBarReportsHandler(ActionEvent event) {
+    void menuBarReportsHandler() {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
@@ -190,20 +188,6 @@ public class MainScreenController {
             e.printStackTrace();
         }
     }
-
-    private MySchedulingApp mainApp;
-    private User currentUser;
-
-    /*
-     * Non FXML
-     * */
-//    public void setMain(MySchedulingApp mainApp, User currentUser) {
-//        this.mainApp = mainApp;
-//        this.currentUser = currentUser;
-//
-////        TODO add a logout option that states the name of the user
-////        logoutUser.setText("Logout: " + currentUser.getUsername());
-//    }
 
     /**
      * Sets language for the screen
