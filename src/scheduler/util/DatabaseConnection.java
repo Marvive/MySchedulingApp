@@ -132,11 +132,7 @@ public class DatabaseConnection {
             }
             passwordSet.close();
 
-            if (dbPassword.equals(password)) {
-                return true;
-            } else {
-                return false;
-            }
+            return dbPassword.equals(password);
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -146,7 +142,6 @@ public class DatabaseConnection {
 
     /**
      * Method to create a notification upon logging in
-     * TODO Add to Resource bundle and edit appointment details
      */
     public static void loginAppointmentNotification() {
         if (openCount == 0) {
@@ -168,12 +163,12 @@ public class DatabaseConnection {
                     ResourceBundle rb = ResourceBundle.getBundle("resources/MainScreen", Locale.getDefault());
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle(rb.getString("upcomingNotificationTitle"));
-                    alert.setContentText(rb.getString("upcomingNotificationText") + "\n" + rb.getString("lblTitle")
-                            + ": " + appointment.getTitle() + "\n" + rb.getString("lblDescription") + ": " + appointment.getTitle() +
-                            "\n" + rb.getString("lblLocation") + ": " + appointment.getLocation() + "\n" + rb.getString("lblContact") +
-                            ": " + appointment.getContact() + "\n" + rb.getString("lblUrl") + ": " + appointment.getUrl() + "\n" +
-                            rb.getString("lblDate") + ": " + appointment.getDateString() + "\n" + rb.getString("lblStartTime") + ": " +
-                            appointment.getStartString() + "\n" + rb.getString("lblEndTime") + ": " + appointment.getEndString());
+                    alert.setContentText(rb.getString("upcomingNotificationText") + "\n" + rb.getString("title")
+                            + ": " + appointment.getTitle() + "\n" + rb.getString("description") + ": " + appointment.getTitle() +
+                            "\n" + rb.getString("location") + ": " + appointment.getLocation() + "\n" + rb.getString("contact") +
+                            ": " + appointment.getContact() + "\n" + rb.getString("url") + ": " + appointment.getUrl() + "\n" +
+                            rb.getString("date") + ": " + appointment.getDateString() + "\n" + rb.getString("startTime") + ": " +
+                            appointment.getStartString() + "\n" + rb.getString("endTime") + ": " + appointment.getEndString());
                     alert.showAndWait();
                 }
             }
@@ -191,7 +186,7 @@ public class DatabaseConnection {
              Statement stmt = conn.createStatement()) {
 //            Query the database and clear
             ObservableList<Customer> customerRoster = CustomerRoster.getCustomerRoster();
-//            Clear method removes everything from an arraylist. We need to clear in order to update the information
+//            Clear method removes everything from an arrayList. We need to clear in order to update the information
             customerRoster.clear();
 //            Queries database to create an INT list of customerId's
             ResultSet customerIdResultSet = stmt.executeQuery("SELECT customerId FROM customer WHERE active = 1");
@@ -603,9 +598,10 @@ public class DatabaseConnection {
 //            Calls getAppointmentList() from AppointmentList
             ObservableList<Appointment> appointmentList = AppointmentList.getAppointmentList();
             appointmentList.clear();
-//            Create list of appointmentId's for all appointments that are in the future
-            ResultSet appointmentResultSet = stmt.executeQuery("SELECT appointmentId FROM appointment WHERE start >= CURRENT_TIMESTAMP");
+//            Create list of appointmentId's for all appointments that are in the FUTURE. Will not display old appointments
+            ResultSet appointmentResultSet = stmt.executeQuery("SELECT appointmentId FROM appointment WHERE start <= CURRENT_TIMESTAMP");
             ArrayList<Integer> appointmentIdList = new ArrayList<>();
+//            Iterates over each appointment grabbed by the Query and grabs the ID
             while(appointmentResultSet.next()) {
                 appointmentIdList.add(appointmentResultSet.getInt(1));
             }
@@ -1099,18 +1095,16 @@ public class DatabaseConnection {
                 addressIdListFromAddress.add(addressIdResultSet.getInt(1));
             }
 //            Creates list of addressId's that exist in Address table but are not used in Customer table
-            for (int i = 0; i < addressIdListFromCustomer.size(); i++) {
+            for (Integer value : addressIdListFromCustomer) {
                 for (int j = 0; j < addressIdListFromAddress.size(); j++) {
-                    if (addressIdListFromCustomer.get(i) == addressIdListFromAddress.get(j)) {
+                    if (value.equals(addressIdListFromAddress.get(j))) {
                         addressIdListFromAddress.remove(j);
                         j--;
                     }
                 }
             }
 //            Deletes Address table entries by remaining addressId's, if any remain
-            if (addressIdListFromAddress.isEmpty()) {
-
-            } else {
+            if (!addressIdListFromAddress.isEmpty()) {
                 for (int addressId : addressIdListFromAddress) {
                     stmt.executeUpdate("DELETE FROM address WHERE addressId = " + addressId);
                 }
@@ -1129,9 +1123,9 @@ public class DatabaseConnection {
                 cityIdListFromCity.add(cityIdResultSet.getInt(1));
             }
 //            Creates list of cityId's that exist in City table but are not used in Address table
-            for (int i = 0; i < cityIdListFromAddress.size(); i++) {
+            for (Integer idListFromAddress : cityIdListFromAddress) {
                 for (int j = 0; j < cityIdListFromCity.size(); j++) {
-                    if (cityIdListFromAddress.get(i) == cityIdListFromCity.get(j)) {
+                    if (idListFromAddress.equals(cityIdListFromCity.get(j))) {
                         cityIdListFromCity.remove(j);
                         j--;
                     }
@@ -1156,9 +1150,9 @@ public class DatabaseConnection {
                 countryIdListFromCountry.add(countryIdResultSet.getInt(1));
             }
 //            Creates list of countryId's that exist in Country table but are not used in City table
-            for (int i = 0; i < countryIdListFromCity.size(); i++) {
+            for (Integer integer : countryIdListFromCity) {
                 for (int j = 0; j < countryIdListFromCountry.size(); j++) {
-                    if (countryIdListFromCity.get(i) == countryIdListFromCountry.get(j)) {
+                    if (integer.equals(countryIdListFromCountry.get(j))) {
                         countryIdListFromCountry.remove(j);
                         j--;
                     }

@@ -38,7 +38,6 @@ public class Appointment {
         this.type = new SimpleStringProperty(type);
         this.location = new SimpleStringProperty(location);
         this.contact = new SimpleStringProperty(contact);
-//        URL may be removed?
         this.url = new SimpleStringProperty(url);
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;

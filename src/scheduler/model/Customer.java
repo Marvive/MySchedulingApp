@@ -40,7 +40,7 @@ public class Customer {
         country = new SimpleStringProperty();
     }
 
-    //    Setters
+//    Setters
     public void setCustomerId(int customerId) {
         this.customerId.set(customerId);
     }

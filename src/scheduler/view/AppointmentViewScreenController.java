@@ -15,7 +15,6 @@ import scheduler.model.AppointmentList;
 import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -34,10 +33,14 @@ public class AppointmentViewScreenController {
     private TableColumn<Appointment, String> typeColumn;
 
     @FXML
-    private TableColumn<Appointment, LocalDateTime> startColumn;
+//    private TableColumn<Appointment, LocalDateTime> startColumn;
+    private TableColumn<Appointment, String> startColumn;
+
 
     @FXML
-    private TableColumn<Appointment, LocalDateTime> endColumn;
+//    private TableColumn<Appointment, LocalDateTime> endColumn;
+    private TableColumn<Appointment, String> endColumn;
+
 
     @FXML
     private TableColumn<Appointment, String> customerColumn;
@@ -59,7 +62,7 @@ public class AppointmentViewScreenController {
 
     /**
      * MenuBar fxml
-     * */
+     */
 
 
     @FXML
@@ -210,7 +213,7 @@ public class AppointmentViewScreenController {
         }
     }
 
-//    Variable to hold appointment index to edit
+    //    Variable to hold appointment index to edit
     private static int appointmentIndexToEdit;
 
     /**
@@ -291,22 +294,31 @@ public class AppointmentViewScreenController {
     }
 
 
-//    Returns appointment index to Edit
+    //    Returns appointment index to Edit
     public static int getAppointmentIndexToEdit() {
         return appointmentIndexToEdit;
     }
 
-//    Updates the TableView
+    //    Updates the TableView
     @FXML
     private void updateAddAppointmentTableView() {
         DatabaseConnection.updateAppointmentList();
         appointmentTableView.setItems(getAppointmentList());
     }
 
+    @FXML
+    private void setTableView() {
+        titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        typeColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        startColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        endColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        customerColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        consultantColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+    }
+
     /**
      * Grabs information to initialize screen and calls set language
      */
-    @FXML
     public void initialize() {
         setLanguage();
 //        Lambdas to call methods on buttons
@@ -315,16 +327,12 @@ public class AppointmentViewScreenController {
         deleteAppointmentButton.setOnAction(event -> deleteAppointmentHandler(event));
 //        Updates the Table View When initialized
         updateAddAppointmentTableView();
-//        Puts data to the table view
-        titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-//        typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
-//        startColumn.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
-//        endColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
-//        customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
-//        consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+//        Sets the table view columns
+        setTableView();
 //        Sets Data for combobox
         setData();
     }
+
 }
 
 

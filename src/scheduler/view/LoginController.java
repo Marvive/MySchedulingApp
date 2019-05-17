@@ -10,6 +10,11 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.MySchedulingApp;
+import scheduler.model.Appointment;
+import scheduler.model.AppointmentList;
+import scheduler.model.Customer;
+import scheduler.model.CustomerRoster;
+import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -137,6 +142,18 @@ public class LoginController {
         setLanguage();
 //        Lambda to assign action to login button
         loginSignInButton.setOnAction(event -> loginSignInButtonHandler(event));
+
+        /**
+         * TEST TEST TEST
+         * */
+        DatabaseConnection.updateAppointmentList();
+        for (Appointment appointment : AppointmentList.getAppointmentList()) {
+            System.out.println(appointment.titleProperty());
+        }
+        DatabaseConnection.updateCustomerRoster();
+        for (Customer customer : CustomerRoster.getCustomerRoster()) {
+            System.out.println(customer.customerNameProperty());
+        }
     }
 
 }

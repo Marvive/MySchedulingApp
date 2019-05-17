@@ -341,6 +341,7 @@ public class AppointmentAddScreenController {
             time = time.plusMinutes(15);
         } while (!time.equals(LocalTime.of(17, 15)));
         startTimes.remove(startTimes.size() - 1);
+//        Removes first index of times since it shouldn't end at opening time
         endTimes.remove(0);
 
         datePicker.setValue(LocalDate.now());

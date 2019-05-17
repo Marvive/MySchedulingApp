@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.model.Customer;
+import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -18,7 +19,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static scheduler.model.CustomerRoster.getCustomerRoster;
-import static scheduler.util.DatabaseConnection.updateCustomerRoster;
 
 public class CustomerScreenController {
 
@@ -209,7 +209,7 @@ public class CustomerScreenController {
     }
 
     private void updateCustomerTableView() {
-        updateCustomerRoster();
+        DatabaseConnection.updateCustomerRoster();
         customerTableView.setItems(getCustomerRoster());
     }
 
@@ -256,9 +256,9 @@ public class CustomerScreenController {
     public void initialize() {
 //        Sets the language
         setLanguage();
-//        Sets the TableView Data
-        setTableView();
 //        If there are any customer changes, update the Table View
         updateCustomerTableView();
+//        Sets the TableView Data
+        setTableView();
     }
 }
