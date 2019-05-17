@@ -599,7 +599,7 @@ public class DatabaseConnection {
             ObservableList<Appointment> appointmentList = AppointmentList.getAppointmentList();
             appointmentList.clear();
 //            Create list of appointmentId's for all appointments that are in the FUTURE. Will not display old appointments
-            ResultSet appointmentResultSet = stmt.executeQuery("SELECT appointmentId FROM appointment WHERE start <= CURRENT_TIMESTAMP");
+            ResultSet appointmentResultSet = stmt.executeQuery("SELECT appointmentId FROM appointment WHERE start >= CURRENT_TIMESTAMP");
             ArrayList<Integer> appointmentIdList = new ArrayList<>();
 //            Iterates over each appointment grabbed by the Query and grabs the ID
             while(appointmentResultSet.next()) {

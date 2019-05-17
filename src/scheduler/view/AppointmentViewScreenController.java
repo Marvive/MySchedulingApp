@@ -15,6 +15,7 @@ import scheduler.model.AppointmentList;
 import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -33,14 +34,10 @@ public class AppointmentViewScreenController {
     private TableColumn<Appointment, String> typeColumn;
 
     @FXML
-//    private TableColumn<Appointment, LocalDateTime> startColumn;
-    private TableColumn<Appointment, String> startColumn;
-
+    private TableColumn<Appointment, LocalDateTime> startColumn;
 
     @FXML
-//    private TableColumn<Appointment, LocalDateTime> endColumn;
-    private TableColumn<Appointment, String> endColumn;
-
+    private TableColumn<Appointment, LocalDateTime> endColumn;
 
     @FXML
     private TableColumn<Appointment, String> customerColumn;
@@ -309,11 +306,11 @@ public class AppointmentViewScreenController {
     @FXML
     private void setTableView() {
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        startColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        endColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        customerColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-        consultantColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
+        startColumn.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
+        endColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
+        customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
+        consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
     }
 
     /**
