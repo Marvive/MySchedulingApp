@@ -42,7 +42,7 @@ import java.util.*;
 
 
 public class DatabaseConnection {
-    //    Created finals to frequently reference SQL information provided by Ucertify
+//    Created finals to frequently reference SQL information provided by UCertify
     private static final String driver = "com.mysql.jdbc.Driver";
     private static final String db = "U04zW0";
     private static final String url = "jdbc:mysql://52.206.157.109/" + db;
@@ -84,7 +84,7 @@ public class DatabaseConnection {
     }
 
     /**
-     * Method to reference the Usernames grom the SQL Database
+     * Method to reference the UserNames from the SQL Database
      * Used by checkLogInCredentials()
      */
     private static int getUserId(String userName) {
@@ -493,8 +493,7 @@ public class DatabaseConnection {
 //            Check if customer already exists in DB
             if (checkIfCustomerExists(customerName, addressId)) {
                 int existingCustomerId = getCustomerId(customerName, addressId);
-                int activeStatus = getActiveStatus(existingCustomerId);
-                return activeStatus;
+                return getActiveStatus(existingCustomerId);
             } else {
 //                Cleans up database after updating the customer
                 updateCustomer(customerId, customerName, addressId);
@@ -523,8 +522,7 @@ public class DatabaseConnection {
              Statement stmt = conn.createStatement()) {
             ResultSet customerIdResultSet = stmt.executeQuery("SELECT customerId FROM customer WHERE customerName = '" + customerName + "' AND addressId = " + addressId);
             customerIdResultSet.next();
-            int customerId = customerIdResultSet.getInt(1);
-            return customerId;
+            return customerIdResultSet.getInt(1);
         }
     }
 

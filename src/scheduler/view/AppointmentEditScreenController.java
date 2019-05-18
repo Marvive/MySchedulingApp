@@ -18,13 +18,17 @@ import scheduler.model.Customer;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 import static scheduler.model.AppointmentList.getAppointmentList;
 import static scheduler.model.CustomerRoster.getCustomerRoster;
 import static scheduler.util.DatabaseConnection.modifyAppointment;
+import static scheduler.util.DatabaseConnection.updateCustomerRoster;
 
 
 /**
@@ -78,6 +82,15 @@ public class AppointmentEditScreenController {
 
     @FXML
     private Button cancelButton;
+
+
+    private final ObservableList<String> startTimes = FXCollections.observableArrayList();
+    private final ObservableList<String> endTimes = FXCollections.observableArrayList();
+    private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
+    private final DateTimeFormatter dateDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+
+    private ResourceBundle rb1 = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
+    private final ZoneId zoneID = ZoneId.systemDefault();
 
     /**
      * MenuBar FXML
@@ -198,16 +211,17 @@ public class AppointmentEditScreenController {
 
     @FXML
     private void setLanguage() {
-        ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentEditScreen", Locale.getDefault());
-        editAppointmentText.setText(rb.getString("lblAddAppointment"));
-        AppointmentTitleText.setText(rb.getString("lblTitle"));
-        dateText.setText(rb.getString("lblDate"));
-        startTimeText.setText(rb.getString("lblStartTime"));
-        endTimeText.setText(rb.getString("lblEndTime"));
-        customerColumn.setText(rb.getString("lblNameColumn"));
-        appointmentTypeText.setText(rb.getString("aptType"));
-        saveButton.setText(rb.getString("btnSave"));
-        cancelButton.setText(rb.getString("btnCancel"));
+//        Just grabbed the rb info from AddScreen since it's the same!
+        ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
+        editAppointmentText.setText(rb.getString("editAppointmentText"));
+        AppointmentTitleText.setText(rb.getString("AppointmentTitleText"));
+        dateText.setText(rb.getString("dateText"));
+        startTimeText.setText(rb.getString("startTimeText"));
+        endTimeText.setText(rb.getString("endTimeText"));
+        customerColumn.setText(rb.getString("customerColumn"));
+        appointmentTypeText.setText(rb.getString("appointmentTypeText"));
+        saveButton.setText(rb.getString("saveButton"));
+        cancelButton.setText(rb.getString("cancelButton"));
 
         menuBarLogOut.setText(rb.getString("menuBarLogOut"));
         menuBarClose.setText(rb.getString("menuBarClose"));
@@ -253,33 +267,10 @@ public class AppointmentEditScreenController {
 //    Initialize observableList
     private ObservableList<Customer> currentCustomers = FXCollections.observableArrayList();
 
-    /**
-     * TODO Fix Lookup function
-     * */
-//    @FXML
-//    void customerSearchButtonHandler(ActionEvent event) {
-//        String searchCustomer = customerSearchField.getText();
-//        int partIndex = -1;
-//        if (Customer.lookupPart(searchCustomer) == -1) {
-////            Create condition, if not found, then make sure to input part name
-//            Alert alert = new Alert(Alert.AlertType.WARNING);
-//            alert.setTitle("Error");
-//            alert.setHeaderText("Could Not Find Customer.");
-//            alert.setContentText("Please make sure to input a valid Customer Name");
-//            alert.showAndWait();
-//        } else {
-////            Everything else should fall under found
-//            partIndex = Customer.lookupPart(searchPart);
-//            Part tpart = Inventory.getPartInventory().get(partIndex);
-//            ObservableList<Part> partList = FXCollections.observableArrayList();
-//            partList.add(tpart);
-//            partTableView.setItems(partList);
-//        }
-//    }
-
 //    Update Customer Table View
 
-    public void updateCustomerTableView() {
+    private void updateCustomerTableView() {
+        updateCustomerRoster();
         customerSelectTableView.setItems(currentCustomers);
     }
 
@@ -345,6 +336,38 @@ public class AppointmentEditScreenController {
         }
     }
 
+
+    /**
+     * Sets comboBox Data
+     * */
+    private void setData(){
+//        Sets times available in 15 minutes increments within business hours 8-5
+        LocalTime time = LocalTime.of(8, 0);
+        do {
+            startTimes.add(time.format(timeDTF));
+            endTimes.add(time.format(timeDTF));
+            time = time.plusMinutes(15);
+        } while (!time.equals(LocalTime.of(17, 15)));
+        startTimes.remove(startTimes.size() - 1);
+//        Removes first index of times since it shouldn't end at opening time
+        endTimes.remove(0);
+
+        startTimePicker.setItems(startTimes);
+        endTimePicker.setItems(endTimes);
+        startTimePicker.getSelectionModel().select(LocalTime.of(8, 0).format(timeDTF));
+        endTimePicker.getSelectionModel().select(LocalTime.of(8, 15).format(timeDTF));
+
+//        Initializes the Type ComboBox
+        ObservableList<String> typeList = FXCollections.observableArrayList();
+        typeList.addAll(
+                rb1.getString("consultation"),
+                rb1.getString("followUp"),
+                rb1.getString("newAccount"),
+                rb1.getString("closeAccount"));
+        appointmentTypePicker.setItems(typeList);
+    }
+
+
     /**
      * Initialize the data from selected item and set language
      * */
@@ -359,7 +382,6 @@ public class AppointmentEditScreenController {
         appointment = getAppointmentList().get(appointmentIndexToModify);
 //        Grabs information from the selected appointment
         String title = appointment.getTitle();
-        String location = appointment.getLocation();
         String contact = appointment.getContact();
         Date appointmentDate = appointment.getStartDate();
 //        Set LocalDate
@@ -384,7 +406,9 @@ public class AppointmentEditScreenController {
         }
         String endMinute = endString.substring(3,5);
         String endAmPm = endString.substring(6,8);
-        // Get customer to add to currentCustomers via customerId
+
+
+//        Get Customer associated with Appointment by customerId
         int customerId = appointment.getCustomerId();
         ObservableList<Customer> customerRoster = getCustomerRoster();
         for (Customer customer : customerRoster) {
@@ -392,15 +416,22 @@ public class AppointmentEditScreenController {
                 currentCustomers.add(customer);
             }
         }
+
+
 //        Prepopulate information into fields
         appointmentTitleField.setText(title);
         datePicker.setValue(appointmentLocalDate);
         startTimePicker.setValue(startAmPm);
         endTimePicker.setValue(endAmPm);
-//        Lambdas to assign the populated data to table views
-        customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
+//        Test to see if it will automatically set the type
+        appointmentTypePicker.getSelectionModel().select(appointment.getType());
+        setData();
 //        Updates table views
         updateCustomerTableView();
+//        Sets Data in TableView
+        customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
+//        AutoSelects The Editing Customer from TableView So that you don't have to click on the person
+        customerSelectTableView.getSelectionModel().selectFirst();
     }
 }
 

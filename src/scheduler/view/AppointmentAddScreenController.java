@@ -344,8 +344,6 @@ public class AppointmentAddScreenController {
 //        Removes first index of times since it shouldn't end at opening time
         endTimes.remove(0);
 
-        datePicker.setValue(LocalDate.now());
-
         startTimePicker.setItems(startTimes);
         endTimePicker.setItems(endTimes);
         startTimePicker.getSelectionModel().select(LocalTime.of(8, 0).format(timeDTF));
@@ -359,7 +357,8 @@ public class AppointmentAddScreenController {
                 rb1.getString("newAccount"),
                 rb1.getString("closeAccount"));
         appointmentTypePicker.setItems(typeList);
-        appointmentTypePicker.getSelectionModel().selectFirst();
+//        Sets Data in TableView
+        customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
     }
 
     @FXML
@@ -371,9 +370,12 @@ public class AppointmentAddScreenController {
         saveButton.setOnAction(event -> saveButtonHandler(event));
 //        Assigns Data to the Table Column
         updateCustomerTableView();
-        customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
 //        Sets all comboBox data
         setData();
+//        Defaults to first option in Type comboBox
+        appointmentTypePicker.getSelectionModel().selectFirst();
+//        Defaults to today for date comboBox
+        datePicker.setValue(LocalDate.now());
     }
 
 }
