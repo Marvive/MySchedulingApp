@@ -14,20 +14,16 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.model.Appointment;
 import scheduler.model.Customer;
+import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
 
 import static scheduler.model.AppointmentList.getAppointmentList;
 import static scheduler.model.CustomerRoster.getCustomerRoster;
-import static scheduler.util.DatabaseConnection.modifyAppointment;
 import static scheduler.util.DatabaseConnection.updateCustomerRoster;
 
 
@@ -271,7 +267,7 @@ public class AppointmentEditScreenController {
 
     private void updateCustomerTableView() {
         updateCustomerRoster();
-        customerSelectTableView.setItems(currentCustomers);
+        customerSelectTableView.setItems(getCustomerRoster());
     }
 
 
@@ -280,57 +276,58 @@ public class AppointmentEditScreenController {
      * */
     @FXML
     private void saveButtonHandler(ActionEvent event) {
-//        Creates customer
-        Customer customer = null;
-//        Grabs the currentCustomer state
-        if (currentCustomers.size() == 1) {
-            customer = currentCustomers.get(0);
-        }
-//        Gets changed information
         int appointmentId = appointment.getAppointmentId();
+        Customer customer1 = customerSelectTableView.getSelectionModel().getSelectedItem();
         String title = appointmentTitleField.getText();
-        String appointmentType = appointmentTypePicker.getSelectionModel().getSelectedItem();
         LocalDate appointmentDate = datePicker.getValue();
-//        TODO Should be solved in AddScreenController
+        String appointmentType = appointmentTypePicker.getSelectionModel().getSelectedItem();
         String startTime = startTimePicker.getSelectionModel().getSelectedItem();
         String endTime = endTimePicker.getSelectionModel().getSelectedItem();
-//        Attempt to submit verifying validity
-        String errorMessage = Appointment.isAppointmentValid(customer, title, appointmentType, appointmentDate, startTime, endTime);
+//        Grabs the strings from the box and converts to localTime
+        LocalTime startLocalTime = LocalTime.parse(startTime, timeDTF);
+        LocalTime endLocalTime = LocalTime.parse(endTime, timeDTF);
+//        Combines Date and local Time
+        LocalDateTime startDateTime = LocalDateTime.of(appointmentDate, startLocalTime);
+        LocalDateTime endDateTime = LocalDateTime.of(appointmentDate, endLocalTime);
+//        Turns LocalDateTime into ZonedDateTime
+        ZonedDateTime startUTC = startDateTime.atZone(zoneID).withZoneSameInstant(ZoneId.of("UTC"));
+        ZonedDateTime endUTC = endDateTime.atZone(zoneID).withZoneSameInstant(ZoneId.of("UTC"));
+
+//        Submit and check for validation
+        String errorMessage = Appointment.isAppointmentValid(customer1, title, appointmentType,
+                appointmentDate, startTime, endTime);
+
 //        Checks and alerts for any relevant errors
-        if (errorMessage.length() > 0) {
-            ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentEditScreen", Locale.getDefault());
+        if (customer1 == null) {
+            ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
-            alert.setHeaderText(rb.getString("errorModifyingAppointment"));
+            alert.setHeaderText(rb.getString("selectCustomerHeader"));
+            alert.setContentText(rb.getString("selectCustomerContent"));
+            alert.showAndWait();
+            return;
+        }
+
+        if (errorMessage.length() > 0) {
+            ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("errorAddingAppointment"));
             alert.setContentText(errorMessage);
             alert.showAndWait();
             return;
         }
-        SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy-MM-dd h:mm a");
-        localDateFormat.setTimeZone(TimeZone.getDefault());
-        Date startLocal = null;
-        Date endLocal = null;
-//        Formats date and time into Date objects
-//        TODO Combo box selection into UTC, should have been solved in AddScreen
-//        try {
-//            startLocal = localDateFormat.parse(appointmentDate.toString() + " " + startHour + ":" + startMinute + " " + startAmPm);
-//            endLocal = localDateFormat.parse(appointmentDate.toString() + " " + endHour + ":" + endMinute + " " + endAmPm);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        Create ZonedDateTime out of Date objects
-        ZonedDateTime startUTC = ZonedDateTime.ofInstant(startLocal.toInstant(), ZoneId.of("UTC"));
-        ZonedDateTime endUTC = ZonedDateTime.ofInstant(endLocal.toInstant(), ZoneId.of("UTC"));
-//        Return true if successful update to database
-        if (modifyAppointment(appointmentId, customer, title, startUTC, endUTC)) {
+
+        if (DatabaseConnection.modifyAppointment(appointmentId, customer1, title, startUTC, endUTC)) {
             try {
-                // Return to appointment summary window
+//                Returns you to ViewScreen
                 Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
                 Scene mainScreenScene = new Scene(mainScreenParent);
                 Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 mainScreenStage.setScene(mainScreenScene);
                 mainScreenStage.show();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -377,8 +374,6 @@ public class AppointmentEditScreenController {
         saveButton.setOnAction(event -> saveButtonHandler(event));
         cancelButton.setOnAction(event -> cancelButtonHandler(event));
 
-
-
 //        Modifies item based on appointment index
         appointment = getAppointmentList().get(appointmentIndexToModify);
 //        Grabs information from the selected appointment
@@ -405,15 +400,6 @@ public class AppointmentEditScreenController {
             endInitial = endInitial.substring(1,8);
         }
 
-//        Get Customer associated with Appointment by customerId
-        int customerId = appointment.getCustomerId();
-        ObservableList<Customer> customerRoster = getCustomerRoster();
-        for (Customer customer : customerRoster) {
-            if (customer.getCustomerId() == customerId) {
-                currentCustomers.add(customer);
-            }
-        }
-
 //        Prepopulate information into fields
         appointmentTitleField.setText(title);
         datePicker.setValue(appointmentLocalDate);
@@ -424,10 +410,9 @@ public class AppointmentEditScreenController {
         setData();
 //        Updates table views
         updateCustomerTableView();
-//        Sets Data in TableView
+//        Sets Data in TableView (Currently fails to load if you go directly to Edit Screen)
+//        Not based on when this starts. Suspect it has something to do with the for loop.
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
-//        AutoSelects The Editing Customer from TableView So that you don't have to click on the person
-        customerSelectTableView.getSelectionModel().selectFirst();
     }
 }
 

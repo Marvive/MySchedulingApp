@@ -265,7 +265,6 @@ public class AppointmentAddScreenController {
         String errorMessage = Appointment.isAppointmentValid(customer1, title, appointmentType,
                 appointmentDate, startTime, endTime);
 //        Check and print error message
-
         if (customer1 == null) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
