@@ -207,11 +207,18 @@ public class Appointment {
 
     private final ObjectProperty<LocalDateTime> ldt = new SimpleObjectProperty<LocalDateTime>();
 
+    private final ObjectProperty<ZonedDateTime> zdt = new SimpleObjectProperty<>();
+
+    private final ObjectProperty<Timestamp> timestampObjectProperty = new SimpleObjectProperty<Timestamp>();
+
     Appointment(LocalDateTime ldt) {
         this.ldt.set(ldt);
     }
 
+
+
     public ObjectProperty<LocalDateTime> startTimeProperty() {
+
         return ldt;
     }
 
@@ -246,9 +253,9 @@ public class Appointment {
                 errorMessage += rb.getString("errorType");
             }
 //            This is no longer necessary as we switched to combo boxes
-            if (appointmentDate == null || startTime == null || endTime == null) {
-                errorMessage += rb.getString("errorStartEndEmpty");
-            }
+//            if (appointmentDate == null || startTime == null || endTime == null) {
+//                errorMessage += rb.getString("errorStartEndEmpty");
+//            }
 
 
 //        Grabs the strings from the box and converts to localTime
@@ -270,20 +277,11 @@ public class Appointment {
                 errorMessage += rb.getString("startBeforeEnd");
             }
 
-//            TODO These may be useful if I need conditionals for choosing an illogical time
-//            if (Integer.parseInt(startHour) < 1 || Integer.parseInt(startHour) > 12 || Integer.parseInt(endHour) < 1 || Integer.parseInt(endHour) > 12
-//                     ) {
-//                errorMessage += rb.getString("errorStartEndInvalidTime");
-//            }
-//            if ((Integer.parseInt(startHour) > Integer.parseInt(endHour)) || (startHour.equals(endHour))) {
-//                errorMessage += rb.getString("errorStartAfterEnd");
-//            }
             if (appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SATURDAY") || appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SUNDAY")) {
                 errorMessage += rb.getString("errorNoWeekends");
             }
         } catch (Exception e) {
             System.out.println(e);
-//            TODO learn about finally
         } finally {
             return errorMessage;
         }

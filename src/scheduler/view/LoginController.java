@@ -125,9 +125,6 @@ public class LoginController {
         }
     }
 
-
-//    Initialize screen elements
-
     /**
      * Initialize the screen
      */
