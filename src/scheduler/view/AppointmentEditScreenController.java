@@ -354,8 +354,6 @@ public class AppointmentEditScreenController {
 
         startTimePicker.setItems(startTimes);
         endTimePicker.setItems(endTimes);
-        startTimePicker.getSelectionModel().select(LocalTime.of(8, 0).format(timeDTF));
-        endTimePicker.getSelectionModel().select(LocalTime.of(8, 15).format(timeDTF));
 
 //        Initializes the Type ComboBox
         ObservableList<String> typeList = FXCollections.observableArrayList();
@@ -378,11 +376,13 @@ public class AppointmentEditScreenController {
 //        Creates actions for buttons
         saveButton.setOnAction(event -> saveButtonHandler(event));
         cancelButton.setOnAction(event -> cancelButtonHandler(event));
+
+
+
 //        Modifies item based on appointment index
         appointment = getAppointmentList().get(appointmentIndexToModify);
 //        Grabs information from the selected appointment
         String title = appointment.getTitle();
-        String contact = appointment.getContact();
         Date appointmentDate = appointment.getStartDate();
 //        Set LocalDate
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
@@ -391,22 +391,19 @@ public class AppointmentEditScreenController {
         int appointmentMonth = calendar.get(Calendar.MONTH) + 1;
         int appointmentDay = calendar.get(Calendar.DAY_OF_MONTH);
         LocalDate appointmentLocalDate = LocalDate.of(appointmentYear, appointmentMonth, appointmentDay);
-//        Make it more readable with AM/PM
-        String startString = appointment.getStartString();
-        String startHour = startString.substring(0,2);
-        if (Integer.parseInt(startHour) < 10) {
-            startHour = startHour.substring(1,2);
-        }
-        String startMinute = startString.substring(3,5);
-        String startAmPm = startString.substring(6,8);
-        String endString = appointment.getEndString();
-        String endHour = endString.substring(0,2);
-        if (Integer.parseInt(endHour) < 10) {
-            endHour = endHour.substring(1,2);
-        }
-        String endMinute = endString.substring(3,5);
-        String endAmPm = endString.substring(6,8);
 
+//        Grabbing start string information to set up combobox
+        String startString = appointment.getStartString();
+        String startInitial = startString.substring(0,8);
+        if (startInitial.substring(0,1).equals("0")) {
+            startInitial = startInitial.substring(1,8);
+        }
+
+        String endString = appointment.getEndString();
+        String endInitial = endString.substring(0,8);
+        if (endInitial.substring(0,1).equals("0")) {
+            endInitial = endInitial.substring(1,8);
+        }
 
 //        Get Customer associated with Appointment by customerId
         int customerId = appointment.getCustomerId();
@@ -417,12 +414,11 @@ public class AppointmentEditScreenController {
             }
         }
 
-
 //        Prepopulate information into fields
         appointmentTitleField.setText(title);
         datePicker.setValue(appointmentLocalDate);
-        startTimePicker.setValue(startAmPm);
-        endTimePicker.setValue(endAmPm);
+        startTimePicker.getSelectionModel().select(startInitial);
+        endTimePicker.getSelectionModel().select(endInitial);
 //        Test to see if it will automatically set the type
         appointmentTypePicker.getSelectionModel().select(appointment.getType());
         setData();
