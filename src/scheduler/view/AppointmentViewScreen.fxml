@@ -49,8 +49,8 @@
             <TableColumn fx:id="typeColumn" minWidth="20.0" prefWidth="96" text="Type" />
             <TableColumn fx:id="startColumn" minWidth="20.0" prefWidth="96.0" text="Start" />
             <TableColumn fx:id="endColumn" minWidth="20.0" prefWidth="96.0" text="End" />
+            <TableColumn fx:id="dateColumn" minWidth="20.0" prefWidth="96" text="Date" />
             <TableColumn fx:id="customerColumn" minWidth="20.0" prefWidth="96" text="Customer" />
-            <TableColumn fx:id="consultantColumn" minWidth="20.0" prefWidth="96" text="Consultant" />
          </columns>
       </TableView>
       <HBox layoutX="12.0" layoutY="21.0" prefHeight="86.0" prefWidth="576.0">

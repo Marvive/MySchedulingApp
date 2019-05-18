@@ -42,7 +42,7 @@ public class AppointmentViewScreenController {
     private TableColumn<Appointment, String> customerColumn;
 
     @FXML
-    private TableColumn<Appointment, String> consultantColumn;
+    private TableColumn<Appointment, String> dateColumn;
 
     @FXML
     private Button deleteAppointmentButton;
@@ -224,7 +224,7 @@ public class AppointmentViewScreenController {
         startColumn.setText(rb.getString("startColumn"));
         endColumn.setText(rb.getString("endColumn"));
         customerColumn.setText(rb.getString("customerColumn"));
-        consultantColumn.setText(rb.getString("consultantColumn"));
+        dateColumn.setText(rb.getString("dateColumn"));
         editAppointmentButton.setText(rb.getString("editAppointmentButton"));
         deleteAppointmentButton.setText(rb.getString("deleteAppointmentButton"));
         newAppointmentButton.setText(rb.getString("newAppointmentButton"));
@@ -308,8 +308,8 @@ public class AppointmentViewScreenController {
         typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
         startColumn.setCellValueFactory(cellData -> cellData.getValue().startStringProperty());
         endColumn.setCellValueFactory(cellData -> cellData.getValue().endStringProperty());
+        dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
-        consultantColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
     }
 
     /**

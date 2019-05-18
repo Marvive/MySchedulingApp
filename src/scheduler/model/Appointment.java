@@ -242,7 +242,6 @@ public class Appointment {
         String errorMessage = "";
         try {
 //            These will not be else if's because it will not continue checking conditions
-//            TODO some of these may be removed because I removed the ability to choose outside business hours
             if (customer == null) {
                 errorMessage += rb.getString("errorCustomer");
             }
@@ -252,12 +251,6 @@ public class Appointment {
             if (appointmentType == null) {
                 errorMessage += rb.getString("errorType");
             }
-//            This is no longer necessary as we switched to combo boxes
-//            if (appointmentDate == null || startTime == null || endTime == null) {
-//                errorMessage += rb.getString("errorStartEndEmpty");
-//            }
-
-
 //        Grabs the strings from the box and converts to localTime
             LocalTime startLocalTime = LocalTime.parse(startTime, DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
             LocalTime endLocalTime = LocalTime.parse(endTime, DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
@@ -271,21 +264,22 @@ public class Appointment {
             Timestamp startTimeStamp = Timestamp.valueOf(startUTC.toLocalDateTime());
             Timestamp endTimeStamp = Timestamp.valueOf(endUTC.toLocalDateTime());
 
-
-//            This does not work because it must be in full Timestamp format 'yyyy-mm-dd hh:mm:ss'
+//            If Start Time is after end time, it will alert with an error
             if (startTimeStamp.after(endTimeStamp)) {
                 errorMessage += rb.getString("startBeforeEnd");
             }
-
+//            If Date is on a weekend, then it will alert no errors allowed "Outside of business Hours"
             if (appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SATURDAY") || appointmentDate.getDayOfWeek().toString().toUpperCase().equals("SUNDAY")) {
                 errorMessage += rb.getString("errorNoWeekends");
+            }
+//            Throws an error if you choose a date or time in the past
+            if (appointmentDate.isBefore(LocalDate.now()) || (startLocalTime.isBefore(LocalTime.now())) && appointmentDate.equals(LocalDate.now())) {
+                errorMessage += rb.getString("notBeforeNow");
             }
         } catch (Exception e) {
             System.out.println(e);
         } finally {
             return errorMessage;
         }
-
-
     }
 }

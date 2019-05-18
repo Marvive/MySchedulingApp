@@ -666,7 +666,8 @@ public class DatabaseConnection {
             return false;
         } else {
             int customerId = customer.getCustomerId();
-            addAppointment(customerId, title, type, startTimeStamp, endTimeStamp);
+            String customerName = customer.getCustomerName();
+            addAppointment(customerId, customerName, title, type, startTimeStamp, endTimeStamp);
             return true;
         }
     }
@@ -702,10 +703,9 @@ public class DatabaseConnection {
      * Creates new appointment.
      * Used by addNewAppointment()
      * */
-    private static void addAppointment(int customerId, String title, String type, Timestamp startTimestamp, Timestamp endTimestamp) {
+    private static void addAppointment(int customerId, String contact, String title, String type, Timestamp startTimestamp, Timestamp endTimestamp) {
 //        Created Null values as they are not required for the project, but is useful for updating the DB
         String location = null;
-        String contact = null;
 //        Connects to DB. Uses a fuller path since I'm creating a url variable as a parameter
         try (Connection conn = DriverManager.getConnection(DatabaseConnection.url,user,pass);
              Statement stmt = conn.createStatement()) {
@@ -732,7 +732,6 @@ public class DatabaseConnection {
             alert.showAndWait();
         }
     }
-
 
     /**
      * Modifies an appointment
