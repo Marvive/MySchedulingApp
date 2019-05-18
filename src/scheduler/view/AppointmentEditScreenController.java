@@ -276,7 +276,10 @@ public class AppointmentEditScreenController {
      * */
     @FXML
     private void saveButtonHandler(ActionEvent event) {
+//        Grabs appointment to edit
         int appointmentId = appointment.getAppointmentId();
+
+//        Information to send to appointment Validator
         Customer customer1 = customerSelectTableView.getSelectionModel().getSelectedItem();
         String title = appointmentTitleField.getText();
         LocalDate appointmentDate = datePicker.getValue();
@@ -318,7 +321,10 @@ public class AppointmentEditScreenController {
             return;
         }
 
-        if (DatabaseConnection.modifyAppointment(appointmentId, customer1, title, startUTC, endUTC)) {
+//        Sets the customer name. Must be after the check because it needs to be validated before it can grab a name
+        String contact = customer1.getCustomerName();
+
+        if (DatabaseConnection.modifyAppointment(appointmentId, customer1, title, appointmentType, contact, startUTC, endUTC)) {
             try {
 //                Returns you to ViewScreen
                 Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));

@@ -734,7 +734,7 @@ public class DatabaseConnection {
     /**
      * Modifies an appointment
      * */
-    public static boolean modifyAppointment(int appointmentId, Customer customer, String title, ZonedDateTime startUTC, ZonedDateTime endUTC) {
+    public static boolean modifyAppointment(int appointmentId, Customer customer, String title, String type, String contact, ZonedDateTime startUTC, ZonedDateTime endUTC) {
         try {
 //            ZonedDateTimes to Timestamps
             String startUTCString = startUTC.toString();
@@ -755,7 +755,7 @@ public class DatabaseConnection {
             } else {
 //                Else update the appointment and return true
                 int customerId = customer.getCustomerId();
-                updateAppointment(appointmentId, customerId, title, startTimestamp, endTimestamp);
+                updateAppointment(appointmentId, customerId, title, type, contact, startTimestamp, endTimestamp);
                 return true;
             }
         } catch (SQLException e) {
@@ -782,12 +782,15 @@ public class DatabaseConnection {
     /**
      * Updates appointment after a check
      * */
-    private static void updateAppointment(int appointmentId, int customerId, String title, Timestamp startTimestamp,
-                                          Timestamp endTimestamp) throws SQLException {
+    private static void updateAppointment(int appointmentId, int customerId, String title, String type, String contact, Timestamp startTimestamp,
+                                           Timestamp endTimestamp) throws SQLException {
+        String location = null;
 //        Connects to DB. Uses full url path since we're using url as a parameter
         try (Connection conn = DriverManager.getConnection(DatabaseConnection.url,user,pass);
              Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate("UPDATE appointment SET customerId = " + customerId + ", title = '" + title + "', start = '" + startTimestamp + "', end = '" + endTimestamp + "', " +
+            stmt.executeUpdate("UPDATE appointment SET customerId = " + customerId + ", title = '" + title + "', " +
+                    "location = '" + location + "', contact = '" + contact +  "', description = '" + type + "', start = '"
+                    + startTimestamp + "', end = '" + endTimestamp + "', " +
                     "lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = '" + currentUser + "' WHERE appointmentId = " + appointmentId);
         }
     }
