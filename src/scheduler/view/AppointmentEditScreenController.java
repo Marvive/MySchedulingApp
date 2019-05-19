@@ -90,7 +90,7 @@ public class AppointmentEditScreenController {
 
     /**
      * MenuBar FXML
-     * */
+     */
     @FXML
     private MenuBar menuBar;
 
@@ -129,7 +129,7 @@ public class AppointmentEditScreenController {
         try {
             Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
             Scene customerScene = new Scene(customerParent);
-            Stage customerStage = (Stage)  menuBar.getScene().getWindow();
+            Stage customerStage = (Stage) menuBar.getScene().getWindow();
             customerStage.setScene(customerScene);
             customerStage.show();
         } catch (IOException e) {
@@ -142,7 +142,7 @@ public class AppointmentEditScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -155,7 +155,7 @@ public class AppointmentEditScreenController {
         try {
             Parent reportsParent = FXMLLoader.load(getClass().getResource("Reports.fxml"));
             Scene reportsScene = new Scene(reportsParent);
-            Stage reportsStage = (Stage)  menuBar.getScene().getWindow();
+            Stage reportsStage = (Stage) menuBar.getScene().getWindow();
             reportsStage.setScene(reportsScene);
             reportsStage.show();
         } catch (IOException e) {
@@ -168,7 +168,7 @@ public class AppointmentEditScreenController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -256,12 +256,10 @@ public class AppointmentEditScreenController {
     }
 
 
-//    Creating appointment initializer
+//    Initialize appointment Variable
     private Appointment appointment;
-//    Grabs index of appointment
+//    Grabs the index of appointment
     private int appointmentIndexToModify = AppointmentViewScreenController.getAppointmentIndexToEdit();
-//    Initialize observableList
-    private ObservableList<Customer> currentCustomers = FXCollections.observableArrayList();
 
 //    Update Customer Table View
 
@@ -273,7 +271,7 @@ public class AppointmentEditScreenController {
 
     /**
      * Saves and updates database
-     * */
+     */
     @FXML
     private void saveButtonHandler(ActionEvent event) {
 //        Grabs appointment to edit
@@ -332,8 +330,7 @@ public class AppointmentEditScreenController {
                 Stage mainScreenStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 mainScreenStage.setScene(mainScreenScene);
                 mainScreenStage.show();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -342,8 +339,8 @@ public class AppointmentEditScreenController {
 
     /**
      * Sets comboBox Data
-     * */
-    private void setData(){
+     */
+    private void setData() {
 //        Sets times available in 15 minutes increments within business hours 8-5
         LocalTime time = LocalTime.of(8, 0);
         do {
@@ -369,9 +366,23 @@ public class AppointmentEditScreenController {
     }
 
 
+
+//    This function was meant to be used in initialize to set the selection of the customer in the table
+//    private Customer forIndex(Appointment appointment) {
+//        updateCustomerRoster();
+//        for (Customer customer : CustomerRoster.getCustomerRoster()
+//        ) {
+//            if (appointment.getCustomerId() == customer.getCustomerId()) {
+//                return customer;
+//            }
+//        }
+//        System.out.println("No Customer");
+//        return null;
+//    }
+
     /**
      * Initialize the data from selected item and set language
-     * */
+     */
     @FXML
     public void initialize() {
 //        Sets the local language
@@ -395,15 +406,15 @@ public class AppointmentEditScreenController {
 
 //        Grabbing start string information to set up combobox
         String startString = appointment.getStartString();
-        String startInitial = startString.substring(0,8);
-        if (startInitial.substring(0,1).equals("0")) {
-            startInitial = startInitial.substring(1,8);
+        String startInitial = startString.substring(0, 8);
+        if (startInitial.substring(0, 1).equals("0")) {
+            startInitial = startInitial.substring(1, 8);
         }
 
         String endString = appointment.getEndString();
-        String endInitial = endString.substring(0,8);
-        if (endInitial.substring(0,1).equals("0")) {
-            endInitial = endInitial.substring(1,8);
+        String endInitial = endString.substring(0, 8);
+        if (endInitial.substring(0, 1).equals("0")) {
+            endInitial = endInitial.substring(1, 8);
         }
 
 //        Prepopulate information into fields
@@ -411,8 +422,12 @@ public class AppointmentEditScreenController {
         datePicker.setValue(appointmentLocalDate);
         startTimePicker.getSelectionModel().select(startInitial);
         endTimePicker.getSelectionModel().select(endInitial);
-//        Test to see if it will automatically set the type
         appointmentTypePicker.getSelectionModel().select(appointment.getType());
+
+//        Was unable to figure out how to automatically select
+//        customerSelectTableView.getSelectionModel().select(forIndex(appointment));
+
+
         setData();
 //        Updates table views
         updateCustomerTableView();

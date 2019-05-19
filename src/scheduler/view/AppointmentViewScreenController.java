@@ -203,14 +203,6 @@ public class AppointmentViewScreenController {
                     if (newValue.equals(rb1.getString("allView"))) {
                         DatabaseConnection.updateAppointmentList();
                         appointmentTableView.setItems(getAppointmentList());
-//                        ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
-//                        for (Appointment appointment : AppointmentList.getAppointmentList()
-//                        ) {
-//                            if (appointment.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(now().plusDays(7))) {
-//                                appointmentList.addAll(appointment);
-//                            }
-//                            appointmentTableView.setItems(appointmentList);
-//                        }
                     } else if (newValue.equals(rb1.getString("weekView"))) {
                         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
                         for (Appointment appointment : AppointmentList.getAppointmentList()
