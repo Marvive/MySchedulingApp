@@ -134,22 +134,6 @@ public class LoginController {
         setLanguage();
 //        Lambda to assign action to login button
         loginSignInButton.setOnAction(event -> loginSignInButtonHandler(event));
-
-        /**
-         * TEST CODE
-         * Used the below Code to make sure that tableViews would have been populated. Queries the dB to make sure that
-         * Lists and rosters were being populated by the data properly. Earlier I had an Issue seeing my appointments
-         * because I did not realize that past appointments would not have been populated.
-         * The Code iterates over the Arrays after updating them then prints out the specifc properties
-         * */
-//        DatabaseConnection.updateAppointmentList();
-//        for (Appointment appointment : AppointmentList.getAppointmentList()) {
-//            System.out.println(appointment.titleProperty());
-//        }
-//        DatabaseConnection.updateCustomerRoster();
-//        for (Customer customer : CustomerRoster.getCustomerRoster()) {
-//            System.out.println(customer.customerNameProperty());
-//        }
     }
 
 }

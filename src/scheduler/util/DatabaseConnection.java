@@ -782,8 +782,8 @@ public class DatabaseConnection {
     /**
      * Updates appointment after a check
      * */
-    private static void updateAppointment(int appointmentId, int customerId, String title, String type, String contact, Timestamp startTimestamp,
-                                           Timestamp endTimestamp) throws SQLException {
+    private static void updateAppointment(int appointmentId, int customerId, String title, String type, String contact,
+                                          Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException {
         String location = null;
 //        Connects to DB. Uses full url path since we're using url as a parameter
         try (Connection conn = DriverManager.getConnection(DatabaseConnection.url,user,pass);

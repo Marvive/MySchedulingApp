@@ -1,5 +1,7 @@
 package scheduler.view;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,10 +17,12 @@ import scheduler.model.AppointmentList;
 import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static java.time.LocalDate.now;
 import static scheduler.model.AppointmentList.getAppointmentList;
 
 public class AppointmentViewScreenController {
@@ -179,7 +183,7 @@ public class AppointmentViewScreenController {
     private ResourceBundle rb1 = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
 
     @FXML
-    private ComboBox comboBox;
+    private ComboBox<String> comboBox;
 
     /**
      * Sets that Data in the combo box
@@ -192,7 +196,44 @@ public class AppointmentViewScreenController {
                 rb1.getString("weekView"),
                 rb1.getString("monthView")
         );
+//        Selects the first option so that comboBox will not be blank
         comboBox.getSelectionModel().selectFirst();
+//        Lambda that sets an addListener on the comboBox options.
+        comboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+                    if (newValue.equals(rb1.getString("allView"))) {
+                        DatabaseConnection.updateAppointmentList();
+                        appointmentTableView.setItems(getAppointmentList());
+//                        ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+//                        for (Appointment appointment : AppointmentList.getAppointmentList()
+//                        ) {
+//                            if (appointment.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(now().plusDays(7))) {
+//                                appointmentList.addAll(appointment);
+//                            }
+//                            appointmentTableView.setItems(appointmentList);
+//                        }
+                    } else if (newValue.equals(rb1.getString("weekView"))) {
+                        ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+                        for (Appointment appointment : AppointmentList.getAppointmentList()
+                        ) {
+                            if (appointment.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(now().plusDays(7))) {
+                                appointmentList.addAll(appointment);
+                            }
+                            appointmentTableView.setItems(appointmentList);
+                        }
+                    } else if (newValue.equals(rb1.getString("monthView"))) {
+                        ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+                        for (Appointment appointment : AppointmentList.getAppointmentList()
+                        ) {
+                            if (appointment.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(now().plusDays(31))) {
+                                appointmentList.addAll(appointment);
+                            }
+                            appointmentTableView.setItems(appointmentList);
+                        }
+                    }
+                }
+        );
+
+
     }
 
 
