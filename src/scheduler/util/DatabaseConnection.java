@@ -881,7 +881,6 @@ public class DatabaseConnection {
 //        Sorting the years and months
         Collections.sort(monthsWithAppointments);
         for (String yearMonth : monthsWithAppointments) {
-            // Get year and month values again
 //            Grabs the year and month values again
             int year = Integer.parseInt(yearMonth.substring(0,4));
             int month = Integer.parseInt(yearMonth.substring(5,7));

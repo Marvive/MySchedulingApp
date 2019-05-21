@@ -35,11 +35,11 @@
       </MenuBar>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
         <tabs>
-          <Tab fx:id="appointmentTab" text="Appointment Types By Month">
+          <Tab fx:id="consultantTab" text="Consultant Schedule">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="appointmentTableView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="consultantScheduleTablewView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
                             <TableColumn fx:id="appointmentTitleColumn" prefWidth="75.0" text="Title" />
                             <TableColumn fx:id="appointmentTypeColumn" prefWidth="75.0" text="Type" />
@@ -55,11 +55,11 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab fx:id="consultantTab" text="Consultant Schedule">
+          <Tab fx:id="appointmentTab" text="Appointment Types By Month">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="scheduleTableView" layoutX="27.0" layoutY="31.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="appointmentTypesByMonthTableView" layoutX="27.0" layoutY="31.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
                             <TableColumn fx:id="scheduleMonthColumn" prefWidth="75.0" text="Month" />
                             <TableColumn fx:id="scheduleTypeColumn" prefWidth="75.0" text="Type" />

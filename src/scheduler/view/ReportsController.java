@@ -9,52 +9,58 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.model.Appointment;
+import scheduler.model.AppointmentList;
+import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
+
+import static scheduler.util.DatabaseConnection.updateAppointmentList;
 
 public class ReportsController {
-
-    @FXML
-    private Tab appointmentTab;
-
-    @FXML
-    private TableView<Appointment> appointmentTableView;
-
-    @FXML
-    private TableColumn<Appointment, String> appointmentTitleColumn;
-
-    @FXML
-    private TableColumn<Appointment, String> appointmentTypeColumn;
-
-    @FXML
-    private TableColumn<Appointment, ?> appointmentStartColumn;
-
-    @FXML
-    private TableColumn<Appointment, ?> appointmentEndColumn;
-
-    @FXML
-    private TableColumn<Appointment, String> appointmentCustomerColumn;
 
     @FXML
     private Tab consultantTab;
 
     @FXML
-    private TableView<?> scheduleTableView;
+    private TableView<Appointment> consultantScheduleTableView;
 
     @FXML
-    private TableColumn<Appointment, ?> scheduleMonthColumn;
+    private TableColumn<?, String> appointmentTitleColumn;
 
     @FXML
-    private TableColumn<Appointment, ?> scheduleTypeColumn;
+    private TableColumn<?, String> appointmentTypeColumn;
 
     @FXML
-    private TableColumn<Appointment, ?> scheduleAmountColumn;
+    private TableColumn<?, ?> appointmentStartColumn;
+
+    @FXML
+    private TableColumn<?, ?> appointmentEndColumn;
+
+    @FXML
+    private TableColumn<?, String> appointmentCustomerColumn;
+
+    @FXML
+    private Tab appointmentTab;
+
+    @FXML
+    private TableView<Appointment> appointmentTypesByMonthTableView;
+
+    @FXML
+    private TableColumn<Appointment, String> scheduleMonthColumn;
+
+    @FXML
+    private TableColumn<Appointment, String> scheduleTypeColumn;
+
+    @FXML
+    private TableColumn<Appointment, Integer> scheduleAmountColumn;
 
     @FXML
     private Tab reportTab;
+
+    /**
+     * Menu FXML
+     * */
 
     @FXML
     private MenuBar menuBar;
@@ -87,7 +93,7 @@ public class ReportsController {
     private Menu menuBarFile;
 
     /**
-     * Handler actions for customer screens
+     * Menu Handlers
      */
     @FXML
     void menuBarCustomersHandler(ActionEvent event) {
@@ -163,6 +169,9 @@ public class ReportsController {
         }
     }
 
+
+
+
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("resources/reports", Locale.getDefault());
         appointmentTitleColumn.setText(rb.getString("appointmentTitleColumn"));
@@ -170,6 +179,7 @@ public class ReportsController {
         appointmentStartColumn.setText(rb.getString("appointmentStartColumn"));
         appointmentEndColumn.setText(rb.getString("appointmentEndColumn"));
         appointmentCustomerColumn.setText(rb.getString("appointmentCustomerColumn"));
+
         scheduleMonthColumn.setText(rb.getString("scheduleMonthColumn"));
         scheduleTypeColumn.setText(rb.getString("scheduleTypeColumn"));
         scheduleAmountColumn.setText(rb.getString("scheduleAmountColumn"));
@@ -190,33 +200,152 @@ public class ReportsController {
     }
 
     @FXML
+    private void setAppointmentTypesByMonthTableView() {
+        updateAppointmentList();
+
+//        Will contain an array of strings
+        ArrayList<String> monthsWithAppointments = new ArrayList<>();
+//        For each appointment in the list, add a year and month combo to arrayList
+        for (Appointment appointment : AppointmentList.getAppointmentList()) {
+            Date startDate = appointment.getStartDate();
+//            System.out.println(startDate);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(startDate);
+//            System.out.println(calendar);
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            String monthString = "";
+            switch(month) {
+                case 1:
+                    monthString = "January";
+                    break;
+                case 2:
+                    monthString = "February";
+                    break;
+                case 3:
+                    monthString = "March";
+                    break;
+                case 4:
+                    monthString = "April";
+                    break;
+                case 5:
+                    monthString = "May";
+                    break;
+                case 6:
+                    monthString = "June";
+                    break;
+                case 7:
+                    monthString = "July";
+                    break;
+                case 8:
+                    monthString = "August";
+                    break;
+                case 9:
+                    monthString = "September";
+                    break;
+                case 10:
+                    monthString = "October";
+                    break;
+                case 11:
+                    monthString = "November";
+                    break;
+                case 12:
+                    monthString = "December";
+                    break;
+            }
+
+            String yearMonthString = (monthString + " " + year);
+
+
+//            System.out.println(yearMonthString);
+            monthsWithAppointments.add(yearMonthString);
+
+
+            for (String appointmentFor : monthsWithAppointments) {
+                for (String appointmentFive monthsWithAppointments) {
+                    if (appointmentFor == )
+                }
+
+
+            }
+
+
+//            String yearMonth = year + "-" + month;
+//            if (month < 10) {
+//                yearMonth = year + "-0" + month;
+//            } else if (!monthsWithAppointments.contains(yearMonth)) {
+//                monthsWithAppointments.add(yearMonth);
+//            }
+        }
+//        Test
+        System.out.println(monthsWithAppointments);
+
+
+        /*
+        * This section will create an int for each item in the arrayList
+        * based on how many "Types" it finds
+        * */
+
+////        Sorting the years and months
+//        Collections.sort(monthsWithAppointments);
+//        for (String yearMonth : monthsWithAppointments) {
+////            Grabs the year and month values again
+//            int year = Integer.parseInt(yearMonth.substring(0, 4));
+//            int month = Integer.parseInt(yearMonth.substring(5, 7));
+////            Initializing the counter
+//            int typeCount = 0;
+//            ArrayList<String> types = new ArrayList<>();
+//            for (Appointment appointment : AppointmentList.getAppointmentList()) {
+////                Grabs the appointment start date
+//                Date startDate = appointment.getStartDate();
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.setTime(startDate);
+////                Grabs year and month values from appointment
+//                int appointmentYear = calendar.get(Calendar.YEAR);
+//                int appointmentMonth = calendar.get(Calendar.MONTH) + 1;
+////                If the years and month match, grab type
+//                if ((year == appointmentYear) && (month == appointmentMonth)) {
+//                    String type = appointment.getType();
+////                    If not already in arrayList, add it then up the counter
+//                    if (!types.contains(type)) {
+//                        types.add(type);
+//                        typeCount++;
+//                    }
+//                }
+//            }
+//        }
+
+
+
+
+//
+//        scheduleMonthColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+//        scheduleTypeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
+//        scheduleAmountColumn.setCellValueFactory(cellData -> cellData.getValue().startStringProperty());
+//
+
+    }
+
+
+
+
+    @FXML
+    private void setConsultantScheduleTableView() {
+//        Placeholder
+        scheduleMonthColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+    }
+
+    @FXML
     public void initialize() {
 //        Sets the local Language
         setLanguage();
+//        Sets Data on the AppointmentTableView
+        setAppointmentTypesByMonthTableView();
+//        Sets Data on the ConsultantScheduleTableView
+        setConsultantScheduleTableView();
 
-//        TODO Add logic to this
+        DatabaseConnection.generateAppointmentTypeByMonthReport();
 
-        // Assign actions to buttons
-//        btnModifyCustomerSave.setOnAction(event -> saveModifyCustomer(event));
-//        btnModifyCustomerCancel.setOnAction(event -> cancelModifyCustomer(event));
-//        // Get customer to be modified via index
-//        customer = getCustomerRoster().get(customerIndexToModify);
-//        // Get customer information
-//        String customerName = customer.getCustomerName();
-//        String address = customer.getAddress();
-//        String address2 = customer.getAddress2();
-//        String city = customer.getCity();
-//        String country = customer.getCountry();
-//        String postalCode = customer.getPostalCode();
-//        String phone = customer.getPhone();
-//        // Populate information fields with current customer information
-//        txtModifyCustomerName.setText(customerName);
-//        txtModifyCustomerAddress.setText(address);
-//        txtModifyCustomerAddress2.setText(address2);
-//        txtModifyCustomerCity.setText(city);
-//        txtModifyCustomerCountry.setText(country);
-//        txtModifyCustomerPostalCode.setText(postalCode);
-//        txtModifyCustomerPhone.setText(phone);
     }
 
 }
