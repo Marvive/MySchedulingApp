@@ -203,18 +203,24 @@ public class ReportsController {
     private void setAppointmentTypesByMonthTableView() {
         updateAppointmentList();
 
+
+
 //        Will contain an array of strings
-        ArrayList<String> monthsWithAppointments = new ArrayList<>();
+//        ObservableList<AppointmentMonths> appointmentMonths = FXCollections.observableArrayList();
+        ArrayList<String> monthsWithAppointmentsWithTypes = new ArrayList<>();
+        ArrayList<Integer> appointmentsPerMonth = new ArrayList<>();
+        ArrayList<String> literalDate = new ArrayList<>();
+        ArrayList<String> literalType = new ArrayList<>();
 //        For each appointment in the list, add a year and month combo to arrayList
         for (Appointment appointment : AppointmentList.getAppointmentList()) {
             Date startDate = appointment.getStartDate();
-//            System.out.println(startDate);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(startDate);
-//            System.out.println(calendar);
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH) + 1;
             String monthString = "";
+            
+//            Switch turns month numbers into words
             switch(month) {
                 case 1:
                     monthString = "January";
@@ -253,33 +259,53 @@ public class ReportsController {
                     monthString = "December";
                     break;
             }
-
+            
+//            For every appointment, create a string with the month, year, then Appointment Type
+            String yearMonthStringType = (monthString + " " + year + " " + appointment.getType());
             String yearMonthString = (monthString + " " + year);
+            String typeString = appointment.getType();
 
 
 //            System.out.println(yearMonthString);
-            monthsWithAppointments.add(yearMonthString);
+            monthsWithAppointmentsWithTypes.add(yearMonthStringType);
+            literalDate.add(yearMonthString);
+            literalType.add(typeString);
 
-
-            for (String appointmentFor : monthsWithAppointments) {
-                for (String appointmentFive monthsWithAppointments) {
-                    if (appointmentFor == )
-                }
-
-
-            }
-
-
-//            String yearMonth = year + "-" + month;
-//            if (month < 10) {
-//                yearMonth = year + "-0" + month;
-//            } else if (!monthsWithAppointments.contains(yearMonth)) {
-//                monthsWithAppointments.add(yearMonth);
-//            }
         }
-//        Test
-        System.out.println(monthsWithAppointments);
+//        Collections.sort(monthsWithAppointmentsWithTypes);
+//        For Loop to compare each string to see if they match exactly across all params
+        for (String appointmentFor : monthsWithAppointmentsWithTypes) {
+            int amountPerMonth = 0;
+            for (String appointmentFive : monthsWithAppointmentsWithTypes) {
+                if (appointmentFor.equals(appointmentFive)) {
+                    amountPerMonth++;
+                }
+            }
+            appointmentsPerMonth.add(amountPerMonth);
+        }
 
+//        Test
+        System.out.println(monthsWithAppointmentsWithTypes);
+        System.out.println(literalDate);
+        System.out.println(literalType);
+        System.out.println(appointmentsPerMonth);
+
+//        For each item in arraylist, create a new
+        ArrayList<String> finalDestinations = new ArrayList<>();
+        for (String item : monthsWithAppointmentsWithTypes) {
+            String itemNum = "";
+            for (int num : appointmentsPerMonth) {
+                itemNum = item + num;
+            }
+            finalDestinations.add(itemNum);
+        }
+
+
+        /*
+        * Add each array to match class constructors
+        * Make each one unique for the table
+        * */
+        
 
         /*
         * This section will create an int for each item in the arrayList
@@ -287,8 +313,8 @@ public class ReportsController {
         * */
 
 ////        Sorting the years and months
-//        Collections.sort(monthsWithAppointments);
-//        for (String yearMonth : monthsWithAppointments) {
+//        Collections.sort(monthsWithAppointmentsWithTypes);
+//        for (String yearMonth : monthsWithAppointmentsWithTypes) {
 ////            Grabs the year and month values again
 //            int year = Integer.parseInt(yearMonth.substring(0, 4));
 //            int month = Integer.parseInt(yearMonth.substring(5, 7));
