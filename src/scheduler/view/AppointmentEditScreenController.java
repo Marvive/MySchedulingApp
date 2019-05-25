@@ -424,15 +424,9 @@ public class AppointmentEditScreenController {
         endTimePicker.getSelectionModel().select(endInitial);
         appointmentTypePicker.getSelectionModel().select(appointment.getType());
 
-//        Was unable to figure out how to automatically select
-//        customerSelectTableView.getSelectionModel().select(forIndex(appointment));
-
-
         setData();
 //        Updates table views
         updateCustomerTableView();
-//        Sets Data in TableView (Currently fails to load if you go directly to Edit Screen)
-//        Not based on when this starts. Suspect it has something to do with the for loop.
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
     }
 }

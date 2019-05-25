@@ -8,9 +8,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.model.Appointment;
+import scheduler.model.AppointmentList;
 import scheduler.model.AppointmentTypesByMonthTable;
 
 import java.io.IOException;
@@ -59,6 +61,12 @@ public class ReportsController {
 
     @FXML
     private Tab reportTab;
+
+    @FXML
+    private Text consultantText;
+
+    @FXML
+    private ComboBox<String> consultantCombo;
 
     /**
      * Menu FXML
@@ -199,6 +207,8 @@ public class ReportsController {
 
         menuBarCustomers.setText(rb.getString("menuBarCustomers"));
         menuBarGoCustomers.setText(rb.getString("menuBarGoCustomers"));
+
+        consultantText.setText(rb.getString("consultantText"));
     }
 
     @FXML
@@ -288,7 +298,6 @@ public class ReportsController {
             }
         }
 
-
         final ObservableList<AppointmentTypesByMonthTable> data = FXCollections.observableArrayList();
 
         for (String item : transmuteToUnique) {
@@ -307,17 +316,35 @@ public class ReportsController {
 
 
 
-
+/**
+ * Ideally, we would like to have this changed based on a combo box for each consultant
+ * */
     @FXML
     private void setConsultantScheduleTableView() {
         updateAppointmentList();
         consultantScheduleTableView.setItems(getAppointmentList());
 
 
+//        ArrayList<String> consultantsWithAppointments = new ArrayList<>();
+        ObservableList<String> consultantList = FXCollections.observableArrayList();
+//        call getCreatedBy() method to see who created, then add to ArrayList
+//        for each appointment in the appointmentList, get created by and add to consultantsWithAppointments
+        for (Appointment appointment : AppointmentList.getAppointmentList()) {
+            String consultant = appointment.getCreatedBy();
+            if (!consultantList.contains(consultant)) {
+                consultantList.add(consultant);
+            }
+        }
+
+        consultantCombo.getItems().clear();
+        consultantCombo.setItems(FXCollections.observableArrayList(consultantList));
+        consultantCombo.getSelectionModel().selectFirst();
+
+
         appointmentTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         appointmentTypeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
         appointmentDateColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
-//        appointmentTimeColumn.setCellValueFactory(cellData -> cellData.getValue().tableTypeProperty());
+        appointmentTimeColumn.setCellValueFactory(cellData -> cellData.getValue().startStringProperty());
         appointmentCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
     }
 
