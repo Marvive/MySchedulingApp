@@ -322,7 +322,7 @@ public class AppointmentEditScreenController {
 //        Sets the customer name. Must be after the check because it needs to be validated before it can grab a name
         String contact = customer1.getCustomerName();
 
-        if (DatabaseConnection.modifyAppointment(appointmentId, customer1, title, appointmentType, contact, startUTC, endUTC)) {
+        if (DatabaseConnection.editAppointment(appointmentId, customer1, title, appointmentType, contact, startUTC, endUTC)) {
             try {
 //                Returns you to ViewScreen
                 Parent mainScreenParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));

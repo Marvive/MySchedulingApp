@@ -432,7 +432,7 @@ public class DatabaseConnection {
 
     /**
     * Method to make a customer active
-     * Used by addNewCustomer() and modifyCustomer()
+     * Used by addNewCustomer() and editCustomer()
     * */
     public static void setCustomerToActive(String customerName, int addressId) {
         try (Connection conn = DriverManager.getConnection(url, user, pass);
@@ -481,7 +481,7 @@ public class DatabaseConnection {
     /**
     * Method to modify existing customer. Verifies that it exists first
     * */
-    public static int modifyCustomer(int customerId, String customerName, String address, String address2,
+    public static int editCustomer(int customerId, String customerName, String address, String address2,
                                      String city, String country, String postalCode, String phone) {
         try {
 //            Get Customer's country, city and addressID
@@ -512,7 +512,7 @@ public class DatabaseConnection {
 
     /**
      * Method to grab Customer ID
-     * Used by modifyCustomer()
+     * Used by editCustomer()
      * */
     private static int getCustomerId(String customerName, int addressId) throws SQLException {
 //        Connect to DB
@@ -526,7 +526,7 @@ public class DatabaseConnection {
 
     /**
      * Method to see whether customer is active or not
-     * Used by modifyCustomer()
+     * Used by editCustomer()
     * */
     private static int getActiveStatus(int customerId) throws SQLException {
 //        Connect to database
@@ -540,7 +540,7 @@ public class DatabaseConnection {
 
     /**
     * Method that updates customer.
-     * Used by modifyCustomer()
+     * Used by editCustomer()
     * */
     private static void updateCustomer(int customerId, String customerName, int addressId) throws SQLException {
         try (Connection conn = DriverManager.getConnection(url,user,pass);
@@ -731,7 +731,7 @@ public class DatabaseConnection {
     /**
      * Modifies an appointment
      * */
-    public static boolean modifyAppointment(int appointmentId, Customer customer, String title, String type, String contact, ZonedDateTime startUTC, ZonedDateTime endUTC) {
+    public static boolean editAppointment(int appointmentId, Customer customer, String title, String type, String contact, ZonedDateTime startUTC, ZonedDateTime endUTC) {
         try {
 //            ZonedDateTimes to Timestamps
             String startUTCString = startUTC.toString();
@@ -794,7 +794,7 @@ public class DatabaseConnection {
 
     /**
      * A secondary overlap check made for modifying existing appointments
-     * Used by modifyAppointment()
+     * Used by editAppointment()
      * */
     private static boolean doesAppointmentOverlapOthers(Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException, ParseException {
         int appointmentIndexToRemove = AppointmentViewScreenController.getAppointmentIndexToEdit();
@@ -933,6 +933,8 @@ public class DatabaseConnection {
 
     /**
      * Cleans up the database entries that no longer are paired with customers
+     * This is necessary due to the changing of data from Edit appointment
+     * TODO review if this is necessary!!!
      * */
     private static void cleanDatabase() {
 //        Connect to DB

@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static scheduler.model.CustomerRoster.getCustomerRoster;
+import static scheduler.util.DatabaseConnection.setCustomerToInactive;
 
 public class CustomerScreenController {
 
@@ -83,6 +84,9 @@ public class CustomerScreenController {
     private Button customerEditButton;
 
     @FXML
+    private Button deleteButton;
+
+    @FXML
     private Text customerViewScreenText;
 
     private static int customerIndexToModify;
@@ -135,6 +139,30 @@ public class CustomerScreenController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    /**
+     * Deletes the selected customer from the Table then sets customer to inactive
+     * */
+    @FXML
+    private void deleteButtonHandler(ActionEvent event) {
+//        Grab selected customer
+        Customer customerToRemove = customerTableView.getSelectionModel().getSelectedItem();
+//        Throw an alert if no customer was selected
+        if (customerToRemove == null) {
+            // Create alert saying a customer must be selected to be removed
+            ResourceBundle rb = ResourceBundle.getBundle("resources/MainScreen", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("error"));
+            alert.setHeaderText(rb.getString("selectDeleteHeader"));
+            alert.setContentText(rb.getString("selectDeleteContent"));
+            alert.showAndWait();
+            return;
+        }
+        // Submit customer to be removed
+        setCustomerToInactive(customerToRemove);
     }
 
     /**

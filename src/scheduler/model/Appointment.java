@@ -209,30 +209,6 @@ public class Appointment {
 
     private final ObjectProperty<ZonedDateTime> zdt = new SimpleObjectProperty<>();
 
-    private final ObjectProperty<Timestamp> timestampObjectProperty = new SimpleObjectProperty<Timestamp>();
-
-    Appointment(LocalDateTime ldt) {
-        this.ldt.set(ldt);
-    }
-
-
-
-    public ObjectProperty<LocalDateTime> startTimeProperty() {
-
-        return ldt;
-    }
-
-    public ObjectProperty<LocalDateTime> endTimeProperty() {
-        return ldt;
-    }
-//    public LocalDateTime getLdt() {
-//        return ldt.get();
-//    }
-//
-//    public void setLdt(LocalDateTime value) {
-//        ldt.set(value);
-//    }
-
 
 //    Appointment Validation
     public static String isAppointmentValid(Customer customer, String title, String appointmentType,

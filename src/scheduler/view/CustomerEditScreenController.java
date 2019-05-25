@@ -162,7 +162,7 @@ public class CustomerEditScreenController {
             return;
         }
 //        Update Database and save
-        int modifyCustomerCheck = modifyCustomer(customerId, customerName, address, address2, city, country, postalCode, phone);
+        int modifyCustomerCheck = editCustomer(customerId, customerName, address, address2, city, country, postalCode, phone);
 //        Check if customer is active
         if (modifyCustomerCheck == 1) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
@@ -286,7 +286,6 @@ public class CustomerEditScreenController {
         customerPostalCode.setText(postalCode);
         customerPhoneTextField.setText(phone);
     }
-
 
 
     /**
