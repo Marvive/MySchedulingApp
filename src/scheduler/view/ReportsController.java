@@ -1,5 +1,7 @@
 package scheduler.view;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +12,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.model.Appointment;
 import scheduler.model.AppointmentList;
+import scheduler.model.AppointmentTypesByMonthTable;
 import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
@@ -44,16 +47,16 @@ public class ReportsController {
     private Tab appointmentTab;
 
     @FXML
-    private TableView<Appointment> appointmentTypesByMonthTableView;
+    private TableView<AppointmentTypesByMonthTable> appointmentTypesByMonthTableView;
 
     @FXML
-    private TableColumn<Appointment, String> scheduleMonthColumn;
+    private TableColumn<AppointmentTypesByMonthTable, String> scheduleMonthColumn;
 
     @FXML
-    private TableColumn<Appointment, String> scheduleTypeColumn;
+    private TableColumn<AppointmentTypesByMonthTable, String> scheduleTypeColumn;
 
     @FXML
-    private TableColumn<Appointment, Integer> scheduleAmountColumn;
+    private TableColumn<AppointmentTypesByMonthTable, String> scheduleAmountColumn;
 
     @FXML
     private Tab reportTab;
@@ -202,11 +205,7 @@ public class ReportsController {
     @FXML
     private void setAppointmentTypesByMonthTableView() {
         updateAppointmentList();
-
-
-
 //        Will contain an array of strings
-//        ObservableList<AppointmentMonths> appointmentMonths = FXCollections.observableArrayList();
         ArrayList<String> monthsWithAppointmentsWithTypes = new ArrayList<>();
         ArrayList<Integer> appointmentsPerMonth = new ArrayList<>();
         ArrayList<String> literalDate = new ArrayList<>();
@@ -261,7 +260,7 @@ public class ReportsController {
             }
             
 //            For every appointment, create a string with the month, year, then Appointment Type
-            String yearMonthStringType = (monthString + " " + year + " " + appointment.getType());
+            String yearMonthStringType = (monthString + " " + year + "," + appointment.getType());
             String yearMonthString = (monthString + " " + year);
             String typeString = appointment.getType();
 
@@ -272,7 +271,6 @@ public class ReportsController {
             literalType.add(typeString);
 
         }
-//        Collections.sort(monthsWithAppointmentsWithTypes);
 //        For Loop to compare each string to see if they match exactly across all params
         for (String appointmentFor : monthsWithAppointmentsWithTypes) {
             int amountPerMonth = 0;
@@ -284,72 +282,37 @@ public class ReportsController {
             appointmentsPerMonth.add(amountPerMonth);
         }
 
-//        Test
-        System.out.println(monthsWithAppointmentsWithTypes);
-        System.out.println(literalDate);
-        System.out.println(literalType);
-        System.out.println(appointmentsPerMonth);
 
-//        For each item in arraylist, create a new
         ArrayList<String> finalDestinations = new ArrayList<>();
-        for (String item : monthsWithAppointmentsWithTypes) {
-            String itemNum = "";
-            for (int num : appointmentsPerMonth) {
-                itemNum = item + num;
-            }
-            finalDestinations.add(itemNum);
+
+        for (int i = 0; i < monthsWithAppointmentsWithTypes.size(); i++) {
+            finalDestinations.add(monthsWithAppointmentsWithTypes.get(i) + "," + appointmentsPerMonth.get(i));
         }
 
+        ArrayList<String> transmuteToUnique = new ArrayList<>();
+        for(String set : finalDestinations) {
+            if (!transmuteToUnique.contains(set)) {
+                transmuteToUnique.add(set);
+            }
+        }
 
-        /*
-        * Add each array to match class constructors
-        * Make each one unique for the table
-        * */
-        
+        ArrayList<ArrayList> outputs = new ArrayList<>();
 
-        /*
-        * This section will create an int for each item in the arrayList
-        * based on how many "Types" it finds
-        * */
+        final ObservableList<AppointmentTypesByMonthTable> data = FXCollections.observableArrayList();
+        for (String item : transmuteToUnique) {
+            ArrayList<String> outputLOL = new ArrayList<>();
+            String[] output = item.split(",");
+            outputLOL.add(output[0]);
+            outputLOL.add(output[1]);
+            outputLOL.add(output[2]);
+            outputs.add(outputLOL);
+            data.add(new AppointmentTypesByMonthTable(output[0], output[1], output[2]));
+        }
 
-////        Sorting the years and months
-//        Collections.sort(monthsWithAppointmentsWithTypes);
-//        for (String yearMonth : monthsWithAppointmentsWithTypes) {
-////            Grabs the year and month values again
-//            int year = Integer.parseInt(yearMonth.substring(0, 4));
-//            int month = Integer.parseInt(yearMonth.substring(5, 7));
-////            Initializing the counter
-//            int typeCount = 0;
-//            ArrayList<String> types = new ArrayList<>();
-//            for (Appointment appointment : AppointmentList.getAppointmentList()) {
-////                Grabs the appointment start date
-//                Date startDate = appointment.getStartDate();
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.setTime(startDate);
-////                Grabs year and month values from appointment
-//                int appointmentYear = calendar.get(Calendar.YEAR);
-//                int appointmentMonth = calendar.get(Calendar.MONTH) + 1;
-////                If the years and month match, grab type
-//                if ((year == appointmentYear) && (month == appointmentMonth)) {
-//                    String type = appointment.getType();
-////                    If not already in arrayList, add it then up the counter
-//                    if (!types.contains(type)) {
-//                        types.add(type);
-//                        typeCount++;
-//                    }
-//                }
-//            }
-//        }
-
-
-
-
-//
-//        scheduleMonthColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
-//        scheduleTypeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
-//        scheduleAmountColumn.setCellValueFactory(cellData -> cellData.getValue().startStringProperty());
-//
-
+        appointmentTypesByMonthTableView.setItems(data);
+        scheduleMonthColumn.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
+        scheduleTypeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
+        scheduleAmountColumn.setCellValueFactory(cellData -> cellData.getValue().numberOfAppointmentsProperty());
     }
 
 
@@ -357,8 +320,7 @@ public class ReportsController {
 
     @FXML
     private void setConsultantScheduleTableView() {
-//        Placeholder
-        scheduleMonthColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+
     }
 
     @FXML
