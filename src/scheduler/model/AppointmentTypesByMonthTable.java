@@ -32,7 +32,7 @@ public class AppointmentTypesByMonthTable {
         return type.get();
     }
 
-    public StringProperty typeProperty() {
+    public StringProperty tableTypeProperty() {
         return type;
     }
 

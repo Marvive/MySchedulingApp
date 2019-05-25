@@ -11,12 +11,12 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scheduler.model.Appointment;
-import scheduler.model.AppointmentList;
 import scheduler.model.AppointmentTypesByMonthTable;
 
 import java.io.IOException;
 import java.util.*;
 
+import static scheduler.model.AppointmentList.getAppointmentList;
 import static scheduler.util.DatabaseConnection.updateAppointmentList;
 
 public class ReportsController {
@@ -28,19 +28,19 @@ public class ReportsController {
     private TableView<Appointment> consultantScheduleTableView;
 
     @FXML
-    private TableColumn<?, String> appointmentTitleColumn;
+    private TableColumn<Appointment, String> appointmentTitleColumn;
 
     @FXML
-    private TableColumn<?, String> appointmentTypeColumn;
+    private TableColumn<Appointment, String> appointmentTypeColumn;
 
     @FXML
-    private TableColumn<?, ?> appointmentStartColumn;
+    private TableColumn<Appointment, String> appointmentDateColumn;
 
     @FXML
-    private TableColumn<?, ?> appointmentEndColumn;
+    private TableColumn<Appointment, String> appointmentTimeColumn;
 
     @FXML
-    private TableColumn<?, String> appointmentCustomerColumn;
+    private TableColumn<Appointment, String> appointmentCustomerColumn;
 
     @FXML
     private Tab appointmentTab;
@@ -178,8 +178,8 @@ public class ReportsController {
         ResourceBundle rb = ResourceBundle.getBundle("resources/reports", Locale.getDefault());
         appointmentTitleColumn.setText(rb.getString("appointmentTitleColumn"));
         appointmentTypeColumn.setText(rb.getString("appointmentTypeColumn"));
-        appointmentStartColumn.setText(rb.getString("appointmentStartColumn"));
-        appointmentEndColumn.setText(rb.getString("appointmentEndColumn"));
+        appointmentDateColumn.setText(rb.getString("appointmentDateColumn"));
+        appointmentTimeColumn.setText(rb.getString("appointmentTimeColumn"));
         appointmentCustomerColumn.setText(rb.getString("appointmentCustomerColumn"));
 
         scheduleMonthColumn.setText(rb.getString("scheduleMonthColumn"));
@@ -207,17 +207,16 @@ public class ReportsController {
 //        Will contain an array of strings
         ArrayList<String> monthsWithAppointmentsWithTypes = new ArrayList<>();
         ArrayList<Integer> appointmentsPerMonth = new ArrayList<>();
-        ArrayList<String> literalDate = new ArrayList<>();
-        ArrayList<String> literalType = new ArrayList<>();
+
 //        For each appointment in the list, add a year and month combo to arrayList
-        for (Appointment appointment : AppointmentList.getAppointmentList()) {
+        for (Appointment appointment : getAppointmentList()) {
             Date startDate = appointment.getStartDate();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(startDate);
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH) + 1;
             String monthString = "";
-            
+
 //            Switch turns month numbers into words
             switch(month) {
                 case 1:
@@ -257,17 +256,11 @@ public class ReportsController {
                     monthString = "December";
                     break;
             }
-            
+
 //            For every appointment, create a string with the month, year, then Appointment Type
             String yearMonthStringType = (monthString + " " + year + "," + appointment.getType());
-            String yearMonthString = (monthString + " " + year);
-            String typeString = appointment.getType();
 
-
-//            System.out.println(yearMonthString);
             monthsWithAppointmentsWithTypes.add(yearMonthStringType);
-            literalDate.add(yearMonthString);
-            literalType.add(typeString);
 
         }
 //        For Loop to compare each string to see if they match exactly across all params
@@ -281,13 +274,13 @@ public class ReportsController {
             appointmentsPerMonth.add(amountPerMonth);
         }
 
-
+//        Creates a string with all of the data so that you can see what is unique
         ArrayList<String> finalDestinations = new ArrayList<>();
-
         for (int i = 0; i < monthsWithAppointmentsWithTypes.size(); i++) {
             finalDestinations.add(monthsWithAppointmentsWithTypes.get(i) + "," + appointmentsPerMonth.get(i));
         }
 
+//        Sets unique strings as an array
         ArrayList<String> transmuteToUnique = new ArrayList<>();
         for(String set : finalDestinations) {
             if (!transmuteToUnique.contains(set)) {
@@ -295,22 +288,20 @@ public class ReportsController {
             }
         }
 
-        ArrayList<ArrayList> outputs = new ArrayList<>();
 
         final ObservableList<AppointmentTypesByMonthTable> data = FXCollections.observableArrayList();
+
         for (String item : transmuteToUnique) {
-            ArrayList<String> outputLOL = new ArrayList<>();
+//            For each item in transmute, split each item by a comma delimiter
             String[] output = item.split(",");
-            outputLOL.add(output[0]);
-            outputLOL.add(output[1]);
-            outputLOL.add(output[2]);
-            outputs.add(outputLOL);
+//            Add data to the observableList. Strings become Params for AppointmentTypesByMonthTable class
             data.add(new AppointmentTypesByMonthTable(output[0], output[1], output[2]));
         }
-
+//        Sets TableView "data")
         appointmentTypesByMonthTableView.setItems(data);
+//        Lambdas to easily assign cellData to properties
         scheduleMonthColumn.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
-        scheduleTypeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
+        scheduleTypeColumn.setCellValueFactory(cellData -> cellData.getValue().tableTypeProperty());
         scheduleAmountColumn.setCellValueFactory(cellData -> cellData.getValue().numberOfAppointmentsProperty());
     }
 
@@ -319,7 +310,15 @@ public class ReportsController {
 
     @FXML
     private void setConsultantScheduleTableView() {
+        updateAppointmentList();
+        consultantScheduleTableView.setItems(getAppointmentList());
 
+
+        appointmentTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
+        appointmentTypeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
+        appointmentDateColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
+//        appointmentTimeColumn.setCellValueFactory(cellData -> cellData.getValue().tableTypeProperty());
+        appointmentCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
     }
 
     @FXML
@@ -331,8 +330,7 @@ public class ReportsController {
 //        Sets Data on the ConsultantScheduleTableView
         setConsultantScheduleTableView();
 
-//        DatabaseConnection.generateAppointmentTypeByMonthReport();
-
+//        setLastReport();
     }
 
 }

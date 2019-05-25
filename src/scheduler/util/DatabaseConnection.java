@@ -70,7 +70,7 @@ public class DatabaseConnection {
             setCurrentUser(userName);
             try {
                 Path path = Paths.get("UserLog.txt");
-                Files.write(path, Arrays.asList("Consultant " + currentUser + " logged in at " + Date.from(Instant.now()).toString() + "."),
+                Files.write(path, Arrays.asList("Consultant, " + currentUser + " logged in at " + Date.from(Instant.now()).toString() + "."),
                         StandardCharsets.UTF_8, Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -534,8 +534,7 @@ public class DatabaseConnection {
              Statement stmt = conn.createStatement()) {
             ResultSet activeResultSet = stmt.executeQuery("SELECT active FROM customer WHERE customerId = " + customerId);
             activeResultSet.next();
-            int active = activeResultSet.getInt(1);
-            return active;
+            return activeResultSet.getInt(1);
         }
     }
 
