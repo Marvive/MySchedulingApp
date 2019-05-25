@@ -101,7 +101,7 @@ public class CustomerScreenController {
      */
 
     @FXML
-    void addButtonHandler(ActionEvent event) {
+    private void addButtonHandler(ActionEvent event) {
             try {
                 Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("CustomerAddScreen.fxml"));
                 Scene addAppointmentScene = new Scene(addAppointmentParent);
@@ -114,7 +114,7 @@ public class CustomerScreenController {
     }
 
     @FXML
-    void editButtonHandler(ActionEvent event) {
+    private void editButtonHandler(ActionEvent event) {
 //        Grabs customer from Table View
         Customer customerToModify = customerTableView.getSelectionModel().getSelectedItem();
 //        Checks if no customer was selected
@@ -149,10 +149,9 @@ public class CustomerScreenController {
     @FXML
     private void deleteButtonHandler(ActionEvent event) {
 //        Grab selected customer
-        Customer customerToRemove = customerTableView.getSelectionModel().getSelectedItem();
+        Customer deletedCustomer = customerTableView.getSelectionModel().getSelectedItem();
 //        Throw an alert if no customer was selected
-        if (customerToRemove == null) {
-            // Create alert saying a customer must be selected to be removed
+        if (deletedCustomer == null) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/MainScreen", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
@@ -161,8 +160,8 @@ public class CustomerScreenController {
             alert.showAndWait();
             return;
         }
-        // Submit customer to be removed
-        setCustomerToInactive(customerToRemove);
+//        deactivates and removes customer from DB
+        setCustomerToInactive(deletedCustomer);
     }
 
     /**

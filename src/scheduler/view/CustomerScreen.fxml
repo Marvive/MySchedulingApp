@@ -59,7 +59,7 @@
         <buttons>
           <Button fx:id="customerAddButton" mnemonicParsing="false" onAction="#addButtonHandler" text="Add" />
             <Button fx:id="customerEditButton" layoutX="140.0" layoutY="17.0" mnemonicParsing="false" onAction="#editButtonHandler" text="Edit" />
-            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteButtonHanlder" text="Delete" />
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteButtonHandler" text="Delete" />
         </buttons>
       </ButtonBar>
       <Text fx:id="customerViewScreenText" layoutX="34.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer View Screen" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="45.0">

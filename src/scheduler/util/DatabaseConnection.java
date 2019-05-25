@@ -241,9 +241,9 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
-            alert.setHeaderText(rb.getString("errorConnectingToDatabaseHeader"));
-            alert.setContentText(rb.getString("errorConnectingToDatabaseText"));
+            alert.setTitle(rb.getString("errorTitle"));
+            alert.setHeaderText(rb.getString("noDatabaseConnectionHeader"));
+            alert.setContentText(rb.getString("noDatabaseConnectionContent"));
             alert.show();
         }
     }
@@ -271,7 +271,7 @@ public class DatabaseConnection {
                     if (active == 1) {
                         ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle(rb.getString("error"));
+                        alert.setTitle(rb.getString("errorTitle"));
                         alert.setHeaderText(rb.getString("errorAddingCustomer"));
                         alert.setContentText(rb.getString("errorCustomerAlreadyExists"));
                         alert.showAndWait();
@@ -441,8 +441,8 @@ public class DatabaseConnection {
 //            Alert and confirmation before setting a customer to active
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.initModality(Modality.NONE);
-            alert.setTitle(rb.getString("error"));
-            alert.setHeaderText(rb.getString("errorModifyingCustomer"));
+            alert.setTitle(rb.getString("errorTitle"));
+            alert.setHeaderText(rb.getString("errorEditingCustomer"));
             alert.setContentText(rb.getString("errorSetToActive"));
             Optional<ButtonType> result = alert.showAndWait();
 //            If OK button is clicked, then it will update the SQL database
@@ -502,8 +502,8 @@ public class DatabaseConnection {
 //            Alerts that you need to be connected to the database
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
-            alert.setHeaderText(rb.getString("errorModifyingCustomer"));
+            alert.setTitle(rb.getString("errorTitle"));
+            alert.setHeaderText(rb.getString("errorEditingCustomer"));
             alert.setContentText(rb.getString("errorRequiresDatabaseText"));
             alert.showAndWait();
             return -1;
@@ -552,17 +552,16 @@ public class DatabaseConnection {
 
     /**
     * Sets a customer to inactive and makes them hidden in the customer list view
-     * TODO Used Where?
     * */
-    public static void setCustomerToInactive(Customer customerToRemove) {
-        int customerId = customerToRemove.getCustomerId();
+    public static void setCustomerToInactive(Customer customerToDelete) {
+        int customerId = customerToDelete.getCustomerId();
         ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
 //        Set Confirmation to delete customer
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
-        alert.setTitle(rb.getString("confirmRemove"));
-        alert.setHeaderText(rb.getString("confirmRemovingCustomer"));
-        alert.setContentText(rb.getString("confirmRemovingCustomerMessage"));
+        alert.setTitle(rb.getString("confirmDeleteTitle"));
+        alert.setHeaderText(rb.getString("confirmDeleteCustomerHeader"));
+        alert.setContentText(rb.getString("confirmDeleteCustomerContent"));
         Optional<ButtonType> result = alert.showAndWait();
 //        If OK is pressed, then proceed. Catches errors if cannot connect to DB
         if (result.get() == ButtonType.OK) {
@@ -572,9 +571,9 @@ public class DatabaseConnection {
             } catch (SQLException e) {
 //                If it fails it will throw this database error
                 Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                alert2.setTitle(rb.getString("error"));
-                alert2.setHeaderText(rb.getString("errorModifyingCustomer"));
-                alert2.setContentText(rb.getString("errorConnectingToDatabaseText"));
+                alert2.setTitle(rb.getString("errorTitle"));
+                alert2.setHeaderText(rb.getString("errorEditingCustomer"));
+                alert2.setContentText(rb.getString("noDatabaseConnectionContent"));
                 alert2.showAndWait();
             }
 //            Will pass the information into the roster
@@ -628,15 +627,15 @@ public class DatabaseConnection {
 //            Catches SQL errors
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
+            alert.setTitle(rb.getString("errorTitle"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
-            alert.setContentText(rb.getString("errorConnectingToDatabaseText"));
+            alert.setContentText(rb.getString("noDatabaseConnectionContent"));
             alert.showAndWait();
         } catch (Exception e) {
 //            If an error occurs that isn't a SQL error, this part catches it
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
+            alert.setTitle(rb.getString("errorTitle"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
             alert.setContentText(rb.getString("nonDatabaseErrorText"));
             alert.showAndWait();
@@ -651,10 +650,10 @@ public class DatabaseConnection {
         Timestamp startTimeStamp = Timestamp.valueOf(startUTC.toLocalDateTime());
         Timestamp endTimeStamp = Timestamp.valueOf(endUTC.toLocalDateTime());
 //        Checks to make sure that added appointment does not overlap with others, then adds it if it doesn't
-        if (doesAppointmentOverlap(startTimeStamp, endTimeStamp)) {
+        if (checkOverlap(startTimeStamp, endTimeStamp)) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
+            alert.setTitle(rb.getString("errorTitle"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
             alert.setContentText(rb.getString("errorAppointmentOverlaps"));
             alert.showAndWait();
@@ -671,7 +670,7 @@ public class DatabaseConnection {
      * Makes sure that no appointment overlaps as required by the rubric
      * Used by addNewAppointment()
      * */
-    private static boolean doesAppointmentOverlap(Timestamp startTimestamp, Timestamp endTimestamp) {
+    private static boolean checkOverlap(Timestamp startTimestamp, Timestamp endTimestamp) {
         updateAppointmentList();
         ObservableList<Appointment> appointmentList = AppointmentList.getAppointmentList();
         for (Appointment appointment: appointmentList) {
@@ -721,9 +720,9 @@ public class DatabaseConnection {
 //            Database failure alert
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
+            alert.setTitle(rb.getString("errorTitle"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
-            alert.setContentText(rb.getString("errorConnectingToDatabaseText"));
+            alert.setContentText(rb.getString("noDatabaseConnectionContent"));
             alert.showAndWait();
         }
     }
@@ -741,11 +740,11 @@ public class DatabaseConnection {
             endUTCString = endUTCString.substring(0, 10) + " " + endUTCString.substring(11, 16) + ":00";
             Timestamp endTimestamp = Timestamp.valueOf(endUTCString);
 //            Checks to see if appointment overlaps another one
-            if (doesAppointmentOverlapOthers(startTimestamp, endTimestamp)) {
+            if (checkEditOverlap(startTimestamp, endTimestamp)) {
                 ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle(rb.getString("error"));
-                alert.setHeaderText(rb.getString("errorModifyingAppointment"));
+                alert.setTitle(rb.getString("errorTitle"));
+                alert.setHeaderText(rb.getString("errorEditingAppointment"));
                 alert.setContentText(rb.getString("errorAppointmentOverlaps"));
                 alert.showAndWait();
                 return false;
@@ -759,16 +758,16 @@ public class DatabaseConnection {
 //            Database failure alert
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
+            alert.setTitle(rb.getString("errorTitle"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
-            alert.setContentText(rb.getString("errorConnectingToDatabaseText"));
+            alert.setContentText(rb.getString("noDatabaseConnectionContent"));
             alert.showAndWait();
             return false;
         } catch (Exception e) {
 //            Catches other failures
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
+            alert.setTitle(rb.getString("errorTitle"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
             alert.setContentText(rb.getString("nonDatabaseErrorText"));
             alert.showAndWait();
@@ -777,7 +776,7 @@ public class DatabaseConnection {
     }
 
     /**
-     * Updates appointment after a check
+     * Updates appointment to the Database after a check
      * */
     private static void updateAppointment(int appointmentId, int customerId, String title, String type, String contact,
                                           Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException {
@@ -796,7 +795,7 @@ public class DatabaseConnection {
      * A secondary overlap check made for modifying existing appointments
      * Used by editAppointment()
      * */
-    private static boolean doesAppointmentOverlapOthers(Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException, ParseException {
+    private static boolean checkEditOverlap(Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException, ParseException {
         int appointmentIndexToRemove = AppointmentViewScreenController.getAppointmentIndexToEdit();
         ObservableList<Appointment> appointmentList = AppointmentList.getAppointmentList();
 //        Calls remove method from appointmentList
@@ -842,9 +841,9 @@ public class DatabaseConnection {
             catch (SQLException e) {
 //                Alert for SQL failure
                 Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
-                alert2.setTitle(rb.getString("error"));
-                alert2.setHeaderText(rb.getString("errorModifyingAppointment"));
-                alert2.setContentText(rb.getString("errorConnectingToDatabaseText"));
+                alert2.setTitle(rb.getString("errorTitle"));
+                alert2.setHeaderText(rb.getString("errorEditingAppointment"));
+                alert2.setContentText(rb.getString("noDatabaseConnectionContent"));
                 alert2.showAndWait();
             }
 //            Calls updateAppointmentList
@@ -967,7 +966,6 @@ public class DatabaseConnection {
                     stmt.executeUpdate("DELETE FROM address WHERE addressId = " + addressId);
                 }
             }
-
 //            Creates list of cityId's used in Address table
             ResultSet cityIdResultSet = stmt.executeQuery("SELECT DISTINCT cityId FROM address ORDER BY cityId");
             ArrayList<Integer> cityIdListFromAddress = new ArrayList<>();
@@ -1026,9 +1024,9 @@ public class DatabaseConnection {
 //            Throws error if SQL exception
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("error"));
+            alert.setTitle(rb.getString("errorTitle"));
             alert.setHeaderText(rb.getString("errorAddingAppointment"));
-            alert.setContentText(rb.getString("errorConnectingToDatabaseText"));
+            alert.setContentText(rb.getString("noDatabaseConnectionContent"));
             alert.showAndWait();
         }
     }
