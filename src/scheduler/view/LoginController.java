@@ -16,7 +16,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static scheduler.util.DatabaseConnection.checkLogInCredentials;
+import static scheduler.util.DatabaseConnection.checkLogInInputs;
 
 public class LoginController {
 
@@ -104,8 +104,8 @@ public class LoginController {
             return;
         }
 //        Variable to easily query the database
-        boolean correctCredentials = checkLogInCredentials(username, password);
-        if (correctCredentials) {
+        boolean correctInputs = checkLogInInputs(username, password);
+        if (correctInputs) {
             try {
 //                Loads main screen
                 Parent mainScreenParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));

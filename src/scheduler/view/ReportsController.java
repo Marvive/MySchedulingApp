@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import scheduler.model.Appointment;
 import scheduler.model.AppointmentList;
 import scheduler.model.AppointmentTypesByMonthTable;
+import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
 import java.util.*;
@@ -70,7 +71,7 @@ public class ReportsController {
 
     /**
      * Menu FXML
-     * */
+     */
 
     @FXML
     private MenuBar menuBar;
@@ -110,7 +111,7 @@ public class ReportsController {
         try {
             Parent customerParent = FXMLLoader.load(getClass().getResource("CustomerScreen.fxml"));
             Scene customerScene = new Scene(customerParent);
-            Stage customerStage = (Stage)  menuBar.getScene().getWindow();
+            Stage customerStage = (Stage) menuBar.getScene().getWindow();
             customerStage.setScene(customerScene);
             customerStage.show();
         } catch (IOException e) {
@@ -126,7 +127,7 @@ public class ReportsController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -139,7 +140,7 @@ public class ReportsController {
         try {
             Parent addAppointmentParent = FXMLLoader.load(getClass().getResource("AppointmentViewScreen.fxml"));
             Scene addAppointmentScene = new Scene(addAppointmentParent);
-            Stage addAppointmentStage = (Stage)  menuBar.getScene().getWindow();
+            Stage addAppointmentStage = (Stage) menuBar.getScene().getWindow();
             addAppointmentStage.setScene(addAppointmentScene);
             addAppointmentStage.show();
         } catch (IOException e) {
@@ -152,7 +153,7 @@ public class ReportsController {
         try {
             Parent customerParent = FXMLLoader.load(getClass().getResource("MainScreen.fxml"));
             Scene customerScene = new Scene(customerParent);
-            Stage customerStage = (Stage)  menuBar.getScene().getWindow();
+            Stage customerStage = (Stage) menuBar.getScene().getWindow();
             customerStage.setScene(customerScene);
             customerStage.show();
         } catch (IOException e) {
@@ -178,8 +179,6 @@ public class ReportsController {
             System.out.println("Cancelled Exit");
         }
     }
-
-
 
 
     private void setLanguage() {
@@ -213,7 +212,7 @@ public class ReportsController {
 
     @FXML
     private void setAppointmentTypesByMonthTableView() {
-        updateAppointmentList();
+        DatabaseConnection.updateAppointmentList();
 //        Will contain an array of strings
         ArrayList<String> monthsWithAppointmentsWithTypes = new ArrayList<>();
         ArrayList<Integer> appointmentsPerMonth = new ArrayList<>();
@@ -228,7 +227,7 @@ public class ReportsController {
             String monthString = "";
 
 //            Switch turns month numbers into words
-            switch(month) {
+            switch (month) {
                 case 1:
                     monthString = "January";
                     break;
@@ -269,9 +268,7 @@ public class ReportsController {
 
 //            For every appointment, create a string with the month, year, then Appointment Type
             String yearMonthStringType = (monthString + " " + year + "," + appointment.getType());
-
             monthsWithAppointmentsWithTypes.add(yearMonthStringType);
-
         }
 //        For Loop to compare each string to see if they match exactly across all params
         for (String appointmentFor : monthsWithAppointmentsWithTypes) {
@@ -292,7 +289,7 @@ public class ReportsController {
 
 //        Sets unique strings as an array
         ArrayList<String> transmuteToUnique = new ArrayList<>();
-        for(String set : finalDestinations) {
+        for (String set : finalDestinations) {
             if (!transmuteToUnique.contains(set)) {
                 transmuteToUnique.add(set);
             }
@@ -314,32 +311,51 @@ public class ReportsController {
         scheduleAmountColumn.setCellValueFactory(cellData -> cellData.getValue().numberOfAppointmentsProperty());
     }
 
-
-
-/**
- * Ideally, we would like to have this changed based on a combo box for each consultant
- * */
+    /**
+     * Ideally, we would like to have this changed based on a combo box for each consultant
+     */
     @FXML
     private void setConsultantScheduleTableView() {
         updateAppointmentList();
-        consultantScheduleTableView.setItems(getAppointmentList());
 
-
-//        ArrayList<String> consultantsWithAppointments = new ArrayList<>();
         ObservableList<String> consultantList = FXCollections.observableArrayList();
+
 //        call getCreatedBy() method to see who created, then add to ArrayList
 //        for each appointment in the appointmentList, get created by and add to consultantsWithAppointments
         for (Appointment appointment : AppointmentList.getAppointmentList()) {
+//            if (appointment.getStartDate().after(Calendar.getInstance().getTime())) {
             String consultant = appointment.getCreatedBy();
             if (!consultantList.contains(consultant)) {
                 consultantList.add(consultant);
             }
+//            }
         }
-
         consultantCombo.getItems().clear();
         consultantCombo.setItems(FXCollections.observableArrayList(consultantList));
         consultantCombo.getSelectionModel().selectFirst();
 
+//        Sets table data to the default item selected
+        ObservableList<Appointment> appointmentListFirst = FXCollections.observableArrayList();
+        for (Appointment appointment : AppointmentList.getAppointmentList()) {
+            if (appointment.getCreatedBy().equals(consultantCombo.getSelectionModel().selectedItemProperty().get())) {
+                appointmentListFirst.addAll(appointment);
+            }
+        }
+
+        consultantScheduleTableView.setItems(appointmentListFirst);
+
+//        Lambda that sets an addListener on the comboBox options. Changes TableView on selection
+        consultantCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+                    ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+                    for (Appointment appointment : AppointmentList.getAppointmentList()) {
+                        String consultant = appointment.getCreatedBy();
+                        if (newValue.equals(consultant)) {
+                            appointmentList.addAll(appointment);
+                        }
+                    }
+                    consultantScheduleTableView.setItems(appointmentList);
+                }
+        );
 
         appointmentTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         appointmentTypeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());

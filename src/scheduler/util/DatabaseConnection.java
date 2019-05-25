@@ -54,7 +54,7 @@ public class DatabaseConnection {
 
     /**
      * Sets the current user for public access
-     * Used by checkLogInCredentials()
+     * Used by checkLogInInputs()
      */
     private static void setCurrentUser(String userName) {
         currentUser = userName;
@@ -63,13 +63,13 @@ public class DatabaseConnection {
     /**
      * Method to validate if the user is a valid user
      */
-    public static boolean checkLogInCredentials(String userName, String password) {
+    public static boolean checkLogInInputs(String userName, String password) {
         int userId = getUserId(userName);
         boolean correctPassword = checkPassword(userId, password);
         if (correctPassword) {
             setCurrentUser(userName);
             try {
-                Path path = Paths.get("UserLog.txt");
+                Path path = Paths.get("LogIns.txt");
                 Files.write(path, Arrays.asList("Consultant, " + currentUser + " logged in at " + Date.from(Instant.now()).toString() + "."),
                         StandardCharsets.UTF_8, Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
             } catch (IOException e) {
@@ -83,7 +83,7 @@ public class DatabaseConnection {
 
     /**
      * Method to reference the UserNames from the SQL Database
-     * Used by checkLogInCredentials()
+     * Used by checkLogInInputs()
      */
     private static int getUserId(String userName) {
         try {
@@ -110,7 +110,7 @@ public class DatabaseConnection {
 
     /**
      * Method to reference the password from the SQL Database.
-     * Used by checkLogInCredentials()
+     * Used by checkLogInInputs()
      */
     private static boolean checkPassword(int userId, String password) {
         try {
@@ -851,75 +851,6 @@ public class DatabaseConnection {
             updateAppointmentList();
         }
     }
-
-    /**
-     * Creates a report for each user's schedule
-     * */
-    public static void generateScheduleForConsultants() {
-        updateAppointmentList();
-        ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
-//        Create report string
-        String report = rb.getString("lblConsultantScheduleTitle");
-        ArrayList<String> consultantsWithAppointments = new ArrayList<>();
-//        call getCreatedBy() method to see who created, then add to ArrayList
-        for (Appointment appointment : AppointmentList.getAppointmentList()) {
-            String consultant = appointment.getCreatedBy();
-            if (!consultantsWithAppointments.contains(consultant)) {
-                consultantsWithAppointments.add(consultant);
-            }
-        }
-//        Sort by consultant names
-        Collections.sort(consultantsWithAppointments);
-        for (String consultant : consultantsWithAppointments) {
-//            Add Customer name to the report add a new line
-            report = report + consultant + ": \n";
-//            For each appointment in list, grab name
-            for (Appointment appointment : AppointmentList.getAppointmentList()) {
-                String appointmentConsultant = appointment.getCreatedBy();
-//                Check if appointment was was created by the consultant
-                if (consultant.equals(appointmentConsultant)) {
-//                    Grab appointment date and title using appointment methods
-                    String date = appointment.getDateString();
-                    String title = appointment.getTitle();
-                    Date startDate = appointment.getStartDate();
-//                    Change to AM/PM instead of military time. Sees if time is greater than 12, subtracts then appends AM/PM
-                    String startTime = startDate.toString().substring(11,16);
-                    if (Integer.parseInt(startTime.substring(0,2)) > 12) {
-                        startTime = Integer.parseInt(startTime.substring(0,2)) - 12 + startTime.substring(2,5) + "PM";
-                    } else if (Integer.parseInt(startTime.substring(0,2)) == 12) {
-                        startTime += "PM";
-                    } else {
-                        startTime += "AM";
-                    }
-                    Date endDate = appointment.getEndDate();
-                    String endTime = endDate.toString().substring(11,16);
-                    if (Integer.parseInt(endTime.substring(0,2)) > 12) {
-                        endTime = Integer.parseInt(endTime.substring(0,2)) - 12 + endTime.substring(2,5) + "PM";
-                    }
-                    else if (Integer.parseInt(endTime.substring(0,2)) == 12) {
-                        endTime += "PM";
-                    } else {
-                        endTime += "AM";
-                    }
-                    // Get timezone
-                    String timeZone = startDate.toString().substring(20,23);
-                    // Add appointment info to report
-                    report = report + date + ": " + title + rb.getString("lblFrom") + startTime + rb.getString("lblTo") +
-                            endTime + " " + timeZone + ". \n";
-                }
-            }
-//            Add new Lines for spacing
-            report = report + "\n \n";
-        }
-//        Outputs report to ScheduleByConsultant.txt and overwrites if existing
-        try {
-            Path path = Paths.get("ScheduleByConsultant.txt");
-            Files.write(path, Arrays.asList(report), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     /**
      * Creates report for each othe customer's upcoming meetings
