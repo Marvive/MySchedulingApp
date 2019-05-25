@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import scheduler.model.Appointment;
 import scheduler.model.AppointmentList;
 import scheduler.model.AppointmentTypesByMonthTable;
-import scheduler.util.DatabaseConnection;
 
 import java.io.IOException;
 import java.util.*;
@@ -332,7 +331,7 @@ public class ReportsController {
 //        Sets Data on the ConsultantScheduleTableView
         setConsultantScheduleTableView();
 
-        DatabaseConnection.generateAppointmentTypeByMonthReport();
+//        DatabaseConnection.generateAppointmentTypeByMonthReport();
 
     }
 

@@ -38,8 +38,6 @@ import java.util.*;
  * out how to properly interact with the SQL database.
  */
 
-//    Class.forName(driver);
-
 
 public class DatabaseConnection {
 //    Created finals to frequently reference SQL information provided by UCertify
@@ -72,7 +70,7 @@ public class DatabaseConnection {
             setCurrentUser(userName);
             try {
                 Path path = Paths.get("UserLog.txt");
-                Files.write(path, Arrays.asList("User " + currentUser + " logged in at " + Date.from(Instant.now()).toString() + "."),
+                Files.write(path, Arrays.asList("Consultant " + currentUser + " logged in at " + Date.from(Instant.now()).toString() + "."),
                         StandardCharsets.UTF_8, Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -852,77 +850,6 @@ public class DatabaseConnection {
             }
 //            Calls updateAppointmentList
             updateAppointmentList();
-        }
-    }
-
-    /**
-     * Creates a report of appointment types by month
-     * */
-    public static void generateAppointmentTypeByMonthReport() {
-        updateAppointmentList();
-        ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
-//        Creates report string and grabs label based on language
-        String report = rb.getString("lblAppointmentTypeByMonthTitle");
-        ArrayList<String> monthsWithAppointments = new ArrayList<>();
-//        For each appointment in the list, add a year and month combo to arrayList
-        for (Appointment appointment : AppointmentList.getAppointmentList()) {
-            Date startDate = appointment.getStartDate();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(startDate);
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH) + 1;
-            String yearMonth = year + "-" + month;
-            if (month < 10) {
-                yearMonth = year + "-0" + month;
-            } else if (!monthsWithAppointments.contains(yearMonth)) {
-                monthsWithAppointments.add(yearMonth);
-            }
-        }
-//        Sorting the years and months
-        Collections.sort(monthsWithAppointments);
-        for (String yearMonth : monthsWithAppointments) {
-//            Grabs the year and month values again
-            int year = Integer.parseInt(yearMonth.substring(0,4));
-            int month = Integer.parseInt(yearMonth.substring(5,7));
-//            Initializing the counter
-            int typeCount = 0;
-            ArrayList<String> titles = new ArrayList<>();
-            for (Appointment appointment : AppointmentList.getAppointmentList()) {
-//                Grabs the appointment start date
-                Date startDate = appointment.getStartDate();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(startDate);
-//                Grabs year and month values from appointment
-                int appointmentYear = calendar.get(Calendar.YEAR);
-                int appointmentMonth = calendar.get(Calendar.MONTH) + 1;
-//                If the years and month match, grab description
-                if (year == appointmentYear && month == appointmentMonth) {
-                    String title = appointment.getTitle();
-//                    If not already in arrayList, add it then up the counter
-                    if (!titles.contains(title)) {
-                        titles.add(title);
-                        typeCount++;
-                    }
-                }
-            }
-//            Add Year and month to report
-            report = report + yearMonth + ": " + typeCount + "\n";
-            report = report + rb.getString("lblTypes");
-            // Add each type description to report
-            for (String description : titles) {
-                report = report + " " + description + ",";
-            }
-//            TODO removes last character intended for comma. Optimize with regex
-            report = report.substring(0, report.length()-1);
-//            Adds new lines for spacing
-            report = report + "\n \n";
-        }
-//        Prints out report to AppointmentTypeByMonth.txt. Will overwrite it if it exists
-        try {
-            Path path = Paths.get("AppointmentTypeByMonth.txt");
-            Files.write(path, Arrays.asList(report), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
