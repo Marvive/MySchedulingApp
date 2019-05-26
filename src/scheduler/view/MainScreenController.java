@@ -64,7 +64,6 @@ public class MainScreenController {
     @FXML
     private MenuBar menuBar;
 
-
     /**
      * Handlers for buttons and MenuBar
      * */
@@ -113,7 +112,6 @@ public class MainScreenController {
             System.out.println("Cancelled Exit");
         }
     }
-
 
     /**
      * Handler actions for customer screens

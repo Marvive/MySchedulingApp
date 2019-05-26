@@ -83,7 +83,6 @@ public class AppointmentEditScreenController {
     private final ObservableList<String> startTimes = FXCollections.observableArrayList();
     private final ObservableList<String> endTimes = FXCollections.observableArrayList();
     private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
-    private final DateTimeFormatter dateDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
 
     private ResourceBundle rb1 = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
     private final ZoneId zoneID = ZoneId.systemDefault();
@@ -414,8 +413,6 @@ public class AppointmentEditScreenController {
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
     }
 }
-
-
 
 /*
 * C. Provide the ability to add, update, and delete appointments,

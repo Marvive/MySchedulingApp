@@ -471,7 +471,6 @@ public class ReportsController {
 //        sets the customer appointments tableView
         setCustomerAppointmentsTableView();
     }
-
 }
 
 

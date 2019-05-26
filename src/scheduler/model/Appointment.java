@@ -205,11 +205,6 @@ public class Appointment {
         return this.createdBy;
     }
 
-    private final ObjectProperty<LocalDateTime> ldt = new SimpleObjectProperty<LocalDateTime>();
-
-    private final ObjectProperty<ZonedDateTime> zdt = new SimpleObjectProperty<>();
-
-
 //    Appointment Validation
     public static String isAppointmentValid(Customer customer, String title, String appointmentType,
                                             LocalDate appointmentDate, String startTime, String endTime) throws NumberFormatException {

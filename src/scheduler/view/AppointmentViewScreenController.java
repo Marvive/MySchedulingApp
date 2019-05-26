@@ -64,7 +64,6 @@ public class AppointmentViewScreenController {
      * MenuBar fxml
      */
 
-
     @FXML
     private MenuBar menuBar;
 

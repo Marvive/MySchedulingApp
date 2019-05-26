@@ -166,7 +166,6 @@ public class CustomerAddScreenController {
         }
     }
 
-
     /**
      * Menu Handlers
      */

@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import scheduler.MySchedulingApp;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -45,20 +44,15 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
-    private MySchedulingApp mainApp;
+//    Variable to store whether there should be an error
+    private static int databaseError = 0;
 
-
-    // variable for whether an error should be thrown
-    public static int databaseError = 0;
-
-    //    method for increasing Database error number
+//    A method to increase the error
     public static void incrementDatabaseError() {
         databaseError++;
     }
 
-//    Other Text
-
-    //    This Method will be in every class to set the names if of the labels
+//    Setting the language for this Login page
     private void setLanguage() {
         ResourceBundle rb = ResourceBundle.getBundle("resources/login", Locale.getDefault());
         loginTitle.setText(rb.getString("title"));
@@ -69,7 +63,6 @@ public class LoginController {
     }
 
 //    Handlers
-
     /**
      * Exit Confirmation
      * Quits App
@@ -117,7 +110,7 @@ public class LoginController {
                 e.printStackTrace();
             }
         } else if (databaseError > 0) {
-            // Check for database error Show connection error message
+//            Checks the error variable to throw an error or not
             errorLabel.setText(rb.getString("dbConnectionError"));
         } else {
 //            Calls the error message saying username or password incorrect
