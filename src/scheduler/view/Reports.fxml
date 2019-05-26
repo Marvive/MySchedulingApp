@@ -113,6 +113,27 @@
                      </children></AnchorPane>
                </content>
             </Tab>
+            <Tab fx:id="customerAppointmentTab" text="Customer Appointments">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="customerAppointmentsTableView" layoutX="81.0" layoutY="42.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                            <TableColumn fx:id="cACustomerColumn" prefWidth="75.0" text="Customer" />
+                              <TableColumn fx:id="cAConsultationColumn" prefWidth="75.0" text="Consultation" />
+                              <TableColumn fx:id="cAFollowUpColumn" prefWidth="75.0" text="Follow Up" />
+                              <TableColumn fx:id="cANewAccountColumn" prefWidth="75.0" text="New Account" />
+                            <TableColumn fx:id="cACloseAccountColumn" prefWidth="75.0" text="Close Account" />
+                              <TableColumn fx:id="caTotalColumn" prefWidth="75.0" text="Total" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
         </tabs>
       </TabPane>
    </children>
