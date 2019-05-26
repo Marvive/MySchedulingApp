@@ -393,24 +393,35 @@ public class ReportsController {
         appointmentCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
     }
 
+    private ResourceBundle rb1 = ResourceBundle.getBundle("resources/reports", Locale.getDefault());
+    private String consultationString = rb1.getString("consultation");
+    private String followUpString = rb1.getString("followUp");
+    private String newAccountString = rb1.getString("newAccount");
+    private String closeAccountString = rb1.getString("closeAccount");
+
+//    private ObservableList<XYChart.Series<String, Double>> getChartData() {
+//        double aValue = 0;
+//
+//        ObservableList<XYChart.Series<String, Double>> data = FXCollections.observableArrayList();
+//
+//        XYChart.Series<String, Double> aSeries = new XYChart.Series<String, Double>();
+//
+//        for (Appointment appointment: AppointmentList.getAppointmentList()) {
+//            aSeries.getData().add(consultationString, aValue);
+//        }
+//
+//
+//        return null;
+//    }
+
     /**
      * Sets a bar chart of how many appointments each customer has
      * */
     @FXML
     private void setBarChart() {
-        ResourceBundle rb = ResourceBundle.getBundle("resources/reports", Locale.getDefault());
         DatabaseConnection.updateAppointmentList();
-
-//        Defining x axis
-//        xAxis.setCategories(FXCollections.observableArrayList(Arrays.asList(
-//                rb.getString("followUp"), rb.getString("closeAccount"),
-//                rb.getString("newAccount"), rb.getString("consultation"))));
-
-
-//        Axis Labels
-        xAxis.setLabel(rb.getString("customers"));
-        yAxis.setLabel(rb.getString("appointments"));
-
+        ObservableList<XYChart.Data<String, Integer>> data = FXCollections.observableArrayList();
+        XYChart.Series<String, Integer> series = new XYChart.Series<>();
 
         ArrayList<String> customerNamesWithAppointments = new ArrayList<>();
 //        Setting the Categories
@@ -421,19 +432,128 @@ public class ReportsController {
             }
         }
 
-        xAxis.setCategories(FXCollections.observableArrayList(customerNamesWithAppointments));
+//        for (Appointment appointment: getAppointmentList()) {
+//            String type = appointment.getType();
+//            int counter = 0;
+//            for (String customer : customerNamesWithAppointments) {
+//                if (appointment.getContact().equals(customer)) {
+//                    counter++;
+//                }
+//            }
+//
+//            data.add(new XYChart.Data<>(type, counter));
+//
+//        }
+//
+//        System.out.println(data);
 
-//        System.out.println(customerNamesWithAppointments);
-//        new XYChart.Data<>(item.getName(), item.getValue1()))
-        ObservableList<XYChart.Data<String, Number>> data = FXCollections.observableArrayList();
+        for (Appointment appointment2 : AppointmentList.getAppointmentList()) {
+
+        }
 
 
 
 
-        barChart.getData().add(new XYChart.Series<>(rb.getString("consultation"), data));
-        barChart.getData().add(new XYChart.Series<>(rb.getString("followUp"), data));
-        barChart.getData().add(new XYChart.Series<>(rb.getString("newAccount"), data));
-        barChart.getData().add(new XYChart.Series<>(rb.getString("closeAccount"), data));
+
+        for (Appointment appointment: AppointmentList.getAppointmentList()) {
+            int counter1 = 0;
+            int counter2 = 0;
+            int counter3 = 0;
+            int counter4 = 0;
+            String type1 ="";
+            String type2 ="";
+            String type3 ="";
+            String type4 ="";
+            for (String customer : customerNamesWithAppointments) {
+                if (appointment.getContact().equals(customer)) {
+                    System.out.print(customer + " ");
+                    if (appointment.getType().equals(consultationString)) {
+                        type1 = appointment.getType();
+                        counter1++;
+
+                    } else if (appointment.getType().equals(followUpString)) {
+                        counter2++;
+
+                    } else if (appointment.getType().equals(newAccountString)) {
+                        counter3++;
+
+                    } else if (appointment.getType().equals(closeAccountString)) {
+                        counter4++;
+
+                    }
+                }
+                if (!type1.equals("")) {
+                    data.add(new XYChart.Data<>(type1, counter1));
+                }
+            }
+
+
+        }
+        System.out.println();
+        System.out.println(data);
+
+
+
+//        data.addAll(series);
+//        barChart.getData().add(series);
+
+
+
+
+////        ResourceBundle rb = ResourceBundle.getBundle("resources/reports", Locale.getDefault());
+//        DatabaseConnection.updateAppointmentList();
+//
+////        Axis Labels
+//        xAxis.setLabel(rb1.getString("customers"));
+//        yAxis.setLabel(rb1.getString("appointments"));
+//
+//
+//        ArrayList<String> customerNamesWithAppointments = new ArrayList<>();
+////        Setting the Categories
+//        for (Appointment appointment: AppointmentList.getAppointmentList()) {
+//            String name = appointment.getContact();
+//            if (!(customerNamesWithAppointments.contains(name))){
+//                customerNamesWithAppointments.add(name);
+//            }
+//        }
+//
+//        xAxis.setCategories(FXCollections.observableArrayList(customerNamesWithAppointments));
+//
+//
+//
+//
+////        new XYChart.Data<>(item.getName(), item.getValue1()))
+//        ObservableList<XYChart.Data<String, Number>> data = FXCollections.observableArrayList();
+//        ObservableList<XYChart.Data<String, Number>> data2 = FXCollections.observableArrayList();
+//        ObservableList<XYChart.Data<String, Number>> data3 = FXCollections.observableArrayList();
+//        ObservableList<XYChart.Data<String, Number>> data4 = FXCollections.observableArrayList();
+//
+//
+////        For each customer in customerNamesWithAppointments, get the types of Appointments and add to data
+//        for (Appointment appointment: AppointmentList.getAppointmentList()) {
+//            for (String customer : customerNamesWithAppointments) {
+//                if (appointment.getContact().equals(customer)) {
+////                    data.add();
+//                    if (appointment.getType().equals(consultationString)) {
+//                        data.add(consultationString, );
+//                    } else if (appointment.getType().equals(followUpString)) {
+//                        data2.add(followUpString, );
+//                    } else if (appointment.getType().equals(newAccountString)) {
+//                        data3.add(newAccountString, );
+//                    } else if (appointment.getType().equals(closeAccountString)) {
+//                        data4.add(closeAccountString, );
+//                    } else {
+//                        System.out.println(appointment.getType());
+//                    }
+////                    System.out.println(appointment.getType());
+//                }
+//            }
+//        }
+//
+//        barChart.getData().add(new XYChart.Series<>(consultationString, data));
+//        barChart.getData().add(new XYChart.Series<>(followUpString, data2));
+//        barChart.getData().add(new XYChart.Series<>(newAccountString, data3));
+//        barChart.getData().add(new XYChart.Series<>(closeAccountString, data4));
 
 
 
