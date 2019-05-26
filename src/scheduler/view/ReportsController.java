@@ -229,6 +229,13 @@ public class ReportsController {
         menuBarGoCustomers.setText(rb.getString("menuBarGoCustomers"));
 
         consultantText.setText(rb.getString("consultantText"));
+
+        cACustomerColumn.setText(rb.getString("cACustomerColumn"));
+        cAConsultationColumn.setText(rb.getString("cAConsultationColumn"));
+        cAFollowUpColumn.setText(rb.getString("cAFollowUpColumn"));
+        cANewAccountColumn.setText(rb.getString("cANewAccountColumn"));
+        cACloseAccountColumn.setText(rb.getString("cACloseAccountColumn"));
+        caTotalColumn.setText(rb.getString("caTotalColumn"));
     }
 
     /**
