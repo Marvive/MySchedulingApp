@@ -88,9 +88,9 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
         int userId = -1;
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
-             Statement stmt = conn.createStatement()) {
-            ResultSet userIdSet = stmt.executeQuery("SELECT userId FROM user WHERE userName = '" + userName + "'");
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             Statement statement = connection.createStatement()) {
+            ResultSet userIdSet = statement.executeQuery("SELECT userId FROM user WHERE userName = '" + userName + "'");
             if (userIdSet.next()) {
                 userId = userIdSet.getInt("userId");
             }
@@ -111,10 +111,10 @@ public class DatabaseConnection {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
-             Statement stmt = conn.createStatement()) {
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             Statement statement = connection.createStatement()) {
 
-            ResultSet passwordSet = stmt.executeQuery("SELECT password FROM user WHERE userId = " + userId);
+            ResultSet passwordSet = statement.executeQuery("SELECT password FROM user WHERE userId = " + userId);
             String dbPassword;
             if (passwordSet.next()) {
                 dbPassword = passwordSet.getString("password");
@@ -171,14 +171,14 @@ public class DatabaseConnection {
      */
     public static void updateCustomerList() {
 //        Try to connect to DB
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
-             Statement stmt = conn.createStatement()) {
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             Statement statement = connection.createStatement()) {
 //            Query the database and clear
             ObservableList<Customer> customerList = CustomerList.getCustomerList();
 //            Clear method removes everything from an arrayList. We need to clear in order to update the information
             customerList.clear();
 //            Queries database to create an INT list of customerId's
-            ResultSet customerIdResultSet = stmt.executeQuery("SELECT customerId FROM customer WHERE active = 1");
+            ResultSet customerIdResultSet = statement.executeQuery("SELECT customerId FROM customer WHERE active = 1");
             ArrayList<Integer> customerIdList = new ArrayList<>();
             while (customerIdResultSet.next()) {
                 customerIdList.add(customerIdResultSet.getInt(1));
@@ -188,7 +188,7 @@ public class DatabaseConnection {
 //                Creates a customer instance
                 Customer customer = new Customer();
 //                Query database for instance
-                ResultSet customerResultSet = stmt.executeQuery("SELECT customerName, active, addressId FROM customer WHERE customerId = " + customerId);
+                ResultSet customerResultSet = statement.executeQuery("SELECT customerName, active, addressId FROM customer WHERE customerId = " + customerId);
                 customerResultSet.next();
                 String customerName = customerResultSet.getString(1);
                 int active = customerResultSet.getInt(2);
@@ -199,7 +199,7 @@ public class DatabaseConnection {
                 customer.setActive(active);
                 customer.setAddressId(addressId);
 //                Queries database for address information
-                ResultSet addressResultSet = stmt.executeQuery("SELECT address, address2, postalCode, phone, cityId FROM address WHERE addressId = " + addressId);
+                ResultSet addressResultSet = statement.executeQuery("SELECT address, address2, postalCode, phone, cityId FROM address WHERE addressId = " + addressId);
                 addressResultSet.next();
                 String address = addressResultSet.getString(1);
                 String address2 = addressResultSet.getString(2);
@@ -213,7 +213,7 @@ public class DatabaseConnection {
                 customer.setPhone(phone);
                 customer.setCityId(cityId);
 //                Queries DB again for City information
-                ResultSet cityResultSet = stmt.executeQuery("SELECT city, countryId FROM city WHERE cityId = " + cityId);
+                ResultSet cityResultSet = statement.executeQuery("SELECT city, countryId FROM city WHERE cityId = " + cityId);
                 cityResultSet.next();
                 String city = cityResultSet.getString(1);
                 int countryId = cityResultSet.getInt(2);
@@ -221,7 +221,7 @@ public class DatabaseConnection {
                 customer.setCity(city);
                 customer.setCountryId(countryId);
 //                Queries DB again for Country information
-                ResultSet countryResultSet = stmt.executeQuery("SELECT country FROM country WHERE countryId = " + countryId);
+                ResultSet countryResultSet = statement.executeQuery("SELECT country FROM country WHERE countryId = " + countryId);
                 countryResultSet.next();
                 String country = countryResultSet.getString(1);
 //                sets Country information using methods from Customer class
@@ -252,9 +252,9 @@ public class DatabaseConnection {
 //            Check if customer is already in the database
             if (checkIfCustomerExists(customerName, addressId)) {
 //                if true, then it will query DB
-                try (Connection conn = DriverManager.getConnection(url, user, pass);
-                     Statement stmt = conn.createStatement()) {
-                    ResultSet activeResultSet = stmt.executeQuery("SELECT active FROM customer WHERE " +
+                try (Connection connection = DriverManager.getConnection(url, user, pass);
+                     Statement statement = connection.createStatement()) {
+                    ResultSet activeResultSet = statement.executeQuery("SELECT active FROM customer WHERE " +
                             "customerName = '" + customerName + "' AND addressId = " + addressId);
                     activeResultSet.next();
                     int active = activeResultSet.getInt(1);
@@ -290,9 +290,9 @@ public class DatabaseConnection {
     * */
     public static int calculateCountryId(String country) {
 //        Try to connect to DB
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
-             Statement stmt = conn.createStatement()) {
-            ResultSet countryIdCheck = stmt.executeQuery("SELECT countryId FROM country WHERE country = '" + country + "'");
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             Statement statement = connection.createStatement()) {
+            ResultSet countryIdCheck = statement.executeQuery("SELECT countryId FROM country WHERE country = '" + country + "'");
 //            Check to see if already exists. Will return the country ID if it does
             if (countryIdCheck.next()) {
                 int countryId = countryIdCheck.getInt(1);
@@ -301,7 +301,7 @@ public class DatabaseConnection {
             } else {
                 countryIdCheck.close();
                 int countryId;
-                ResultSet allCountryId = stmt.executeQuery("SELECT countryId FROM country ORDER BY countryId");
+                ResultSet allCountryId = statement.executeQuery("SELECT countryId FROM country ORDER BY countryId");
 //                Adding +1 to the country ID count
                 if (allCountryId.last()) {
                     countryId = allCountryId.getInt(1) + 1;
@@ -312,7 +312,7 @@ public class DatabaseConnection {
                     countryId = 1;
                 }
 //                Update databse with the new countryId value
-                stmt.executeUpdate("INSERT INTO country VALUES (" + countryId + ", '" + country + "', CURRENT_DATE, " +
+                statement.executeUpdate("INSERT INTO country VALUES (" + countryId + ", '" + country + "', CURRENT_DATE, " +
                         "'" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
                 return countryId;
             }
@@ -328,9 +328,9 @@ public class DatabaseConnection {
     * */
     public static int calculateCityId(String city, int countryId) {
 //        Try to connect to DB
-        try (Connection conn = DriverManager.getConnection(url,user,pass);
-             Statement stmt = conn.createStatement()) {
-            ResultSet cityIdCheck = stmt.executeQuery("SELECT cityId FROM city WHERE city = '" + city + "' AND countryid = " + countryId);
+        try (Connection connection = DriverManager.getConnection(url,user,pass);
+             Statement statement = connection.createStatement()) {
+            ResultSet cityIdCheck = statement.executeQuery("SELECT cityId FROM city WHERE city = '" + city + "' AND countryid = " + countryId);
 //            Add or check to see if city exists
             if (cityIdCheck.next()) {
                 int cityId = cityIdCheck.getInt(1);
@@ -339,7 +339,7 @@ public class DatabaseConnection {
             } else {
                 cityIdCheck.close();
                 int cityId;
-                ResultSet allCityId = stmt.executeQuery("SELECT cityId FROM city ORDER BY cityId");
+                ResultSet allCityId = statement.executeQuery("SELECT cityId FROM city ORDER BY cityId");
 //                If the city exists, then add +1 to it
                 if (allCityId.last()) {
                     cityId = allCityId.getInt(1) + 1;
@@ -350,7 +350,7 @@ public class DatabaseConnection {
                     cityId = 1;
                 }
 //                Create the new item if it doesn't exist
-                stmt.executeUpdate("INSERT INTO city VALUES (" + cityId + ", '" + city + "', " + countryId + ", CURRENT_DATE, " +
+                statement.executeUpdate("INSERT INTO city VALUES (" + cityId + ", '" + city + "', " + countryId + ", CURRENT_DATE, " +
                         "'" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
                 return cityId;
             }
@@ -366,9 +366,9 @@ public class DatabaseConnection {
     * */
     public static int calculateAddressId(String address, String address2, String postalCode, String phone, int cityId) {
 //        Try to connect to database
-        try (Connection conn = DriverManager.getConnection(url,user,pass);
-             Statement stmt = conn.createStatement()) {
-            ResultSet addressIdCheck = stmt.executeQuery("SELECT addressId FROM address WHERE address = '" + address + "' AND " +
+        try (Connection connection = DriverManager.getConnection(url,user,pass);
+             Statement statement = connection.createStatement()) {
+            ResultSet addressIdCheck = statement.executeQuery("SELECT addressId FROM address WHERE address = '" + address + "' AND " +
                     "address2 = '" + address2 + "' AND postalCode = '" + postalCode + "' AND phone = '" + phone + "' AND cityId = " + cityId);
 //            If address already exists, else add to ID's
             if (addressIdCheck.next()) {
@@ -378,7 +378,7 @@ public class DatabaseConnection {
             } else {
                 addressIdCheck.close();
                 int addressId;
-                ResultSet allAddressId = stmt.executeQuery("SELECT addressId FROM address ORDER BY addressId");
+                ResultSet allAddressId = statement.executeQuery("SELECT addressId FROM address ORDER BY addressId");
                 if (allAddressId.last()) {
                     addressId = allAddressId.getInt(1) + 1;
                     allAddressId.close();
@@ -387,7 +387,7 @@ public class DatabaseConnection {
                     addressId = 1;
                 }
 //                Create new Entry
-                stmt.executeUpdate("INSERT INTO address VALUES (" + addressId + ", '" + address + "', '" +address2 + "', " + cityId + ", " +
+                statement.executeUpdate("INSERT INTO address VALUES (" + addressId + ", '" + address + "', '" +address2 + "', " + cityId + ", " +
                         "'" + postalCode + "', '" + phone + "', CURRENT_DATE, '" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
                 return addressId;
             }
@@ -404,9 +404,9 @@ public class DatabaseConnection {
     * */
     private static boolean checkIfCustomerExists(String customerName, int addressId) throws SQLException {
 //        Connect to DB
-        try (Connection conn = DriverManager.getConnection(url,user,pass);
-             Statement stmt = conn.createStatement()) {
-            ResultSet customerIdCheck = stmt.executeQuery("SELECT customerId FROM customer WHERE customerName = '"
+        try (Connection connection = DriverManager.getConnection(url,user,pass);
+             Statement statement = connection.createStatement()) {
+            ResultSet customerIdCheck = statement.executeQuery("SELECT customerId FROM customer WHERE customerName = '"
                     + customerName + "' " + "AND addressId = " + addressId);
             if (customerIdCheck.next()) {
                 customerIdCheck.close();
@@ -423,8 +423,8 @@ public class DatabaseConnection {
      * Used by addNewCustomer() and editCustomer()
     * */
     public static void setCustomerToActive(String customerName, int addressId) {
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
-             Statement stmt = conn.createStatement()) {
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             Statement statement = connection.createStatement()) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
 //            Alert and confirmation before setting a customer to active
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -435,7 +435,7 @@ public class DatabaseConnection {
             Optional<ButtonType> result = alert.showAndWait();
 //            If OK button is clicked, then it will update the SQL database
             if (result.get() == ButtonType.OK) {
-                stmt.executeUpdate("UPDATE customer SET active = 1, lastUpdate = CURRENT_TIMESTAMP, " +
+                statement.executeUpdate("UPDATE customer SET active = 1, lastUpdate = CURRENT_TIMESTAMP, " +
                         "lastUpdateBy = '" + currentUser + "' WHERE customerName = '" + customerName + "' AND addressId = " + addressId);
             }
         } catch (SQLException e) {
@@ -448,9 +448,9 @@ public class DatabaseConnection {
     * */
     private static void addCustomer(String customerName, int addressId) throws SQLException {
 //        Connect to DB
-        try (Connection conn = DriverManager.getConnection(url,user,pass);
-             Statement stmt = conn.createStatement()) {
-            ResultSet allCustomerId = stmt.executeQuery("SELECT customerId FROM customer ORDER BY customerId");
+        try (Connection connection = DriverManager.getConnection(url,user,pass);
+             Statement statement = connection.createStatement()) {
+            ResultSet allCustomerId = statement.executeQuery("SELECT customerId FROM customer ORDER BY customerId");
             int customerId;
 //            If ID exists, add +1 to last value, else set to 1
             if (allCustomerId.last()) {
@@ -461,7 +461,7 @@ public class DatabaseConnection {
                 customerId = 1;
             }
 //            Creates entry to customerId
-            stmt.executeUpdate("INSERT INTO customer VALUES (" + customerId + ", '" + customerName + "', " +
+            statement.executeUpdate("INSERT INTO customer VALUES (" + customerId + ", '" + customerName + "', " +
                     addressId + ", 1, " + "CURRENT_DATE, '" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
         }
     }
@@ -505,16 +505,16 @@ public class DatabaseConnection {
      * */
     private static void cleanDatabase() {
 //        Connect to DB
-        try (Connection conn = DriverManager.getConnection(url,user,pass);
-             Statement stmt = conn.createStatement()) {
+        try (Connection connection = DriverManager.getConnection(url,user,pass);
+             Statement statement = connection.createStatement()) {
 //            Creates list of addressId's in Customer Table
-            ResultSet addressIdResultSet = stmt.executeQuery("SELECT DISTINCT addressId FROM customer ORDER BY addressId");
+            ResultSet addressIdResultSet = statement.executeQuery("SELECT DISTINCT addressId FROM customer ORDER BY addressId");
             ArrayList<Integer> addressIdListFromCustomer = new ArrayList<>();
             while (addressIdResultSet.next()) {
                 addressIdListFromCustomer.add(addressIdResultSet.getInt(1));
             }
 //            Creates list of addressId's in Address table
-            addressIdResultSet = stmt.executeQuery("SELECT DISTINCT addressId FROM address ORDER BY addressId");
+            addressIdResultSet = statement.executeQuery("SELECT DISTINCT addressId FROM address ORDER BY addressId");
             ArrayList<Integer> addressIdListFromAddress = new ArrayList<>();
             while (addressIdResultSet.next()) {
                 addressIdListFromAddress.add(addressIdResultSet.getInt(1));
@@ -531,17 +531,17 @@ public class DatabaseConnection {
 //            Deletes Address table entries by remaining addressId's, if any remain
             if (!addressIdListFromAddress.isEmpty()) {
                 for (int addressId : addressIdListFromAddress) {
-                    stmt.executeUpdate("DELETE FROM address WHERE addressId = " + addressId);
+                    statement.executeUpdate("DELETE FROM address WHERE addressId = " + addressId);
                 }
             }
 //            Creates list of cityId's used in Address table
-            ResultSet cityIdResultSet = stmt.executeQuery("SELECT DISTINCT cityId FROM address ORDER BY cityId");
+            ResultSet cityIdResultSet = statement.executeQuery("SELECT DISTINCT cityId FROM address ORDER BY cityId");
             ArrayList<Integer> cityIdListFromAddress = new ArrayList<>();
             while (cityIdResultSet.next()) {
                 cityIdListFromAddress.add(cityIdResultSet.getInt(1));
             }
 //            Creates list of cityId's used in City table
-            cityIdResultSet = stmt.executeQuery("SELECT DISTINCT cityId FROM city ORDER BY cityId");
+            cityIdResultSet = statement.executeQuery("SELECT DISTINCT cityId FROM city ORDER BY cityId");
             ArrayList<Integer> cityIdListFromCity = new ArrayList<>();
             while (cityIdResultSet.next()) {
                 cityIdListFromCity.add(cityIdResultSet.getInt(1));
@@ -558,17 +558,17 @@ public class DatabaseConnection {
 //            Delete City table entries by remaining cityId's, if any remain
             if (!cityIdListFromCity.isEmpty()) {
                 for (int cityId : cityIdListFromCity) {
-                    stmt.executeUpdate("DELETE FROM city WHERE cityId = " + cityId);
+                    statement.executeUpdate("DELETE FROM city WHERE cityId = " + cityId);
                 }
             }
 //            Create list of countryId's used in City table
-            ResultSet countryIdResultSet = stmt.executeQuery("SELECT DISTINCT countryId FROM city ORDER BY countryId");
+            ResultSet countryIdResultSet = statement.executeQuery("SELECT DISTINCT countryId FROM city ORDER BY countryId");
             ArrayList<Integer> countryIdListFromCity = new ArrayList<>();
             while (countryIdResultSet.next()) {
                 countryIdListFromCity.add(countryIdResultSet.getInt(1));
             }
 //            Creates list of countryId's used in Country table
-            countryIdResultSet = stmt.executeQuery("SELECT DISTINCT countryId FROM country ORDER BY countryId");
+            countryIdResultSet = statement.executeQuery("SELECT DISTINCT countryId FROM country ORDER BY countryId");
             ArrayList<Integer> countryIdListFromCountry = new ArrayList<>();
             while (countryIdResultSet.next()) {
                 countryIdListFromCountry.add(countryIdResultSet.getInt(1));
@@ -585,7 +585,7 @@ public class DatabaseConnection {
 //            Deletes Country table entries by remaining countryId's, if any remain
             if (!countryIdListFromCountry.isEmpty()) {
                 for (int countryId : countryIdListFromCountry) {
-                    stmt.executeUpdate("DELETE FROM country WHERE countryId = " + countryId);
+                    statement.executeUpdate("DELETE FROM country WHERE countryId = " + countryId);
                 }
             }
         } catch (SQLException e) {
@@ -605,9 +605,9 @@ public class DatabaseConnection {
      * */
     private static int getCustomerId(String customerName, int addressId) throws SQLException {
 //        Connect to DB
-        try (Connection conn = DriverManager.getConnection(url,user,pass);
-             Statement stmt = conn.createStatement()) {
-            ResultSet customerIdResultSet = stmt.executeQuery("SELECT customerId FROM customer WHERE customerName = '" + customerName + "' AND addressId = " + addressId);
+        try (Connection connection = DriverManager.getConnection(url,user,pass);
+             Statement statement = connection.createStatement()) {
+            ResultSet customerIdResultSet = statement.executeQuery("SELECT customerId FROM customer WHERE customerName = '" + customerName + "' AND addressId = " + addressId);
             customerIdResultSet.next();
             return customerIdResultSet.getInt(1);
         }
@@ -619,9 +619,9 @@ public class DatabaseConnection {
     * */
     private static int getActiveStatus(int customerId) throws SQLException {
 //        Connect to database
-        try (Connection conn = DriverManager.getConnection(url,user,pass);
-             Statement stmt = conn.createStatement()) {
-            ResultSet activeResultSet = stmt.executeQuery("SELECT active FROM customer WHERE customerId = " + customerId);
+        try (Connection connection = DriverManager.getConnection(url,user,pass);
+             Statement statement = connection.createStatement()) {
+            ResultSet activeResultSet = statement.executeQuery("SELECT active FROM customer WHERE customerId = " + customerId);
             activeResultSet.next();
             return activeResultSet.getInt(1);
         }
@@ -632,9 +632,9 @@ public class DatabaseConnection {
      * Used by editCustomer()
     * */
     private static void updateCustomer(int customerId, String customerName, int addressId) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(url,user,pass);
-             Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate("UPDATE customer SET customerName = '" + customerName + "', addressId = " + addressId + ", " +
+        try (Connection connection = DriverManager.getConnection(url,user,pass);
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate("UPDATE customer SET customerName = '" + customerName + "', addressId = " + addressId + ", " +
                     "lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = '" + currentUser + "' WHERE customerId = " + customerId);
         }
     }
@@ -654,9 +654,9 @@ public class DatabaseConnection {
         Optional<ButtonType> result = alert.showAndWait();
 //        If OK is pressed, then proceed. Catches errors if cannot connect to DB
         if (result.get() == ButtonType.OK) {
-            try (Connection conn = DriverManager.getConnection(url,user,pass);
-                 Statement stmt = conn.createStatement()) {
-                stmt.executeUpdate("UPDATE customer SET active = 0 WHERE customerId = " + customerId);
+            try (Connection connection = DriverManager.getConnection(url,user,pass);
+                 Statement statement = connection.createStatement()) {
+                statement.executeUpdate("UPDATE customer SET active = 0 WHERE customerId = " + customerId);
             } catch (SQLException e) {
 //                If it fails it will throw this database error
                 Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
@@ -676,13 +676,13 @@ public class DatabaseConnection {
      * */
     public static void updateAppointmentList() {
 //        DB Connection
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
-             Statement stmt = conn.createStatement()) {
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             Statement statement = connection.createStatement()) {
 //            Calls getAppointmentList() from AppointmentList
             ObservableList<Appointment> appointmentList = AppointmentList.getAppointmentList();
             appointmentList.clear();
 //            Create list of appointmentId's for all appointments that are in the FUTURE. Will not display old appointments
-            ResultSet appointmentResultSet = stmt.executeQuery("SELECT appointmentId FROM appointment WHERE start >= CURRENT_TIMESTAMP");
+            ResultSet appointmentResultSet = statement.executeQuery("SELECT appointmentId FROM appointment WHERE start >= CURRENT_TIMESTAMP");
             ArrayList<Integer> appointmentIdList = new ArrayList<>();
 //            Iterates over each appointment grabbed by the Query and grabs the ID
             while(appointmentResultSet.next()) {
@@ -691,7 +691,7 @@ public class DatabaseConnection {
 //            For Loop to create Appointment for each appointmentId in list and adds the object to appointmentList
             for (int appointmentId : appointmentIdList) {
 //                Queries database for appointment information
-                appointmentResultSet = stmt.executeQuery("SELECT customerId, title, description, location, contact, url, start, end, createdBy FROM appointment WHERE appointmentId = " + appointmentId);
+                appointmentResultSet = statement.executeQuery("SELECT customerId, title, description, location, contact, url, start, end, createdBy FROM appointment WHERE appointmentId = " + appointmentId);
                 appointmentResultSet.next();
                 int customerId = appointmentResultSet.getInt(1);
                 String title = appointmentResultSet.getString(2);
@@ -790,9 +790,9 @@ public class DatabaseConnection {
 //        Created Null values as they are not required for the project, but is useful for updating the DB
         String location = null;
 //        Connects to DB. Uses a fuller path since I'm creating a url variable as a parameter
-        try (Connection conn = DriverManager.getConnection(DatabaseConnection.url,user,pass);
-             Statement stmt = conn.createStatement()) {
-            ResultSet allAppointmentId = stmt.executeQuery("SELECT appointmentId FROM appointment ORDER BY appointmentId");
+        try (Connection connection = DriverManager.getConnection(DatabaseConnection.url,user,pass);
+             Statement statement = connection.createStatement()) {
+            ResultSet allAppointmentId = statement.executeQuery("SELECT appointmentId FROM appointment ORDER BY appointmentId");
             int appointmentId;
             if (allAppointmentId.last()) {
                 appointmentId = allAppointmentId.getInt(1) + 1;
@@ -802,7 +802,7 @@ public class DatabaseConnection {
                 appointmentId = 1;
             }
 //            Creates the new entry
-            stmt.executeUpdate("INSERT INTO appointment VALUES (" + appointmentId +", " + customerId + ", '" + title + "', '" +
+            statement.executeUpdate("INSERT INTO appointment VALUES (" + appointmentId +", " + customerId + ", '" + title + "', '" +
                     type + "', '" + location + "', '" + contact + "', '" + url + "', '" + startTimestamp + "', '" + endTimestamp + "', " +
                     "CURRENT_DATE, '" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
         } catch (SQLException e) {
@@ -872,9 +872,9 @@ public class DatabaseConnection {
                                           Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException {
         String location = null;
 //        Connects to DB. Uses full url path since we're using url as a parameter
-        try (Connection conn = DriverManager.getConnection(DatabaseConnection.url,user,pass);
-             Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate("UPDATE appointment SET customerId = " + customerId + ", title = '" + title + "', " +
+        try (Connection connection = DriverManager.getConnection(DatabaseConnection.url,user,pass);
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate("UPDATE appointment SET customerId = " + customerId + ", title = '" + title + "', " +
                     "location = '" + location + "', contact = '" + contact +  "', description = '" + type + "', start = '"
                     + startTimestamp + "', end = '" + endTimestamp + "', " +
                     "lastUpdate = CURRENT_TIMESTAMP, lastUpdateBy = '" + currentUser + "' WHERE appointmentId = " + appointmentId);
@@ -924,9 +924,9 @@ public class DatabaseConnection {
         Optional<ButtonType> result = alert.showAndWait();
 //        Action if Confirmed with OK button
         if (result.get() == ButtonType.OK) {
-            try (Connection conn = DriverManager.getConnection(url,user,pass);
-                 Statement stmt = conn.createStatement()) {
-                stmt.executeUpdate("DELETE FROM appointment WHERE appointmentId =" + appointmentId);
+            try (Connection connection = DriverManager.getConnection(url,user,pass);
+                 Statement statement = connection.createStatement()) {
+                statement.executeUpdate("DELETE FROM appointment WHERE appointmentId =" + appointmentId);
             }
             catch (SQLException e) {
 //                Alert for SQL failure
