@@ -24,8 +24,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static scheduler.model.CustomerRoster.getCustomerRoster;
-import static scheduler.util.DatabaseConnection.updateCustomerRoster;
+import static scheduler.model.CustomerList.getCustomerList;
+import static scheduler.util.DatabaseConnection.updateCustomerList;
 
 
 /**
@@ -118,8 +118,8 @@ public class AppointmentAddScreenController {
      * Adds data to TableView
      * */
     private void updateCustomerTableView() {
-        updateCustomerRoster();
-        customerSelectTableView.setItems(getCustomerRoster());
+        updateCustomerList();
+        customerSelectTableView.setItems(getCustomerList());
     }
 
     private final ObservableList<String> startTimes = FXCollections.observableArrayList();

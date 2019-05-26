@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static scheduler.model.CustomerRoster.getCustomerRoster;
+import static scheduler.model.CustomerList.getCustomerList;
 import static scheduler.util.DatabaseConnection.setCustomerToInactive;
 
 public class CustomerScreenController {
@@ -128,7 +128,7 @@ public class CustomerScreenController {
             return;
         }
 //        Sets index of the customers to be modified
-        customerIndexToModify = getCustomerRoster().indexOf(customerToModify);
+        customerIndexToModify = getCustomerList().indexOf(customerToModify);
 //        Opens customerEditScreen
         try {
             Parent modifyCustomerParent = FXMLLoader.load(getClass().getResource("CustomerEditScreen.fxml"));
@@ -140,8 +140,6 @@ public class CustomerScreenController {
             e.printStackTrace();
         }
     }
-
-
 
     /**
      * Deletes the selected customer from the Table then sets customer to inactive
@@ -236,8 +234,8 @@ public class CustomerScreenController {
     }
 
     private void updateCustomerTableView() {
-        DatabaseConnection.updateCustomerRoster();
-        customerTableView.setItems(getCustomerRoster());
+        DatabaseConnection.updateCustomerList();
+        customerTableView.setItems(getCustomerList());
     }
 
 
@@ -265,7 +263,6 @@ public class CustomerScreenController {
         menuBarGoMain.setText(rb.getString("menuBarGoMain"));
         menuBarGoReports.setText(rb.getString("menuBarGoReports"));
         menuBarGoAppointments.setText(rb.getString("menuBarGoAppointments"));
-
     }
 
     @FXML
@@ -278,7 +275,6 @@ public class CustomerScreenController {
         customerCountryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
         customerPhoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
     }
-
 
     @FXML
     public void initialize() {

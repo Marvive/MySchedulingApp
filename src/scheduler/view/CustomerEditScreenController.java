@@ -17,7 +17,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static scheduler.model.CustomerRoster.getCustomerRoster;
+import static scheduler.model.CustomerList.getCustomerList;
 import static scheduler.util.DatabaseConnection.*;
 
 public class CustomerEditScreenController {
@@ -268,7 +268,7 @@ public class CustomerEditScreenController {
 
     private void getCustomerInfo() {
 //        Selects customer to modify by the index number
-        customer = getCustomerRoster().get(customerIndexToModify);
+        customer = getCustomerList().get(customerIndexToModify);
 //        Grabs customer information from the DB
         String customerName = customer.getCustomerName();
         String address = customer.getAddress();

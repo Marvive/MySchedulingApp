@@ -23,12 +23,12 @@ import java.time.format.FormatStyle;
 import java.util.*;
 
 import static scheduler.model.AppointmentList.getAppointmentList;
-import static scheduler.model.CustomerRoster.getCustomerRoster;
-import static scheduler.util.DatabaseConnection.updateCustomerRoster;
+import static scheduler.model.CustomerList.getCustomerList;
+import static scheduler.util.DatabaseConnection.updateCustomerList;
 
 
 /**
- * Primary difference here from the EditScreen is that this will not be autopopulated
+ * Primary difference here from the EditScreen is that this will not be auto populated
  * based on what was selected. This will be a slightly more simple controller
  */
 
@@ -264,8 +264,8 @@ public class AppointmentEditScreenController {
 //    Update Customer Table View
 
     private void updateCustomerTableView() {
-        updateCustomerRoster();
-        customerSelectTableView.setItems(getCustomerRoster());
+        updateCustomerList();
+        customerSelectTableView.setItems(getCustomerList());
     }
 
 
@@ -365,21 +365,6 @@ public class AppointmentEditScreenController {
         appointmentTypePicker.setItems(typeList);
     }
 
-
-
-//    This function was meant to be used in initialize to set the selection of the customer in the table
-//    private Customer forIndex(Appointment appointment) {
-//        updateCustomerRoster();
-//        for (Customer customer : CustomerRoster.getCustomerRoster()
-//        ) {
-//            if (appointment.getCustomerId() == customer.getCustomerId()) {
-//                return customer;
-//            }
-//        }
-//        System.out.println("No Customer");
-//        return null;
-//    }
-
     /**
      * Initialize the data from selected item and set language
      */
@@ -390,7 +375,6 @@ public class AppointmentEditScreenController {
 //        Creates actions for buttons
         saveButton.setOnAction(event -> saveButtonHandler(event));
         cancelButton.setOnAction(event -> cancelButtonHandler(event));
-
 //        Modifies item based on appointment index
         appointment = getAppointmentList().get(appointmentIndexToModify);
 //        Grabs information from the selected appointment

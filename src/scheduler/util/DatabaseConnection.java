@@ -9,7 +9,7 @@ import javafx.stage.Modality;
 import scheduler.model.Appointment;
 import scheduler.model.AppointmentList;
 import scheduler.model.Customer;
-import scheduler.model.CustomerRoster;
+import scheduler.model.CustomerList;
 import scheduler.view.AppointmentViewScreenController;
 import scheduler.view.LoginController;
 
@@ -169,21 +169,21 @@ public class DatabaseConnection {
     /**
      * Method to update the customer roster when the database changes
      */
-    public static void updateCustomerRoster() {
+    public static void updateCustomerList() {
 //        Try to connect to DB
         try (Connection conn = DriverManager.getConnection(url, user, pass);
              Statement stmt = conn.createStatement()) {
 //            Query the database and clear
-            ObservableList<Customer> customerRoster = CustomerRoster.getCustomerRoster();
+            ObservableList<Customer> customerList = CustomerList.getCustomerList();
 //            Clear method removes everything from an arrayList. We need to clear in order to update the information
-            customerRoster.clear();
+            customerList.clear();
 //            Queries database to create an INT list of customerId's
             ResultSet customerIdResultSet = stmt.executeQuery("SELECT customerId FROM customer WHERE active = 1");
             ArrayList<Integer> customerIdList = new ArrayList<>();
             while (customerIdResultSet.next()) {
                 customerIdList.add(customerIdResultSet.getInt(1));
             }
-//            for loop to create a customer object for each customerId in the list, then adds Customer to customerRoster
+//            for loop to create a customer object for each customerId in the list, then adds Customer to customerList
             for (int customerId : customerIdList) {
 //                Creates a customer instance
                 Customer customer = new Customer();
@@ -226,8 +226,8 @@ public class DatabaseConnection {
                 String country = countryResultSet.getString(1);
 //                sets Country information using methods from Customer class
                 customer.setCountry(country);
-//                Adds the new Customer object based on the information to the customerRoster instance
-                customerRoster.add(customer);
+//                Adds the new Customer object based on the information to the customerList instance
+                customerList.add(customer);
             }
         } catch (SQLException e) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
@@ -666,7 +666,7 @@ public class DatabaseConnection {
                 alert2.showAndWait();
             }
 //            Will pass the information into the roster
-            updateCustomerRoster();
+            updateCustomerList();
         }
     }
 

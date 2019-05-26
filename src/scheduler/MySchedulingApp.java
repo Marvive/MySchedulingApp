@@ -12,7 +12,6 @@ public class MySchedulingApp extends Application {
     @Override
 //    Initial startup of App, calls showLoginScreen Method
     public void start(Stage primaryStage) throws Exception {
-
         primaryStage.setResizable(false);
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("My Scheduling App");
