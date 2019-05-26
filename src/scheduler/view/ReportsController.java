@@ -7,6 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -102,6 +106,28 @@ public class ReportsController {
 
     @FXML
     private Menu menuBarFile;
+
+//    private final CategoryAxis xAxis = new CategoryAxis();
+//    private final NumberAxis yAxis = new NumberAxis();
+
+    @FXML
+    private BarChart<String, Number> barChart;
+    @FXML
+    private CategoryAxis xAxis;
+    @FXML
+    private NumberAxis yAxis;
+
+
+
+
+
+//    CategoryAxis xAxis    = new CategoryAxis();
+//xAxis.setLabel("Devices");
+//
+//    NumberAxis yAxis = new NumberAxis();
+//yAxis.setLabel("Visits");
+//
+//    BarChart     barChart = new BarChart(xAxis, yAxis);
 
     /**
      * Menu Handlers
@@ -210,6 +236,9 @@ public class ReportsController {
         consultantText.setText(rb.getString("consultantText"));
     }
 
+    /**
+     * Shows the appointment Types per month report Table
+     * */
     @FXML
     private void setAppointmentTypesByMonthTableView() {
         DatabaseConnection.updateAppointmentList();
@@ -312,7 +341,7 @@ public class ReportsController {
     }
 
     /**
-     * Ideally, we would like to have this changed based on a combo box for each consultant
+     * Shows the schedule of each consultant based on which consultant is selected
      */
     @FXML
     private void setConsultantScheduleTableView() {
@@ -364,6 +393,69 @@ public class ReportsController {
         appointmentCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().contactProperty());
     }
 
+    /**
+     * Sets a bar chart of how many appointments each customer has
+     * */
+    @FXML
+    private void setBarChart() {
+        ResourceBundle rb = ResourceBundle.getBundle("resources/reports", Locale.getDefault());
+        DatabaseConnection.updateAppointmentList();
+
+//        Defining x axis
+//        xAxis.setCategories(FXCollections.observableArrayList(Arrays.asList(
+//                rb.getString("followUp"), rb.getString("closeAccount"),
+//                rb.getString("newAccount"), rb.getString("consultation"))));
+
+
+//        Axis Labels
+        xAxis.setLabel(rb.getString("customers"));
+        yAxis.setLabel(rb.getString("appointments"));
+
+
+        ArrayList<String> customerNamesWithAppointments = new ArrayList<>();
+//        Setting the Categories
+        for (Appointment appointment: AppointmentList.getAppointmentList()) {
+            String name = appointment.getContact();
+            if (!(customerNamesWithAppointments.contains(name))){
+                customerNamesWithAppointments.add(name);
+            }
+        }
+
+        xAxis.setCategories(FXCollections.observableArrayList(customerNamesWithAppointments));
+
+//        System.out.println(customerNamesWithAppointments);
+//        new XYChart.Data<>(item.getName(), item.getValue1()))
+        ObservableList<XYChart.Data<String, Number>> data = FXCollections.observableArrayList();
+
+
+
+
+        barChart.getData().add(new XYChart.Series<>(rb.getString("consultation"), data));
+        barChart.getData().add(new XYChart.Series<>(rb.getString("followUp"), data));
+        barChart.getData().add(new XYChart.Series<>(rb.getString("newAccount"), data));
+        barChart.getData().add(new XYChart.Series<>(rb.getString("closeAccount"), data));
+
+
+
+//        BarChart<String, Number> chart =
+//                new BarChart<String, Number>(new CategoryAxis(), new NumberAxis());
+//        chart.getData().add(new XYChart.Series<>("Value 1", dataSet1));
+//        chart.getData().add(new XYChart.Series<>("Value 2", dataSet2));
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
     @FXML
     public void initialize() {
 //        Sets the local Language
@@ -373,7 +465,8 @@ public class ReportsController {
 //        Sets Data on the ConsultantScheduleTableView
         setConsultantScheduleTableView();
 
-//        setLastReport();
+//        Sets the Bar Chart Data
+        setBarChart();
     }
 
 }

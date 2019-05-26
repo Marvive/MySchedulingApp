@@ -70,7 +70,7 @@ public class DatabaseConnection {
             setCurrentUser(userName);
             try {
                 Path path = Paths.get("LogIns.txt");
-                Files.write(path, Arrays.asList("Consultant, " + currentUser + " logged in at " + Date.from(Instant.now()).toString() + "."),
+                Files.write(path, Collections.singletonList("Consultant, " + currentUser + " logged in at " + Date.from(Instant.now()).toString() + "."),
                         StandardCharsets.UTF_8, Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -504,9 +504,110 @@ public class DatabaseConnection {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("errorTitle"));
             alert.setHeaderText(rb.getString("errorEditingCustomer"));
-            alert.setContentText(rb.getString("errorRequiresDatabaseText"));
+            alert.setContentText(rb.getString("noDatabaseConnectionContent"));
             alert.showAndWait();
             return -1;
+        }
+    }
+
+    /**
+     * Cleans up the database entries that no longer are paired with customers
+     * This is necessary due to the changing of data from Edit appointment
+     * Used by editCustomer()
+     * */
+    private static void cleanDatabase() {
+//        Connect to DB
+        try (Connection conn = DriverManager.getConnection(url,user,pass);
+             Statement stmt = conn.createStatement()) {
+//            Creates list of addressId's in Customer Table
+            ResultSet addressIdResultSet = stmt.executeQuery("SELECT DISTINCT addressId FROM customer ORDER BY addressId");
+            ArrayList<Integer> addressIdListFromCustomer = new ArrayList<>();
+            while (addressIdResultSet.next()) {
+                addressIdListFromCustomer.add(addressIdResultSet.getInt(1));
+            }
+//            Creates list of addressId's in Address table
+            addressIdResultSet = stmt.executeQuery("SELECT DISTINCT addressId FROM address ORDER BY addressId");
+            ArrayList<Integer> addressIdListFromAddress = new ArrayList<>();
+            while (addressIdResultSet.next()) {
+                addressIdListFromAddress.add(addressIdResultSet.getInt(1));
+            }
+//            Creates list of addressId's that exist in Address table but are not used in Customer table
+            for (Integer value : addressIdListFromCustomer) {
+                for (int j = 0; j < addressIdListFromAddress.size(); j++) {
+                    if (value.equals(addressIdListFromAddress.get(j))) {
+                        addressIdListFromAddress.remove(j);
+                        j--;
+                    }
+                }
+            }
+//            Deletes Address table entries by remaining addressId's, if any remain
+            if (!addressIdListFromAddress.isEmpty()) {
+                for (int addressId : addressIdListFromAddress) {
+                    stmt.executeUpdate("DELETE FROM address WHERE addressId = " + addressId);
+                }
+            }
+//            Creates list of cityId's used in Address table
+            ResultSet cityIdResultSet = stmt.executeQuery("SELECT DISTINCT cityId FROM address ORDER BY cityId");
+            ArrayList<Integer> cityIdListFromAddress = new ArrayList<>();
+            while (cityIdResultSet.next()) {
+                cityIdListFromAddress.add(cityIdResultSet.getInt(1));
+            }
+//            Creates list of cityId's used in City table
+            cityIdResultSet = stmt.executeQuery("SELECT DISTINCT cityId FROM city ORDER BY cityId");
+            ArrayList<Integer> cityIdListFromCity = new ArrayList<>();
+            while (cityIdResultSet.next()) {
+                cityIdListFromCity.add(cityIdResultSet.getInt(1));
+            }
+//            Creates list of cityId's that exist in City table but are not used in Address table
+            for (Integer idListFromAddress : cityIdListFromAddress) {
+                for (int j = 0; j < cityIdListFromCity.size(); j++) {
+                    if (idListFromAddress.equals(cityIdListFromCity.get(j))) {
+                        cityIdListFromCity.remove(j);
+                        j--;
+                    }
+                }
+            }
+//            Delete City table entries by remaining cityId's, if any remain
+            if (!cityIdListFromCity.isEmpty()) {
+                for (int cityId : cityIdListFromCity) {
+                    stmt.executeUpdate("DELETE FROM city WHERE cityId = " + cityId);
+                }
+            }
+//            Create list of countryId's used in City table
+            ResultSet countryIdResultSet = stmt.executeQuery("SELECT DISTINCT countryId FROM city ORDER BY countryId");
+            ArrayList<Integer> countryIdListFromCity = new ArrayList<>();
+            while (countryIdResultSet.next()) {
+                countryIdListFromCity.add(countryIdResultSet.getInt(1));
+            }
+//            Creates list of countryId's used in Country table
+            countryIdResultSet = stmt.executeQuery("SELECT DISTINCT countryId FROM country ORDER BY countryId");
+            ArrayList<Integer> countryIdListFromCountry = new ArrayList<>();
+            while (countryIdResultSet.next()) {
+                countryIdListFromCountry.add(countryIdResultSet.getInt(1));
+            }
+//            Creates list of countryId's that exist in Country table but are not used in City table
+            for (Integer integer : countryIdListFromCity) {
+                for (int j = 0; j < countryIdListFromCountry.size(); j++) {
+                    if (integer.equals(countryIdListFromCountry.get(j))) {
+                        countryIdListFromCountry.remove(j);
+                        j--;
+                    }
+                }
+            }
+//            Deletes Country table entries by remaining countryId's, if any remain
+            if (!countryIdListFromCountry.isEmpty()) {
+                for (int countryId : countryIdListFromCountry) {
+                    stmt.executeUpdate("DELETE FROM country WHERE countryId = " + countryId);
+                }
+            }
+        } catch (SQLException e) {
+//            Throws error if SQL exception
+            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(rb.getString("errorTitle"));
+            alert.setHeaderText(rb.getString("errorAddingAppointment"));
+            alert.setContentText(rb.getString("noDatabaseConnectionContent"));
+            alert.showAndWait();
         }
     }
 
@@ -643,7 +744,7 @@ public class DatabaseConnection {
     }
 
     /**
-     * Adds appointment to database unless it exists
+     * Adds appointment to database unless it overlaps another
      * */
     public static boolean addNewAppointment(Customer customer, String title, String type, ZonedDateTime startUTC, ZonedDateTime endUTC) {
 //        Change ZonedDateTimes to Timestamps.
@@ -751,7 +852,7 @@ public class DatabaseConnection {
             } else {
 //                Else update the appointment and return true
                 int customerId = customer.getCustomerId();
-                updateAppointment(appointmentId, customerId, title, type, contact, startTimestamp, endTimestamp);
+                updateAppointmentInDB(appointmentId, customerId, title, type, contact, startTimestamp, endTimestamp);
                 return true;
             }
         } catch (SQLException e) {
@@ -777,8 +878,9 @@ public class DatabaseConnection {
 
     /**
      * Updates appointment to the Database after a check
+     * Used by editAppointment()
      * */
-    private static void updateAppointment(int appointmentId, int customerId, String title, String type, String contact,
+    private static void updateAppointmentInDB(int appointmentId, int customerId, String title, String type, String contact,
                                           Timestamp startTimestamp, Timestamp endTimestamp) throws SQLException {
         String location = null;
 //        Connects to DB. Uses full url path since we're using url as a parameter
@@ -930,106 +1032,7 @@ public class DatabaseConnection {
         }
     }
 
-    /**
-     * Cleans up the database entries that no longer are paired with customers
-     * This is necessary due to the changing of data from Edit appointment
-     * TODO review if this is necessary!!!
-     * */
-    private static void cleanDatabase() {
-//        Connect to DB
-        try (Connection conn = DriverManager.getConnection(url,user,pass);
-             Statement stmt = conn.createStatement()) {
-//            Creates list of addressId's in Customer Table
-            ResultSet addressIdResultSet = stmt.executeQuery("SELECT DISTINCT addressId FROM customer ORDER BY addressId");
-            ArrayList<Integer> addressIdListFromCustomer = new ArrayList<>();
-            while (addressIdResultSet.next()) {
-                addressIdListFromCustomer.add(addressIdResultSet.getInt(1));
-            }
-//            Creates list of addressId's in Address table
-            addressIdResultSet = stmt.executeQuery("SELECT DISTINCT addressId FROM address ORDER BY addressId");
-            ArrayList<Integer> addressIdListFromAddress = new ArrayList<>();
-            while (addressIdResultSet.next()) {
-                addressIdListFromAddress.add(addressIdResultSet.getInt(1));
-            }
-//            Creates list of addressId's that exist in Address table but are not used in Customer table
-            for (Integer value : addressIdListFromCustomer) {
-                for (int j = 0; j < addressIdListFromAddress.size(); j++) {
-                    if (value.equals(addressIdListFromAddress.get(j))) {
-                        addressIdListFromAddress.remove(j);
-                        j--;
-                    }
-                }
-            }
-//            Deletes Address table entries by remaining addressId's, if any remain
-            if (!addressIdListFromAddress.isEmpty()) {
-                for (int addressId : addressIdListFromAddress) {
-                    stmt.executeUpdate("DELETE FROM address WHERE addressId = " + addressId);
-                }
-            }
-//            Creates list of cityId's used in Address table
-            ResultSet cityIdResultSet = stmt.executeQuery("SELECT DISTINCT cityId FROM address ORDER BY cityId");
-            ArrayList<Integer> cityIdListFromAddress = new ArrayList<>();
-            while (cityIdResultSet.next()) {
-                cityIdListFromAddress.add(cityIdResultSet.getInt(1));
-            }
-//            Creates list of cityId's used in City table
-            cityIdResultSet = stmt.executeQuery("SELECT DISTINCT cityId FROM city ORDER BY cityId");
-            ArrayList<Integer> cityIdListFromCity = new ArrayList<>();
-            while (cityIdResultSet.next()) {
-                cityIdListFromCity.add(cityIdResultSet.getInt(1));
-            }
-//            Creates list of cityId's that exist in City table but are not used in Address table
-            for (Integer idListFromAddress : cityIdListFromAddress) {
-                for (int j = 0; j < cityIdListFromCity.size(); j++) {
-                    if (idListFromAddress.equals(cityIdListFromCity.get(j))) {
-                        cityIdListFromCity.remove(j);
-                        j--;
-                    }
-                }
-            }
-//            Delete City table entries by remaining cityId's, if any remain
-            if (!cityIdListFromCity.isEmpty()) {
-                for (int cityId : cityIdListFromCity) {
-                    stmt.executeUpdate("DELETE FROM city WHERE cityId = " + cityId);
-                }
-            }
-//            Create list of countryId's used in City table
-            ResultSet countryIdResultSet = stmt.executeQuery("SELECT DISTINCT countryId FROM city ORDER BY countryId");
-            ArrayList<Integer> countryIdListFromCity = new ArrayList<>();
-            while (countryIdResultSet.next()) {
-                countryIdListFromCity.add(countryIdResultSet.getInt(1));
-            }
-//            Creates list of countryId's used in Country table
-            countryIdResultSet = stmt.executeQuery("SELECT DISTINCT countryId FROM country ORDER BY countryId");
-            ArrayList<Integer> countryIdListFromCountry = new ArrayList<>();
-            while (countryIdResultSet.next()) {
-                countryIdListFromCountry.add(countryIdResultSet.getInt(1));
-            }
-//            Creates list of countryId's that exist in Country table but are not used in City table
-            for (Integer integer : countryIdListFromCity) {
-                for (int j = 0; j < countryIdListFromCountry.size(); j++) {
-                    if (integer.equals(countryIdListFromCountry.get(j))) {
-                        countryIdListFromCountry.remove(j);
-                        j--;
-                    }
-                }
-            }
-//            Deletes Country table entries by remaining countryId's, if any remain
-            if (!countryIdListFromCountry.isEmpty()) {
-                for (int countryId : countryIdListFromCountry) {
-                    stmt.executeUpdate("DELETE FROM country WHERE countryId = " + countryId);
-                }
-            }
-        } catch (SQLException e) {
-//            Throws error if SQL exception
-            ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(rb.getString("errorTitle"));
-            alert.setHeaderText(rb.getString("errorAddingAppointment"));
-            alert.setContentText(rb.getString("noDatabaseConnectionContent"));
-            alert.showAndWait();
-        }
-    }
+
 }
 
 

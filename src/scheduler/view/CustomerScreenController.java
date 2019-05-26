@@ -254,6 +254,7 @@ public class CustomerScreenController {
         customerAddress2Column.setText(rb.getString("customerAddressLabel2"));
         customerAddButton.setText(rb.getString("customerAddButton"));
         customerEditButton.setText(rb.getString("customerEditButton"));
+        deleteButton.setText(rb.getString("deleteButton"));
 
         menuBarLogOut.setText(rb.getString("menuBarLogOut"));
         menuBarClose.setText(rb.getString("menuBarClose"));
