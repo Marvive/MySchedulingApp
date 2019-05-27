@@ -150,15 +150,14 @@ public class DatabaseConnection {
 //                Generates message for the notification. Calls on methods from appointment class
                 if (appointment.getStartDate().before(notificationCutoff)) {
                     ResourceBundle rb = ResourceBundle.getBundle("resources/MainScreen", Locale.getDefault());
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle(rb.getString("upcomingNotificationTitle"));
-                    alert.setContentText(rb.getString("upcomingNotificationText") + "\n" + rb.getString("title")
+                    Alert alertAppointmentWithinFifteen = new Alert(Alert.AlertType.INFORMATION);
+                    alertAppointmentWithinFifteen.setTitle(rb.getString("upcomingNotificationTitle"));
+                    alertAppointmentWithinFifteen.setContentText(rb.getString("upcomingNotificationText") + "\n" + rb.getString("title")
                             + ": " + appointment.getTitle() + "\n" + rb.getString("description") + ": " + appointment.getTitle() +
-                            "\n" + rb.getString("location") + ": " + appointment.getLocation() + "\n" + rb.getString("contact") +
-                            ": " + appointment.getContact() + "\n" + rb.getString("url") + ": " + appointment.getUrl() + "\n" +
+                            "\n" + rb.getString("contact") + ": " + appointment.getContact() + "\n" +
                             rb.getString("date") + ": " + appointment.getDateString() + "\n" + rb.getString("startTime") + ": " +
                             appointment.getStartString() + "\n" + rb.getString("endTime") + ": " + appointment.getEndString());
-                    alert.showAndWait();
+                    alertAppointmentWithinFifteen.showAndWait();
                 }
             }
 //            Counter is to make sure that the notification only shows up once during login
@@ -832,6 +831,7 @@ public class DatabaseConnection {
         ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
 //        Created Null values as they are not required for the project, but is useful for updating the DB
         String location = null;
+        String url = null;
 //        Connects to DB. Uses a fuller path since I'm creating a url variable as a parameter
         try (Connection connection = DriverManager.getConnection(DatabaseConnection.url,user,pass);
              Statement statement = connection.createStatement()) {

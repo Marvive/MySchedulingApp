@@ -20,7 +20,6 @@ public class CustomerAppointmentsTable {
         this.total = new SimpleStringProperty(counterTotal);
     }
 
-
     public String getCustomer() {
         return customer.get();
     }
