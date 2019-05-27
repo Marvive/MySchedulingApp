@@ -377,6 +377,7 @@ public class ReportsController {
         consultantScheduleTableView.setItems(appointmentListFirst);
 
 //        Lambda that sets an addListener on the comboBox options. Changes TableView on selection
+//        More organized in line here than referencing an outside method
         consultantCombo.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
                     ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
                     for (Appointment appointment : AppointmentList.getAppointmentList()) {
@@ -388,7 +389,7 @@ public class ReportsController {
                     consultantScheduleTableView.setItems(appointmentList);
                 }
         );
-
+//        Lambda is used here to populate the tableView. Much easier than not using a lambda.
         appointmentTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         appointmentTypeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
         appointmentDateColumn.setCellValueFactory(cellData -> cellData.getValue().dateStringProperty());
@@ -454,6 +455,7 @@ public class ReportsController {
 
 
         customerAppointmentsTableView.setItems(caData);
+//        Lambda is used here to populate the tableview. Much easier than not using a lambda.
         cACustomerColumn.setCellValueFactory(cellData -> cellData.getValue().customerProperty());
         cAConsultationColumn.setCellValueFactory(cellData -> cellData.getValue().consultationProperty());
         cAFollowUpColumn.setCellValueFactory(cellData -> cellData.getValue().followUpProperty());

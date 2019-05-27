@@ -179,7 +179,6 @@ public class AppointmentViewScreenController {
         }
     }
 
-
     private ResourceBundle rb1 = ResourceBundle.getBundle("resources/appointmentViewScreen", Locale.getDefault());
 
     @FXML
@@ -199,6 +198,7 @@ public class AppointmentViewScreenController {
 //        Selects the first option so that comboBox will not be blank
         comboBox.getSelectionModel().selectFirst();
 //        Lambda that sets an addListener on the comboBox options.
+//        Better organized placing in line with the rest of the combobox data.
         comboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
                     if (newValue.equals(rb1.getString("allView"))) {
                         DatabaseConnection.updateAppointmentList();
@@ -337,6 +337,7 @@ public class AppointmentViewScreenController {
 
     @FXML
     private void setTableView() {
+//        Lambda is used here to populate the tableView. Much easier than not using a lambda.
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
         startColumn.setCellValueFactory(cellData -> cellData.getValue().startStringProperty());
@@ -350,7 +351,7 @@ public class AppointmentViewScreenController {
      */
     public void initialize() {
         setLanguage();
-//        Lambdas to call methods on buttons
+//        Lambdas to call methods on buttons. More efficient than manipulating files/
         newAppointmentButton.setOnAction(event -> newAppointmentHandler(event));
         editAppointmentButton.setOnAction(event -> editAppointmentHandler(event));
         deleteAppointmentButton.setOnAction(event -> deleteAppointmentHandler(event));

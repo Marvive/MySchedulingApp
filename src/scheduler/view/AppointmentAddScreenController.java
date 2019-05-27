@@ -364,7 +364,7 @@ public class AppointmentAddScreenController {
     public void initialize() {
 //        Sets the Language
         setLanguage();
-//        Lambdas to assign actions to buttons
+//        Lambdas to assign actions to buttons. More efficient handling them this way.
         cancelButton.setOnAction(event -> cancelButtonHandler(event));
         saveButton.setOnAction(event -> saveButtonHandler(event));
 //        Assigns Data to the Table Column

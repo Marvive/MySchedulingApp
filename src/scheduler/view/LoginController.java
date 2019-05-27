@@ -125,7 +125,7 @@ public class LoginController {
     public void initialize() {
 //        Calls setLanguage() to see text in proper language
         setLanguage();
-//        Lambda to assign action to login button
+//        Lambda to assign action to login button. Easier than traditional way.
         loginSignInButton.setOnAction(event -> loginSignInButtonHandler(event));
     }
 

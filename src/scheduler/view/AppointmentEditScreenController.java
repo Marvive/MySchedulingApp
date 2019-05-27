@@ -372,7 +372,7 @@ public class AppointmentEditScreenController {
     public void initialize() {
 //        Sets the local language
         setLanguage();
-//        Creates actions for buttons
+//        Creates actions for buttons. More efficient than manipulating the files.
         saveButton.setOnAction(event -> saveButtonHandler(event));
         cancelButton.setOnAction(event -> cancelButtonHandler(event));
 //        Modifies item based on appointment index
@@ -411,6 +411,7 @@ public class AppointmentEditScreenController {
         setData();
 //        Updates table views
         updateCustomerTableView();
+//        Lambda is used here to populate the tableview. Much easier than not using a lambda.
         customerColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
     }
 }

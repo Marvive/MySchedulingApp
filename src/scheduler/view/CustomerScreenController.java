@@ -268,7 +268,7 @@ public class CustomerScreenController {
 
     @FXML
     private void setTableView() {
-//        Lambdas to set the values of the tableView cells
+//        Lambda is used here to populate the tableView. Much easier than not using a lambda.
         customerNameColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
         customerAddressColumn.setCellValueFactory(cellData -> cellData.getValue().addressProperty());
         customerAddress2Column.setCellValueFactory(cellData -> cellData.getValue().address2Property());
