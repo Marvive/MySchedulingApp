@@ -177,17 +177,18 @@ public class AppointmentEditScreenController {
 
     @FXML
     void menuBarCloseHandler() {
+        ResourceBundle rb = ResourceBundle.getBundle("resources/MainScreen", Locale.getDefault());
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initModality(Modality.NONE);
-        alert.setTitle("Exit");
-        alert.setHeaderText("Exiting Program!");
-        alert.setContentText("Press OK to exit the Program");
+        alert.setTitle(rb.getString("exitTitle"));
+        alert.setHeaderText(rb.getString("exitHeader"));
+        alert.setContentText(rb.getString("exitContent"));
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get() == ButtonType.OK) {
             System.exit(0);
         } else {
-            System.out.println("Cancelled Exit");
+            System.out.println(rb.getString("cancelledExit"));
         }
     }
 
