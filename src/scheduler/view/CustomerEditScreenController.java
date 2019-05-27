@@ -166,7 +166,7 @@ public class CustomerEditScreenController {
 //        Check if customer is active
         if (modifyCustomerCheck == 1) {
             ResourceBundle rb = ResourceBundle.getBundle("resources/databaseConnection", Locale.getDefault());
-            // Create alert saying that customer already exists
+//            Checks if customer exists
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(rb.getString("error"));
             alert.setHeaderText(rb.getString("errorModifyingCustomer"));
@@ -175,7 +175,6 @@ public class CustomerEditScreenController {
 
         } else if (modifyCustomerCheck == 0) {
 //        Check if customer is inactive
-            // Calculate country, city and addressId's
             int countryId = calculateCountryId(country);
             int cityId = calculateCityId(city, countryId);
             int addressId = calculateAddressId(address, address2, postalCode, phone, cityId);
