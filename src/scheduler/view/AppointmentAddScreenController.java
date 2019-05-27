@@ -125,7 +125,6 @@ public class AppointmentAddScreenController {
     private final ObservableList<String> startTimes = FXCollections.observableArrayList();
     private final ObservableList<String> endTimes = FXCollections.observableArrayList();
     private final DateTimeFormatter timeDTF = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT);
-    private final DateTimeFormatter dateDTF = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
 
     private ResourceBundle rb1 = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());
     private final ZoneId zoneID = ZoneId.systemDefault();
