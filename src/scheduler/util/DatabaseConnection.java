@@ -281,7 +281,7 @@ public class DatabaseConnection {
                 addCustomer(customerName, addressId);
             }
         } catch (SQLException e) {
-//            Catch block to create an alert notifying the user that an error occurred. This is a catch all but will fire if there is no connection
+//            Catch block to create an alert notifying the user that an error occurred.
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle(rb.getString("errorTitle"));
             alert.setHeaderText(rb.getString("noDatabaseConnectionHeader"));
@@ -344,7 +344,8 @@ public class DatabaseConnection {
 //        Try to connect to DB
         try (Connection connection = DriverManager.getConnection(url,user,pass);
              Statement statement = connection.createStatement()) {
-            ResultSet cityIdCheck = statement.executeQuery("SELECT cityId FROM city WHERE city = '" + city + "' AND countryid = " + countryId);
+            ResultSet cityIdCheck = statement.executeQuery("SELECT cityId FROM city WHERE city = '"
+                    + city + "' AND countryid = " + countryId);
 //            Add or check to see if city exists
             if (cityIdCheck.next()) {
                 int cityId = cityIdCheck.getInt(1);
@@ -364,8 +365,8 @@ public class DatabaseConnection {
                     cityId = 1;
                 }
 //                Create the new item if it doesn't exist
-                statement.executeUpdate("INSERT INTO city VALUES (" + cityId + ", '" + city + "', " + countryId + ", CURRENT_DATE, " +
-                        "'" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
+                statement.executeUpdate("INSERT INTO city VALUES (" + cityId + ", '" + city + "', " + countryId +
+                        ", CURRENT_DATE, " + "'" + currentUser + "', CURRENT_TIMESTAMP, '" + currentUser + "')");
                 return cityId;
             }
         } catch (SQLException e) {
@@ -637,7 +638,8 @@ public class DatabaseConnection {
 //        Connect to DB
         try (Connection connection = DriverManager.getConnection(url,user,pass);
              Statement statement = connection.createStatement()) {
-            ResultSet customerIdResultSet = statement.executeQuery("SELECT customerId FROM customer WHERE customerName = '" + customerName + "' AND addressId = " + addressId);
+            ResultSet customerIdResultSet = statement.executeQuery("SELECT customerId FROM customer WHERE customerName = '"
+                    + customerName + "' AND addressId = " + addressId);
             customerIdResultSet.next();
             return customerIdResultSet.getInt(1);
         }
@@ -745,7 +747,8 @@ public class DatabaseConnection {
                 java.util.Date startDate = utcFormat.parse(startTimestamp.toString());
                 java.util.Date endDate = utcFormat.parse(endTimestamp.toString());
 //                Adds information to the Appointment instance
-                Appointment appointment = new Appointment(appointmentId, customerId, title, description, location, contact, url, startTimestamp, endTimestamp, startDate, endDate, createdBy);
+                Appointment appointment = new Appointment(appointmentId, customerId, title, description,
+                        location, contact, url, startTimestamp, endTimestamp, startDate, endDate, createdBy);
 //                Adds instance to appointmentList
                 appointmentList.add(appointment);
             }
@@ -771,7 +774,8 @@ public class DatabaseConnection {
     /**
      * Adds appointment to database unless it overlaps another
      * */
-    public static boolean addNewAppointment(Customer customer, String title, String type, ZonedDateTime startUTC, ZonedDateTime endUTC) {
+    public static boolean addNewAppointment(Customer customer, String title, String type,
+                                            ZonedDateTime startUTC, ZonedDateTime endUTC) {
 //        Change ZonedDateTimes to Timestamps.
         Timestamp startTimeStamp = Timestamp.valueOf(startUTC.toLocalDateTime());
         Timestamp endTimeStamp = Timestamp.valueOf(endUTC.toLocalDateTime());

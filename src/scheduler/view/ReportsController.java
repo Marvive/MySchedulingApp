@@ -455,7 +455,7 @@ public class ReportsController {
 
 
         customerAppointmentsTableView.setItems(caData);
-//        Lambda is used here to populate the tableview. Much easier than not using a lambda.
+//        Lambda is used here to populate the tableView. Much easier than not using a lambda.
         cACustomerColumn.setCellValueFactory(cellData -> cellData.getValue().customerProperty());
         cAConsultationColumn.setCellValueFactory(cellData -> cellData.getValue().consultationProperty());
         cAFollowUpColumn.setCellValueFactory(cellData -> cellData.getValue().followUpProperty());
