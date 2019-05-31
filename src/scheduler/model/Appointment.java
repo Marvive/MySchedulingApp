@@ -39,14 +39,14 @@ public class Appointment {
         this.location = new SimpleStringProperty(location);
         this.contact = new SimpleStringProperty(contact);
         this.url = new SimpleStringProperty(url);
-        this.startTimestamp = startTimestamp;
+        this.startTimestamp = startTimestamp; //This is correct
         this.endTimestamp = endTimestamp;
-        this.startDate = startDate;
+        this.startDate = startDate; //This is 7 hours behind
         this.endDate = endDate;
         SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy");
         this.dateString = new SimpleStringProperty(format.format(startDate));
         SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm a z");
-        this.startString = new SimpleStringProperty(formatTime.format(startDate));
+        this.startString = new SimpleStringProperty(formatTime.format(startDate));//This is also is 7 hours behind
         this.endString = new SimpleStringProperty(formatTime.format(endDate));
         this.createdBy = new SimpleStringProperty(createdBy);
     }

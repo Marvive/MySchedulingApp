@@ -213,9 +213,6 @@ public class AppointmentAddScreenController {
         }
     }
 
-//    ObservableList to hold the customer assigned to the appointment
-    private ObservableList<Customer> currentCustomers = FXCollections.observableArrayList();
-
     @FXML
     void cancelButtonHandler(ActionEvent event) {
         ResourceBundle rb = ResourceBundle.getBundle("resources/appointmentAddScreen", Locale.getDefault());

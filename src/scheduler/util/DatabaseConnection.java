@@ -729,7 +729,8 @@ public class DatabaseConnection {
 //            For Loop to create Appointment for each appointmentId in list and adds the object to appointmentList
             for (int appointmentId : appointmentIdList) {
 //                Queries database for appointment information
-                appointmentResultSet = statement.executeQuery("SELECT customerId, title, description, location, contact, url, start, end, createdBy FROM appointment WHERE appointmentId = " + appointmentId);
+                appointmentResultSet = statement.executeQuery("SELECT customerId, title, description, location, " +
+                        "contact, url, start, end, createdBy FROM appointment WHERE appointmentId = " + appointmentId);
                 appointmentResultSet.next();
                 int customerId = appointmentResultSet.getInt(1);
                 String title = appointmentResultSet.getString(2);
@@ -739,12 +740,17 @@ public class DatabaseConnection {
                 String url = appointmentResultSet.getString(6);
                 Timestamp startTimestamp = appointmentResultSet.getTimestamp(7);
                 Timestamp endTimestamp = appointmentResultSet.getTimestamp(8);
+                System.out.println(startTimestamp);
                 String createdBy = appointmentResultSet.getString(9);
 //                Changes startTimestamp & endTimestamp to ZonedDateTimes
                 DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-                utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+//                utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                 java.util.Date startDate = utcFormat.parse(startTimestamp.toString());
                 java.util.Date endDate = utcFormat.parse(endTimestamp.toString());
+//                startDate ends up being incorrect, TimeStamp should actually be 16:00 not 9:00
+//                Therefore Timestamp ends up being wrong
+
+
 //                Adds information to the Appointment instance
                 Appointment appointment = new Appointment(appointmentId, customerId, title, description,
                         location, contact, url, startTimestamp, endTimestamp, startDate, endDate, createdBy);

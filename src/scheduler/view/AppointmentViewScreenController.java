@@ -189,6 +189,13 @@ public class AppointmentViewScreenController {
      * Used in initialize
      */
     private void setData() {
+        DatabaseConnection.updateAppointmentList();
+//        for (Appointment appointment : AppointmentList.getAppointmentList()) {
+//            System.out.println("StartString " + appointment.getStartString());
+//            System.out.println("StartDate " + appointment.getStartDate());
+//            System.out.println("TimeStamp " + appointment.getStartTimestamp());
+//            System.out.println("------");
+//        }
         comboBox.getItems().clear();
         comboBox.getItems().addAll(
                 rb1.getString("allView"),
